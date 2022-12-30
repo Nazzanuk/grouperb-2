@@ -1,0 +1,38 @@
+.topBar {
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  flex: 0 1 70px;
+  display: flex;
+  /* justify-content: space-between; */
+  align-items: stretch;
+  flex-direction: row;
+  /* background: white; */
+  color: white;
+
+  /* font-family: 'Roboto', sans-serif; */
+  /* font-family: 'Delius', sans-serif; */
+  font-family: var(--bebasNeue);
+  /* background: black; */
+
+}
+
+.title  {
+  font-size: 2.5rem;
+
+
+  display:flex;
+  height:70px;
+  align-items: center;
+}
+
+.menu {
+  display:flex;
+  height:70px;
+  width: 70px;
+  justify-content: center;
+  align-items: center;
+  font-size: 3vh;
+
+}

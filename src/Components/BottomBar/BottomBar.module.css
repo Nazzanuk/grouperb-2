@@ -1,0 +1,52 @@
+.bottomBar {
+  flex: 0 1 170px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  background: white;
+  position: relative;
+  z-index: 100;
+  margin-top: auto;
+  padding: 20px;
+}
+
+.bottomSvg {
+  position: absolute;
+  transform: translate(-50vw, -15vh);
+  z-index: -1;
+  width: 200vw;
+  top:0;
+}
+
+.bottomcircles {
+  position: absolute;
+  transform: translate(-40%, 30%);
+  z-index: 2;
+  width: 100vw;
+  top: 0;
+}
+
+/* light grey circle from half screen to under the bottom bar */
+.bottomCircle {
+  position: absolute;
+  transform: translate(-25%, 40%);
+  width: 200vw;
+  height: 200vw;
+  border-radius: 50%;
+  background: #f2f2f2;
+  z-index: 1;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+}
+
+.blurb {
+  color: #bbb;
+  padding: 20px 0;
+}

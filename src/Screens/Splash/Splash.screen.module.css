@@ -1,0 +1,52 @@
+.splash {
+
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  font-size: 8vh;
+  margin-bottom:20px;
+  font-family: var(--bebasNeue);
+  font-family: var(--teko);
+  letter-spacing: 2px;
+  font-weight: 300;
+}
+.img {
+  position: relative;
+  z-index: 5;
+  width:100%;
+
+  & img {
+    width:100%;
+
+    border-radius:10px;
+    max-height:50vh;
+    object-fit: cover;
+  }
+}
+
+.bottomCircle {
+  position: relative;
+  top:0;
+  z-index: 2;
+  position: absolute;
+  transform: translate(-50vw, 30vh);
+  width: 200vw;
+  height: 300vw;
+  border-radius: 100%;
+  background: #f2f2f2;
+  z-index: 1;
+}
+
+
+.bottomSvg {
+  position: absolute;
+  transform: translate(-50vw, 0vh);
+  z-index: 1;
+  width: 200vw;
+  
+  bottom: -75vw;
+}
