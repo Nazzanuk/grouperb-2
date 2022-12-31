@@ -49,7 +49,7 @@ export const SelectUserScreen: FC = () => {
     <div className="darkScreen">
       <div className={styles.selectuser}>
         <div className="label">User id</div>
-        <div className="textOutput">123456789</div>
+        <div className="textOutput">{user.id}</div>
 
         <div className="label">Username</div>
         <input
