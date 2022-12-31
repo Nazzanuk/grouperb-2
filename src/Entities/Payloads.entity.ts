@@ -6,12 +6,19 @@ export type HostGamePayload = {
   user: User;
 };
 
+export type JoinGamePayload = {
+  action: 'joinGame';
+  gameId: string;
+  user: User;
+};
+
 export type UpdateUserPayload = {
   action: 'updateUser';
   user: User;
 };
+
 export type ConnectPayload = {
   action: 'connect';
 };
 
-export type Payload = HostGamePayload | UpdateUserPayload | ConnectPayload;
+export type Payload = HostGamePayload | UpdateUserPayload | ConnectPayload | JoinGamePayload;

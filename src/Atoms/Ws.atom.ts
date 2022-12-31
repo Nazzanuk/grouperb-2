@@ -1,3 +1,4 @@
+import { currentGameAtom } from 'Atoms/CurrentGame.atom';
 import { Payload } from 'Entities/Payloads.entity';
 import { atom } from 'jotai';
 // import WebSocket from 'isomorphic-ws';
@@ -12,13 +13,16 @@ if (typeof window !== 'undefined') {
   fetch('/api/socket');
 }
 
-export const wsAtom = atom(
+export const wsAtom = atom<WebSocket, Payload>(
   () => ws,
   (get, set, payload: Payload) => {
     console.log({ payload });
 
     ws.onmessage = (event) => {
-      console.log('received: ', event.data, event);
+      const data = JSON.parse(event.data);
+      console.log('CLIENT RECIEVED: ', data);
+
+      if (data.game) set(currentGameAtom, data.game);
     };
 
     if (ws.readyState === WebSocket.OPEN) {

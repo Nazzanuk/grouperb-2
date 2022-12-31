@@ -3,12 +3,22 @@ import Link from 'next/link';
 
 import styles from './BottomBar.module.css';
 import { useRouter } from 'next/router';
+import { wsAtom } from 'Atoms/Ws.atom';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { userAtom } from 'Atoms/User.atom';
 
 export const BottomBar: FC = () => {
-  const { asPath } = useRouter();
+  const { asPath, push } = useRouter();
+  const send = useSetAtom(wsAtom);
+  const user = useAtomValue(userAtom);
 
   const isHome = asPath === '/home';
   const isSplash = asPath === '/';
+
+  const hostGame = () => {
+    send({ action: 'hostGame', type: 'vote', user });
+    push('/vote-game');
+  };
 
   return (
     <>
@@ -26,9 +36,9 @@ export const BottomBar: FC = () => {
                 Join game
               </Link>
 
-              <Link href="/home" className="button">
+              <div className="button" onClick={hostGame}>
                 Host game
-              </Link>
+              </div>
             </>
           )}
 

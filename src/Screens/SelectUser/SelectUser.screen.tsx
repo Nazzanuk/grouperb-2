@@ -1,24 +1,26 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
 import { FC, useState } from 'react';
+import Link from 'next/link';
+import { useEffect } from 'react';
+import { useSetAtom, useAtomValue } from 'jotai';
+
+import { userAtom } from 'Atoms/User.atom';
+import { avatarsAtom } from 'Atoms/Avatars.atom';
+import { updateUserAtom } from 'Atoms/UpdateUser.atom';
 
 import styles from './SelectUser.screen.module.css';
 
-import { useEffect } from 'react';
-import { useSetAtom, useAtom, useAtomValue } from 'jotai';
-import { userAtom } from 'Atoms/User.atom';
-import { avatarsAtom } from 'Atoms/Avatars.atom';
-import Link from 'next/link';
-
 export const SelectUserScreen: FC = () => {
-  const [user, setUser] = useAtom(userAtom);
+  const user = useAtomValue(userAtom);
+  const updateUser = useSetAtom(updateUserAtom);
   const avatars = useAtomValue(avatarsAtom);
 
   const index = avatars.findIndex((avatar) => avatar === user.avatar);
 
   const [currentAvatarIndex, setCurrentAvatarIndex] = useState(0);
 
-  console.log({ index, currentAvatarIndex, avatars });
+  // console.log({ index, currentAvatarIndex, avatars });
 
   const prevAvatar = () => {
     const prevIndex = currentAvatarIndex === 0 ? avatars.length - 1 : currentAvatarIndex - 1;
@@ -30,7 +32,7 @@ export const SelectUserScreen: FC = () => {
     setCurrentAvatarIndex(nextIndex);
   };
 
-  const handleUsernameChange = (e: any) => setUser({ ...user, username: e.target.value.trim() });
+  const handleUsernameChange = (e: any) => updateUser({ ...user, username: e.target.value.trim() });
 
   useEffect(() => {
     if (!avatars.length) return;
@@ -40,7 +42,8 @@ export const SelectUserScreen: FC = () => {
 
   useEffect(() => {
     if (!avatars.length) return;
-    setUser({ ...user, avatar: avatars[currentAvatarIndex] });
+    
+    updateUser({ ...user, avatar: avatars[currentAvatarIndex] });
   }, [currentAvatarIndex, avatars]);
 
   const currentAvatarUrl = `/img/avatars/${user.avatar}`;
@@ -48,7 +51,7 @@ export const SelectUserScreen: FC = () => {
   return (
     <div className="darkScreen">
       <div className={styles.selectuser}>
-        <div className="label">User id</div>
+        <div className="label">User ID</div>
         <div className="textOutput">{user.id}</div>
 
         <div className="label">Username</div>

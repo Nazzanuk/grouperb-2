@@ -6,5 +6,4 @@ export type Game = {
   id: string;
   users: { [key: UserId]: User };
   hostId: UserId;
-  [key: string]: any;
 }

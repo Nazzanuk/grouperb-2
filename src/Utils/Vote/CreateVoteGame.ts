@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import random from 'lodash/random';
 
 import { VoteGame } from 'Entities/VoteGame.entity';
 import { User } from 'Entities/User.entity';
@@ -10,7 +11,7 @@ type CreateVoteGameProps = {
 export const createVoteGame = ({ host }: CreateVoteGameProps): VoteGame => {
   const voteGame: VoteGame = {
     type: 'vote',
-    id: uuidv4(),
+    id: random(10000, 99999).toString(),
     users: { [host.id]: host },
     hostId: host.id,
     questionList: [],

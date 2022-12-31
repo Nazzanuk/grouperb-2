@@ -5,6 +5,8 @@ import { ServerUsers } from 'Server/ServerUsers';
 import { v4 as uuidv4 } from 'uuid';
 import WebSocket, { WebSocketServer } from 'ws';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { ServerGames } from 'Server/ServerGames';
+import { joinGame } from 'Server/JoinGame';
 
 type Client = WebSocket.WebSocket & { id?: string };
 
@@ -27,24 +29,36 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
     });
 
     wss.on('connection', (client: Client) => {
-      console.log('connected', { client });
+      console.log('connected', { clientId:client.id });
 
-      wss.clients.forEach((client: Client) => console.log('Client.ID: ' + client.id));
+      wss.clients.forEach((client: Client) => console.log('ClientId: ' + client.id));
 
       client.on('message', (json: string) => {
         const data: Payload = JSON.parse(json);
-        console.log('received: ', data);
-        client.send(JSON.stringify({ info: 'hello client from the server' }));
+        console.log('SERVER RECIEVED: ', data);
+        client.send(JSON.stringify({ info: 'server confirmed payload', data }));
 
         if (data.action === 'updateUser') {
           ServerUsers[data.user.id] = data.user;
           client.id = data.user.id;
+
+          // console.log({ ServerUsers });
         }
 
         if (data.action === 'hostGame') {
           const game = addServerGame(data);
 
           if (game) client.send(JSON.stringify({ game }));
+
+          console.log({ ServerGames });
+        }
+
+        if (data.action === 'joinGame') {
+          const game = joinGame(data);
+
+          if (game) client.send(JSON.stringify({ game }));
+
+          console.log({ ServerGames });
         }
       });
     });

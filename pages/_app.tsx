@@ -1,5 +1,6 @@
 import type { AppProps } from "next/app";
 import Head from "next/head";
+import NoSSR from 'react-no-ssr';
 import { useAtom, useSetAtom } from "jotai";
 import { useEffect } from "react";
 
@@ -51,11 +52,13 @@ export default function App({ Component, pageProps }: AppProps) {
           font-family: ${bebasNeue.style.fontFamily};
         }
       `}</style> */}
+      <NoSSR>
       <main className={`app ${bebasNeue.variable} ${teko.variable}`}>
         <TopBar />
         <Component {...pageProps} />
         <BottomBar />
       </main>
-    </>
+      </NoSSR>
+      </>
   );
 }
