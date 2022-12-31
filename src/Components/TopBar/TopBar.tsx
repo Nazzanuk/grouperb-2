@@ -1,17 +1,25 @@
-import { FC } from "react";
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { FC } from 'react';
 
-import styles from "./TopBar.module.css";
-
-import { Jost } from '@next/font/google';
-// get an object with font styles:
-const jost = Jost();
-// define them in your component:
+import styles from './TopBar.module.css';
 
 export const TopBar: FC = () => {
-  return <div className={styles.topBar}>
+  const { back, asPath } = useRouter();
 
-    <div className={styles.menu}><i className="fal fa-bars"></i></div>
-    {/* <div className={styles.title}>Grouperb</div> */}
+  const isSplash = asPath === '/';
 
-  </div>;
+  return (
+    <div className={styles.topBar}>
+      {/* {!isSplash && ( */}
+        <div className={styles.menu}>
+          {/* <i className="fal fa-angle-left"></i> */}
+        </div>
+      {/* )} */}
+      <Link href="/" className={styles.title}>{!isSplash && 'Grouperb'}</Link>
+      <div className={styles.menu}>
+        <i className="fal fa-bars"></i>
+      </div>
+    </div>
+  );
 };

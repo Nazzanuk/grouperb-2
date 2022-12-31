@@ -3,6 +3,6 @@ import Image from "next/image";
 import { SplashScreen } from "Screens/Splash/Splash.screen";
 
 
-const HomePage = () => <SplashScreen />;
+const Splashage = () => <SplashScreen />;
 
-export default HomePage;
+export default Splashage;

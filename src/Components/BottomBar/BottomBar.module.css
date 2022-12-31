@@ -1,5 +1,5 @@
 .bottomBar {
-  flex: 0 1 170px;
+  flex: 0 1 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -9,6 +9,7 @@
   z-index: 100;
   margin-top: auto;
   padding: 20px;
+  /* min-height: 100px; */
 }
 
 .bottomSvg {

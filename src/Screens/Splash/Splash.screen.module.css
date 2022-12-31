@@ -11,8 +11,8 @@
   margin-bottom:20px;
   font-family: var(--bebasNeue);
   font-family: var(--teko);
-  letter-spacing: 2px;
-  font-weight: 300;
+  /* letter-spacing: 2px;
+  font-weight: 300; */
 }
 .img {
   position: relative;

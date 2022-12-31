@@ -1,8 +1,11 @@
 import type { AppProps } from "next/app";
 import Head from "next/head";
+import { useAtom, useSetAtom } from "jotai";
+import { useEffect } from "react";
 
 import { BottomBar } from "Components/BottomBar/BottomBar";
 import { TopBar } from "Components/TopBar/TopBar";
+import { wsAtom } from "Atoms/Ws.atom";
 
 import { Bebas_Neue, Teko } from "@next/font/google";
 
@@ -24,12 +27,22 @@ const teko = Teko({
 });
 
 export default function App({ Component, pageProps }: AppProps) {
+  const [ws, send] = useAtom(wsAtom);
+
+  useEffect(() => {
+    send({ action: 'connect'});
+  }, []);
+  
   return (
     <>
       <Head>
         <title>GROUPERB</title>
         <meta name="description" content="" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <meta name="apple-mobile-web-app-capable" content="yes" /> 
+
+        <meta name="viewport" content="minimal-ui, width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+
         {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
 

@@ -1,15 +1,38 @@
-import { FC } from "react";
+import { FC } from 'react';
+import Link from 'next/link';
 
-import styles from "./BottomBar.module.css";
+import styles from './BottomBar.module.css';
+import { useRouter } from 'next/router';
 
 export const BottomBar: FC = () => {
+  const { asPath } = useRouter();
+
+  const isHome = asPath === '/home';
+  const isSplash = asPath === '/';
+
   return (
     <>
       <div className={styles.bottomBar}>
         <div className={styles.buttons}>
-          <div className="button">Start</div>
+          {isSplash && (
+            <Link href="/select-user" className="button">
+              Start
+            </Link>
+          )}
 
-          <div className={styles.blurb}>Group games for any occasion</div>
+          {isHome && (
+            <>
+              <Link href="/home" className="button">
+                Join game
+              </Link>
+
+              <Link href="/home" className="button">
+                Host game
+              </Link>
+            </>
+          )}
+
+          {isSplash && <div className={styles.blurb}>Group games for any occasion</div>}
         </div>
 
         {/* <div className={styles.bottomSvg}>

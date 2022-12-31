@@ -1,11 +1,11 @@
 .topBar {
-  position:absolute;
-  top:0;
-  left:0;
-  right:0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   flex: 0 1 70px;
   display: flex;
-  /* justify-content: space-between; */
+  justify-content: space-between;
   align-items: stretch;
   flex-direction: row;
   /* background: white; */
@@ -13,26 +13,28 @@
 
   /* font-family: 'Roboto', sans-serif; */
   /* font-family: 'Delius', sans-serif; */
-  font-family: var(--bebasNeue);
+  font-family: var(--teko);
+  text-transform: uppercase;
   /* background: black; */
-
 }
 
-.title  {
+.title {
   font-size: 2.5rem;
+  color: white;
+  text-decoration: none;
 
-
-  display:flex;
-  height:70px;
+  display: flex;
+  height: 70px;
   align-items: center;
+
+  padding: 0 20px;
 }
 
 .menu {
-  display:flex;
-  height:70px;
+  display: flex;
+  height: 70px;
   width: 70px;
   justify-content: center;
   align-items: center;
   font-size: 3vh;
-
 }
