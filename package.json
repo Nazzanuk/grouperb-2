@@ -12,7 +12,6 @@
   "overrides": {
     "react": "$react"
   },
-  
   "pnpm": {
     "overrides": {
       "react": "$react"

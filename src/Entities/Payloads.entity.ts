@@ -1,4 +1,5 @@
 import { User } from 'Entities/User.entity';
+import { UserId } from 'Entities/UserId.entity';
 
 export type HostGamePayload = {
   action: 'hostGame';
@@ -21,4 +22,23 @@ export type ConnectPayload = {
   action: 'connect';
 };
 
-export type Payload = HostGamePayload | UpdateUserPayload | ConnectPayload | JoinGamePayload;
+export type CastVotePayload = {
+  action: 'castVote';
+  gameId: string;
+  userId: UserId;
+  vote: UserId;
+};
+
+export type LeaveGamePayload = {
+  action: 'leaveGame';
+  gameId: string;
+  userId: UserId;
+};
+
+export type Payload =
+  | HostGamePayload
+  | UpdateUserPayload
+  | ConnectPayload
+  | JoinGamePayload
+  | CastVotePayload
+  | LeaveGamePayload;

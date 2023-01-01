@@ -1,13 +1,10 @@
-import { HostGamePayload, JoinGamePayload } from 'Entities/Payloads.entity';
-import { VoteGame } from 'Entities/VoteGame.entity';
+import { JoinGamePayload } from 'Entities/Payloads.entity';
 import { ServerGames } from 'Server/ServerGames';
-import { createVoteGame } from 'Utils/Vote/CreateVoteGame';
+import { Game } from 'Entities/Game.entity';
 
-export const joinGame = (hostGamePayload: JoinGamePayload) => {
-  const game = ServerGames[hostGamePayload.gameId] as VoteGame;
-  if (!game) return;
-
-  const user = hostGamePayload.user;
+export const joinGame = (joinGamePayload: JoinGamePayload): Game => {
+  const game = ServerGames[joinGamePayload.gameId];
+  const user = joinGamePayload.user;
   game.users[user.id] = user;
 
   return game;

@@ -1,4 +1,5 @@
 import { currentGameAtom } from 'Atoms/CurrentGame.atom';
+import { routerAtom } from 'Atoms/Router.atom';
 import { Payload } from 'Entities/Payloads.entity';
 import { atom } from 'jotai';
 // import WebSocket from 'isomorphic-ws';
@@ -16,13 +17,17 @@ if (typeof window !== 'undefined') {
 export const wsAtom = atom<WebSocket, Payload>(
   () => ws,
   (get, set, payload: Payload) => {
+    const router = get(routerAtom);
     console.log({ payload });
 
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
       console.log('CLIENT RECIEVED: ', data);
 
-      if (data.game) set(currentGameAtom, data.game);
+      if (data.game) {
+        set(currentGameAtom, data.game);
+        router?.push(`/vote-game/${data.game.id}`);
+      }
     };
 
     if (ws.readyState === WebSocket.OPEN) {

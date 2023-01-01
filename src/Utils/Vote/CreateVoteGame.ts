@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import random from 'lodash/random';
 
 import { VoteGame } from 'Entities/VoteGame.entity';

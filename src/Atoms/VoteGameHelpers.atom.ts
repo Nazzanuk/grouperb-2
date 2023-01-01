@@ -1,9 +1,7 @@
 import { atom } from 'jotai';
 import values from 'lodash/values';
 
-import { currentGameAtom } from 'Atoms/CurrentGame.atom';
 import { voteGameAtom } from 'Atoms/VoteGame.atom';
-import { Game } from 'Entities/Game.entity';
 import { getVoteGameStatus } from 'Utils/Vote/GetVoteGameStatus';
 
 export const voteGameHelpersAtom = atom((get) => {

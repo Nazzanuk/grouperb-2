@@ -6,18 +6,24 @@ import { useRouter } from 'next/router';
 import { wsAtom } from 'Atoms/Ws.atom';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { userAtom } from 'Atoms/User.atom';
+import { gameCodeAtom } from 'Atoms/GameCodeAtom';
 
 export const BottomBar: FC = () => {
   const { asPath, push } = useRouter();
   const send = useSetAtom(wsAtom);
   const user = useAtomValue(userAtom);
+  const gameCode = useAtomValue(gameCodeAtom);
 
   const isHome = asPath === '/home';
   const isSplash = asPath === '/';
 
   const hostGame = () => {
     send({ action: 'hostGame', type: 'vote', user });
-    push('/vote-game');
+    // push('/vote-game');
+  };
+
+  const joinGame = () => {
+    send({ action: 'joinGame', gameId: gameCode, user });
   };
 
   return (
@@ -32,9 +38,9 @@ export const BottomBar: FC = () => {
 
           {isHome && (
             <>
-              <Link href="/home" className="button">
+              <div className="button"  onClick={joinGame}>
                 Join game
-              </Link>
+              </div>
 
               <div className="button" onClick={hostGame}>
                 Host game
