@@ -1,7 +1,8 @@
+import { atom } from 'jotai';
+
 import { currentGameAtom } from 'Atoms/CurrentGame.atom';
 import { routerAtom } from 'Atoms/Router.atom';
 import { Payload } from 'Entities/Payloads.entity';
-import { atom } from 'jotai';
 // import WebSocket from 'isomorphic-ws';
 
 let ws: WebSocket;

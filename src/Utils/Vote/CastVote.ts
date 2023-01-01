@@ -1,6 +1,6 @@
-import { ServerGames } from 'Server/ServerGames';
 import { CastVotePayload } from 'Entities/Payloads.entity';
 import { VoteGame } from 'Entities/VoteGame.entity';
+import { ServerGames } from 'Server/ServerGames';
 
 export const castVote = (payload: CastVotePayload): VoteGame => {
   const game = ServerGames[payload.gameId] as VoteGame;

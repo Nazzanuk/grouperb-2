@@ -1,7 +1,7 @@
 import random from 'lodash/random';
 
-import { VoteGame } from 'Entities/VoteGame.entity';
 import { User } from 'Entities/User.entity';
+import { VoteGame } from 'Entities/VoteGame.entity';
 
 type CreateVoteGameProps = {
   host: User;

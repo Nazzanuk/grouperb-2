@@ -1,12 +1,15 @@
 import { FC } from 'react';
+
+import { useAtomValue, useSetAtom } from 'jotai';
 import Link from 'next/link';
 
-import styles from './BottomBar.module.css';
 import { useRouter } from 'next/router';
-import { wsAtom } from 'Atoms/Ws.atom';
-import { useAtomValue, useSetAtom } from 'jotai';
-import { userAtom } from 'Atoms/User.atom';
+
 import { gameCodeAtom } from 'Atoms/GameCodeAtom';
+import { userAtom } from 'Atoms/User.atom';
+import { wsAtom } from 'Atoms/Ws.atom';
+
+import styles from './BottomBar.module.css';
 
 export const BottomBar: FC = () => {
   const { asPath, push } = useRouter();

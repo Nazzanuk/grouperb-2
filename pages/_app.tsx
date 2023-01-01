@@ -1,21 +1,23 @@
-import type { AppProps } from 'next/app';
-import Head from 'next/head';
-import NoSSR from 'react-no-ssr';
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useEffect } from 'react';
 
+import { Bebas_Neue, Teko } from '@next/font/google';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import type { AppProps } from 'next/app';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import NoSSR from 'react-no-ssr';
+
+import { routerAtom } from 'Atoms/Router.atom';
+import { userAtom } from 'Atoms/User.atom';
+import { wsAtom } from 'Atoms/Ws.atom';
 import { BottomBar } from 'Components/BottomBar/BottomBar';
 import { TopBar } from 'Components/TopBar/TopBar';
-import { wsAtom } from 'Atoms/Ws.atom';
 
-import { Bebas_Neue, Teko } from '@next/font/google';
 
 import 'Global/normalize.css';
 import 'Global/app.css';
 import '../public/fontawesome/css/all.min.css';
-import { useRouter } from 'next/router';
-import { routerAtom } from 'Atoms/Router.atom';
-import { userAtom } from 'Atoms/User.atom';
+
 
 // const inter = Inter({ subsets: ["latin"] });
 const bebasNeue = Bebas_Neue({

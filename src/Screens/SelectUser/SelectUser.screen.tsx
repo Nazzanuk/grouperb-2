@@ -1,13 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
 import { FC, useState } from 'react';
-import Link from 'next/link';
-import { useEffect } from 'react';
-import { useSetAtom, useAtomValue } from 'jotai';
 
-import { userAtom } from 'Atoms/User.atom';
+import { useEffect } from 'react';
+
+import { useSetAtom, useAtomValue } from 'jotai';
+import Link from 'next/link';
+
 import { avatarsAtom } from 'Atoms/Avatars.atom';
 import { updateUserAtom } from 'Atoms/UpdateUser.atom';
+import { userAtom } from 'Atoms/User.atom';
 
 import styles from './SelectUser.screen.module.css';
 

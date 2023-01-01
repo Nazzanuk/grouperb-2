@@ -1,12 +1,16 @@
-import { Payload } from 'Entities/Payloads.entity';
 import { Server } from 'http';
-import { addServerGame } from 'Server/AddServerGame';
-import { ServerUsers } from 'Server/ServerUsers';
-import { v4 as uuidv4 } from 'uuid';
-import WebSocket, { WebSocketServer } from 'ws';
+
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { ServerGames } from 'Server/ServerGames';
+import { v4 as uuidv4 } from 'uuid';
+
+import WebSocket, { WebSocketServer } from 'ws';
+
+import { Payload } from 'Entities/Payloads.entity';
+import { addServerGame } from 'Server/AddServerGame';
 import { joinGame } from 'Server/JoinGame';
+import { ServerGames } from 'Server/ServerGames';
+import { ServerUsers } from 'Server/ServerUsers';
+
 import { updateClientGames } from 'Server/UpdateClientGames';
 
 type Client = WebSocket.WebSocket & { id?: string };

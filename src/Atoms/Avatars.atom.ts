@@ -1,5 +1,6 @@
-import { Payload } from 'Entities/Payloads.entity';
 import { atom } from 'jotai';
+
+import { Payload } from 'Entities/Payloads.entity';
 // import WebSocket from 'isomorphic-ws';
 
 let ws: WebSocket;

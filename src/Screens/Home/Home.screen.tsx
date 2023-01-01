@@ -1,11 +1,14 @@
 import { FC, useState } from 'react';
 
-import styles from './Home.screen.module.css';
 
 import { useEffect } from 'react';
+
 import { useSetAtom, useAtom } from 'jotai';
-import { wsAtom } from 'Atoms/Ws.atom';
+
 import { gameCodeAtom } from 'Atoms/GameCodeAtom';
+import { wsAtom } from 'Atoms/Ws.atom';
+
+import styles from './Home.screen.module.css';
 
 const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 

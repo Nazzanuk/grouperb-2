@@ -1,16 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
-import { FC } from 'react';
-
-import { useEffect } from 'react';
+import { FC, useEffect } from 'react';
 
 import { useAtomValue, useSetAtom } from 'jotai';
-import { wsAtom } from 'Atoms/Ws.atom';
-import { voteGameAtom } from 'Atoms/VoteGame.atom';
-
-import styles from './VoteGame.screen.module.css';
-import { voteGameHelpersAtom } from 'Atoms/VoteGameHelpers.atom';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+
+import { voteGameAtom } from 'Atoms/VoteGame.atom';
+import { voteGameHelpersAtom } from 'Atoms/VoteGameHelpers.atom';
+import { wsAtom } from 'Atoms/Ws.atom';
+
+import styles from './VoteGame.screen.module.css';
+
 
 export const VoteGameScreen: FC = () => {
   const { query } = useRouter();
