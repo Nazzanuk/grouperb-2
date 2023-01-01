@@ -23,7 +23,7 @@ export const wsAtom = atom<WebSocket, Payload>(
 
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      console.log('CLIENT RECIEVED: ', data);
+      console.log('CLIENT RECIEVED: ', data, router);
 
       if (data.game) {
         set(currentGameAtom, data.game);

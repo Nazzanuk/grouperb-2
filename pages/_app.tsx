@@ -44,6 +44,7 @@ export default function App({ Component, pageProps }: AppProps) {
   }, []);
 
   useEffect(() => {
+    console.log('router changed');
     setRouter(router);
   }, [router]);
 

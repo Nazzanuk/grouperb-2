@@ -12,6 +12,7 @@ import { ServerGames } from 'Server/ServerGames';
 import { ServerUsers } from 'Server/ServerUsers';
 
 import { updateClientGames } from 'Server/UpdateClientGames';
+import { leaveGame } from 'Utils/Vote/LeaveGame';
 
 type Client = WebSocket.WebSocket & { id?: string };
 
@@ -54,7 +55,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
           ServerUsers[data.user.id] = data.user;
           client.id = data.user.id;
 
-          console.log(client);
+          // console.log(client);
           console.log({ ServerUsers });
         }
 
@@ -63,7 +64,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
 
           if (game) updateClientGames(game, wss.clients);
 
-          console.log({ ServerGames });
+          console.log({ data, game });
         }
 
         if (data.action === 'joinGame') {
@@ -71,7 +72,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
 
           if (game) updateClientGames(game, wss.clients);
 
-          console.log({ ServerGames });
+          console.log({ data, game });
         }
 
         if (data.action === 'getGame') {
@@ -79,7 +80,15 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
 
           if (game) client.send(JSON.stringify({ game }));
 
-          console.log({ ServerGames });
+          console.log({ data, game });
+        }
+
+        if (data.action === 'leaveGame') {
+          const game = leaveGame(data);
+
+          if (game) updateClientGames(game, wss.clients);
+          
+          console.log({ data, game });
         }
       });
     });

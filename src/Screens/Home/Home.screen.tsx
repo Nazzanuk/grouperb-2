@@ -42,6 +42,7 @@ export const HomeScreen: FC = () => {
             <i className="fal fa-angle-left"/>
           </button>
         </div>
+
       </div>
     </>
   );

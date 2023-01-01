@@ -34,6 +34,7 @@ export type LeaveGamePayload = {
   gameId: string;
   userId: UserId;
 };
+
 export type GetGamePayload = {
   action: 'getGame';
   gameId: string;

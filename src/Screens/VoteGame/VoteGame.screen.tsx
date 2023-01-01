@@ -10,15 +10,21 @@ import { voteGameHelpersAtom } from 'Atoms/VoteGameHelpers.atom';
 import { wsAtom } from 'Atoms/Ws.atom';
 
 import styles from './VoteGame.screen.module.css';
+import { userAtom } from 'Atoms/User.atom';
 
 
 export const VoteGameScreen: FC = () => {
   const { query } = useRouter();
   const game = useAtomValue(voteGameAtom);
   const send = useSetAtom(wsAtom);
+  const user = useAtomValue(userAtom);
   const { status, currentQuestion, currentRound, userArray } = useAtomValue(voteGameHelpersAtom);
 
   console.log({ game });
+
+  const leaveGame = () => {
+    send({ action: 'leaveGame', gameId: game!.id, userId: user.id });
+  }
 
   useEffect(() => {
     console.log({ query });
@@ -58,7 +64,7 @@ export const VoteGameScreen: FC = () => {
           <div className="button" data-variant="light">
             Start game
           </div>
-          <Link href="/home" className="button">
+          <Link href="/home" className="button" onClick={leaveGame}>
             Leave game
           </Link>
         </div>
