@@ -14,7 +14,7 @@ export const updateClientGames = (game: Game, clients: Client[]): Game => {
     if (client) {
       client.send(JSON.stringify({game}));
 
-      console.log('SERVER SENT TO CLIENT: ', client);
+      console.log('SERVER SENT TO CLIENT: ', client?.id);
     }
   });
 

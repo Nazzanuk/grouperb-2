@@ -9,7 +9,6 @@
     "lint": "next lint",
     "lint:fix": "eslint --fix"
   },
-
   "overrides": {
     "react": "$react"
   },
@@ -46,5 +45,8 @@
     "typescript": "4.9.4",
     "uuid": "^9.0.0",
     "ws": "^8.11.0"
+  },
+  "devDependencies": {
+    "@types/react-no-ssr": "^1.1.3"
   }
 }
