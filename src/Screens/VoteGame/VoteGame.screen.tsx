@@ -23,7 +23,7 @@ export const VoteGameScreen: FC = () => {
   useEffect(() => {
     console.log({ query });
     if (query.voteGameId) {
-      send({ action: 'getGame', gameId: query.voteGameId });
+      send({ action: 'getGame', gameId: query.voteGameId as string });
     }
   }, [query.voteGameId]);
 

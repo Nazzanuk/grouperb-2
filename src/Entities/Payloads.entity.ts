@@ -34,6 +34,10 @@ export type LeaveGamePayload = {
   gameId: string;
   userId: UserId;
 };
+export type GetGamePayload = {
+  action: 'getGame';
+  gameId: string;
+};
 
 export type Payload =
   | HostGamePayload
@@ -41,4 +45,5 @@ export type Payload =
   | ConnectPayload
   | JoinGamePayload
   | CastVotePayload
+  | GetGamePayload
   | LeaveGamePayload;
