@@ -19,6 +19,7 @@ export const BottomBar: FC = () => {
 
   const isHome = asPath === '/home';
   const isSplash = asPath === '/';
+  const isVoteGame = asPath.includes('/vote-game');
 
   const hostGame = () => {
     send({ action: 'hostGame', type: 'vote', user });
@@ -41,7 +42,7 @@ export const BottomBar: FC = () => {
 
           {isHome && (
             <>
-              <div className="button"  onClick={joinGame}>
+              <div className="button" onClick={joinGame}>
                 Join game
               </div>
 
@@ -52,6 +53,23 @@ export const BottomBar: FC = () => {
           )}
 
           {isSplash && <div className={styles.blurb}>Group games for any occasion</div>}
+
+          {isVoteGame && (
+            <div className={styles.icons}>
+              <div className={styles.icon}>
+                <i className="fas fa-trophy"></i>
+              </div>
+              <div className={styles.icon}>
+                <i className="fas fa-star"></i>
+              </div>
+              <div className={styles.icon}>
+                <i className="fas fa-info"></i>
+              </div>
+              <div className={styles.icon}>
+                <i className="fas fa-cog"></i>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* <div className={styles.bottomSvg}>

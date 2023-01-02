@@ -13,13 +13,10 @@ import { wsAtom } from 'Atoms/Ws.atom';
 import { BottomBar } from 'Components/BottomBar/BottomBar';
 import { TopBar } from 'Components/TopBar/TopBar';
 
-
 import 'Global/normalize.css';
 import 'Global/app.css';
 import '../public/fontawesome/css/all.min.css';
 
-
-// const inter = Inter({ subsets: ["latin"] });
 const bebasNeue = Bebas_Neue({
   weight: '400',
   variable: '--bebasNeue',
@@ -47,6 +44,20 @@ export default function App({ Component, pageProps }: AppProps) {
     console.log('router changed');
     setRouter(router);
   }, [router]);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden) send({ action: 'reconnect' });
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.onfocus = () => send({ action: 'reconnect' });
+    
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.onfocus = null;
+    };
+  }, []);
 
   return (
     <>

@@ -37,14 +37,16 @@ export const SelectUserScreen: FC = () => {
   const handleUsernameChange = (e: any) => updateUser({ ...user, username: e.target.value.trim() });
 
   useEffect(() => {
+    console.log('weirdavatars', { avatars, user });
     if (!avatars.length) return;
+    console.log('__a', avatars[0]);
 
     setCurrentAvatarIndex(index === -1 ? Math.round(Math.random() * avatars.length) : index);
   }, [!!avatars.length]);
 
   useEffect(() => {
     if (!avatars.length) return;
-    
+
     updateUser({ ...user, avatar: avatars[currentAvatarIndex] });
   }, [currentAvatarIndex, avatars]);
 

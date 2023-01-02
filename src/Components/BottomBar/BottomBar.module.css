@@ -17,7 +17,7 @@
   transform: translate(-50vw, -15vh);
   z-index: -1;
   width: 200vw;
-  top:0;
+  top: 0;
 }
 
 .bottomcircles {
@@ -50,4 +50,23 @@
 .blurb {
   color: #bbb;
   padding: 20px 0;
+}
+
+.icons {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+  padding: 0 20px;
+}
+
+.icon {
+  width: 4vh0;
+  height: 4vh;
+  font-size: 3vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

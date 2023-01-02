@@ -40,6 +40,12 @@ export type GetGamePayload = {
   gameId: string;
 };
 
+export type StartVoteGamePayload = {
+  action: 'startVoteGame';
+  gameId: string;
+  userId: UserId;
+};
+
 export type Payload =
   | HostGamePayload
   | UpdateUserPayload
@@ -47,4 +53,5 @@ export type Payload =
   | JoinGamePayload
   | CastVotePayload
   | GetGamePayload
+  | StartVoteGamePayload
   | LeaveGamePayload;

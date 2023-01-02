@@ -13,6 +13,8 @@ import { ServerUsers } from 'Server/ServerUsers';
 
 import { updateClientGames } from 'Server/UpdateClientGames';
 import { leaveGame } from 'Utils/Vote/LeaveGame';
+import { startVoteGame } from 'Utils/Vote/StartVoteGame';
+import { send } from 'process';
 
 type Client = WebSocket.WebSocket & { id?: string };
 
@@ -37,11 +39,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
     wss.on('connection', (client: Client) => {
       console.log('connected', { clientId: client.id });
 
-      wss.clients.forEach((c: Client) => {
-        if (c.id && c.id === client.id) {
-          c.close();
-        }
-      });
+      
 
       wss.clients.forEach((client: Client) => console.log('ClientId: ' + client.id));
 
@@ -53,6 +51,13 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
         if (data.action === 'updateUser') {
           console.log('???');
           ServerUsers[data.user.id] = data.user;
+
+          wss.clients.forEach((existingClient: Client) => {
+            if (!client.id && existingClient.id && existingClient.id === data.user.id) {
+              existingClient.close();
+            }
+          });
+
           client.id = data.user.id;
 
           // console.log(client);
@@ -63,6 +68,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
           const game = addServerGame(data);
 
           if (game) updateClientGames(game, wss.clients);
+          else client.send(JSON.stringify({ alert: 'Error creating game' }));
 
           console.log({ data, game });
         }
@@ -71,6 +77,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
           const game = joinGame(data);
 
           if (game) updateClientGames(game, wss.clients);
+          else client.send(JSON.stringify({ alert: 'Error joining game' }));
 
           console.log({ data, game });
         }
@@ -79,6 +86,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
           const game = ServerGames[data.gameId];
 
           if (game) client.send(JSON.stringify({ game }));
+          else client.send(JSON.stringify({ alert: 'Error getting game' }));
 
           console.log({ data, game });
         }
@@ -87,6 +95,16 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
           const game = leaveGame(data);
 
           if (game) updateClientGames(game, wss.clients);
+          else client.send(JSON.stringify({ alert: 'Error leaving game' }));
+          
+          console.log({ data, game });
+        }
+
+        if (data.action === 'startVoteGame') {
+          const game = startVoteGame(data);
+
+          if (game) updateClientGames(game, wss.clients);
+          else client.send(JSON.stringify({ alert: 'Error strating game' }));
           
           console.log({ data, game });
         }

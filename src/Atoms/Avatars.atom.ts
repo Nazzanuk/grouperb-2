@@ -5,8 +5,6 @@ import { Payload } from 'Entities/Payloads.entity';
 
 let ws: WebSocket;
 
-console.log('wsAtom');
-
 if (typeof window !== 'undefined') {
   var url = new URL('/api/socket', window.location.href);
   url.protocol = url.protocol.replace('http', 'ws');

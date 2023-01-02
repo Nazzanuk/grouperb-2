@@ -136,6 +136,17 @@ input {
   opacity: 0.6;
 }
 
+.shout {
+  font-size: 4vh;
+  font-weight: 500;
+  /* text-transform: uppercase; */
+  color: white;
+  margin-bottom: 20px;
+  opacity: 0.6;
+  text-align: center;
+  padding: 0 40px;
+}
+
 a {
   text-decoration: none;
   color: inherit;

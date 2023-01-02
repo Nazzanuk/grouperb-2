@@ -3,6 +3,7 @@ import { atom } from 'jotai';
 import { currentGameAtom } from 'Atoms/CurrentGame.atom';
 import { routerAtom } from 'Atoms/Router.atom';
 import { Payload } from 'Entities/Payloads.entity';
+import { userAtom } from 'Atoms/User.atom';
 // import WebSocket from 'isomorphic-ws';
 
 let ws: WebSocket;
@@ -18,6 +19,26 @@ if (typeof window !== 'undefined') {
 export const wsAtom = atom<WebSocket, Payload>(
   () => ws,
   (get, set, payload: Payload) => {
+    if (payload.action === 'reconnect') {
+      const user = get(userAtom);
+      console.log('reconnecting');
+      var url = new URL('/api/socket', window.location.href);
+
+      url.protocol = url.protocol.replace('http', 'ws');
+      ws = new WebSocket(url.href);
+
+      ws.onopen = () => {
+        console.log('REconnected');
+
+          setTimeout(() => {
+            console.log('updating user??')
+            ws.send(JSON.stringify({ action: 'updateUser', user }));
+          }, 500);
+      };
+
+      return;
+    }
+
     const router = get(routerAtom);
     console.log({ payload });
 
