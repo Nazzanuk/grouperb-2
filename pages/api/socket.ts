@@ -15,12 +15,14 @@ import { updateClientGames } from 'Server/UpdateClientGames';
 import { leaveGame } from 'Utils/Vote/LeaveGame';
 import { startVoteGame } from 'Utils/Vote/StartVoteGame';
 import { send } from 'process';
+import { castVote } from 'Utils/Vote/CastVote';
+import { startVoteRound } from 'Utils/Vote/StartVoteRound';
 
 function heartbeat() {
   this.isAlive = true;
 }
 
-type Client = WebSocket.WebSocket & { id?: string, isAlive?: boolean };
+type Client = WebSocket.WebSocket & { id?: string; isAlive?: boolean };
 
 const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
   if (res.socket!.server!.wss) {
@@ -47,19 +49,17 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
       // const interval = setInterval(function ping() {
       //   (wss.clients as Client[]).forEach(function each(client) {
       //     if (client.isAlive === false) return client.terminate();
-      
+
       //     client.isAlive = false;
       //     client.ping();
       //   });
       // }, 2000);
-      
+
       // wss.on('close', function close() {
       //   clearInterval(interval);
       // });
 
       console.log('connected', { clientId: client.id });
-
-      
 
       wss.clients.forEach((client: Client) => console.log('ClientId: ' + client.id));
 
@@ -116,7 +116,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
 
           if (game) updateClientGames(game, wss.clients);
           else client.send(JSON.stringify({ alert: 'Error leaving game' }));
-          
+
           console.log({ data, game });
         }
 
@@ -124,8 +124,26 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
           const game = startVoteGame(data);
 
           if (game) updateClientGames(game, wss.clients);
-          else client.send(JSON.stringify({ alert: 'Error strating game' }));
-          
+          else client.send(JSON.stringify({ alert: 'Error starting game' }));
+
+          console.log({ data, game });
+        }
+
+        if (data.action === 'castVote') {
+          const game = castVote(data);
+
+          if (game) updateClientGames(game, wss.clients);
+          else client.send(JSON.stringify({ alert: 'Error voting' }));
+
+          console.log({ data, game });
+        }
+
+        if (data.action === 'startVoteRound') {
+          const game = startVoteRound(data);
+
+          if (game) updateClientGames(game, wss.clients);
+          else client.send(JSON.stringify({ alert: 'Error starting new round' }));
+
           console.log({ data, game });
         }
       });

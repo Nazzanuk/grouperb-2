@@ -15,23 +15,44 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex: 0 1 calc(33.333% - (40px / 3));
+  flex: 0 1 calc(25% - (60px / 4));
 }
 
 .playerName {
-  font-size: 2.5vh;
-  font-weight: bold;
+  font-size: 3vw;
+  /* font-weight: bold; */
   margin-top: 1vh;
   text-transform: uppercase;
   display: flex;
   align-items: center;
-  flex-direction:row;
+  flex-direction: row;
   gap: 10px;
 
   & i {
     font-size: 1.5vh;
     line-height: 1;
-    padding-bottom:4px;
+    padding-bottom: 4px;
+  }
+}
+
+.singlePlayer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* flex: 0 1 calc(50% - (60px / 4)); */
+  margin-bottom: 20px;
+
+  & .player {
+    flex: 1 1 calc(25% - (60px / 4));
+    width: 50vw;
+  }
+
+  & .playerName {
+    flex: 1 1 calc(25% - (60px / 4));
+    font-size: 4vh;
+  }
+  & .playerImage {
+    width: 50vw;
   }
 }
 
@@ -49,4 +70,29 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.userButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.userButton {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  height: 50px;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
 }

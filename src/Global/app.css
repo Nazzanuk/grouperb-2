@@ -78,6 +78,25 @@ input {
   transition: 0.1s;
   cursor: pointer;
 
+  &[data-size='s'] {
+    height: 50px;
+    font-size: 2.5vh;
+    min-width: 200px;
+    padding-top: 2px;
+    letter-spacing: 0.5px;
+    font-weight: 100;
+  }
+
+  &[data-variant='orange'] {
+    background: orange;
+
+    background: linear-gradient(140deg, rgba(255, 195, 0, 1) 0%, rgba(255, 120, 0, 1) 100%);
+    color: white;
+
+    &:active {  background: linear-gradient(140deg, rgba(255, 195, 0, 1) 0%, rgba(255, 120, 0, 1) 100%);
+    }
+  }
+
   &[data-variant='light'] {
     background: white;
     color: rgba(25, 31, 37, 1);

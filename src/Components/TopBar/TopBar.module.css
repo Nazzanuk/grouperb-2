@@ -31,11 +31,28 @@
   transform: translate(0px, 2px);
 }
 
-.menu {
+.menu, .connectionStatus {
   display: flex;
   height: 70px;
   width: 70px;
   justify-content: center;
   align-items: center;
   font-size: 3vh;
+  cursor: pointer;
+}
+
+.connectionStatus {
+  font-size: 1vh;
+
+  &[data-status="Connected"] {
+    color: #8fc15a;
+  }
+
+  &[data-status="Disconnected"] {
+    color: #f44336;
+  }
+
+  &[data-status="Connecting"], &[data-status="Reconnecting"] {
+    color: #ff9800;
+  }
 }

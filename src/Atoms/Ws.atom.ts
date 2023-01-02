@@ -4,6 +4,7 @@ import { currentGameAtom } from 'Atoms/CurrentGame.atom';
 import { routerAtom } from 'Atoms/Router.atom';
 import { userAtom } from 'Atoms/User.atom';
 import { Payload } from 'Entities/Payloads.entity';
+import { connectionStatusAtom } from 'Atoms/ConnectionStatus.atom';
 // import WebSocket from 'isomorphic-ws';
 
 let ws: WebSocket;
@@ -24,11 +25,13 @@ export const wsAtom = atom<WebSocket, Payload>(
     const user = get(userAtom);
 
     if (payload.action === 'reconnect' && ws.readyState === WebSocket.CLOSED) {
+      set(connectionStatusAtom, 'Reconnecting');
       console.log('reconnecting');
       connect();
 
       ws.onopen = () => {
         console.log('REconnected');
+        set(connectionStatusAtom, 'Connected');
 
         setTimeout(() => {
           console.log('updating user??');
@@ -53,6 +56,7 @@ export const wsAtom = atom<WebSocket, Payload>(
 
     ws.onclose = function () {
       console.log('disconnected', ws.readyState, WebSocket.CLOSED);
+      set(connectionStatusAtom, 'Disconnected');
 
       // if (ws.readyState === WebSocket.CLOSED) {
       //   connect();
@@ -74,10 +78,12 @@ export const wsAtom = atom<WebSocket, Payload>(
       ws.send(JSON.stringify(payload));
       console.log('sending: ', { payload });
     } else {
+      set(connectionStatusAtom, 'Connecting');
       console.log('waiting', ws.readyState);
       if (payload.action === 'reconnect') return;
 
       ws.addEventListener('open', () => {
+        set(connectionStatusAtom, 'Connected');
 
         setTimeout(() => {
         ws.send(JSON.stringify({ action: 'updateUser', user }));

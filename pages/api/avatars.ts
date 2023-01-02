@@ -3,6 +3,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import Chance from 'chance';
 
 // import shuffle from 'lodash/shuffle';
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -30,32 +31,11 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
       console.log(file);
     });
 
-    res.status(200).json({ avatars: shuffle(files) });
+    var chance1 = new Chance(124); // you can choose a seed here, i chose 124 
+    console.log(chance1.shuffle(['alpha', 'bravo', 'charlie', 'delta', 'echo']));
+    // Array [ "alpha", "delta", "echo", "charlie", "bravo" ]
+
+    res.status(200).json({ avatars: chance1.shuffle(files) });
   });
 }
 
-function shuffle(array, seed) {
-  // <-- ADDED ARGUMENT
-  var m = array.length,
-    t,
-    i;
-
-  // While there remain elements to shuffle…
-  while (m) {
-    // Pick a remaining element…
-    i = Math.floor(random(seed) * m--); // <-- MODIFIED LINE
-
-    // And swap it with the current element.
-    t = array[m];
-    array[m] = array[i];
-    array[i] = t;
-    ++seed; // <-- ADDED LINE
-  }
-
-  return array;
-}
-
-function random(seed) {
-  var x = Math.sin(seed++) * 10000;
-  return x - Math.floor(x);
-}

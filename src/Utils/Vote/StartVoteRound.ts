@@ -5,10 +5,9 @@ import { StartVoteGamePayload } from 'Entities/Payloads.entity';
 import { VoteGame } from 'Entities/VoteGame.entity';
 import { ServerGames } from 'Server/ServerGames';
 
-export const startVoteGame = (payload: StartVoteGamePayload): Game | undefined => {
+export const startVoteRound = (payload: StartVoteGamePayload): Game => {
   const game = ServerGames[payload.gameId] as VoteGame;
 
-  if (game.hostId !== payload.userId) return;
   const question = game.questionList[round(Math.random() * game.questionList.length)];
 
   // find and delete question from questionList
