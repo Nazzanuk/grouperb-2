@@ -16,7 +16,11 @@ import { leaveGame } from 'Utils/Vote/LeaveGame';
 import { startVoteGame } from 'Utils/Vote/StartVoteGame';
 import { send } from 'process';
 
-type Client = WebSocket.WebSocket & { id?: string };
+function heartbeat() {
+  this.isAlive = true;
+}
+
+type Client = WebSocket.WebSocket & { id?: string, isAlive?: boolean };
 
 const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
   if (res.socket!.server!.wss) {
@@ -37,6 +41,22 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
     });
 
     wss.on('connection', (client: Client) => {
+      // client.isAlive = true;
+      // client.on('pong', heartbeat);
+
+      // const interval = setInterval(function ping() {
+      //   (wss.clients as Client[]).forEach(function each(client) {
+      //     if (client.isAlive === false) return client.terminate();
+      
+      //     client.isAlive = false;
+      //     client.ping();
+      //   });
+      // }, 2000);
+      
+      // wss.on('close', function close() {
+      //   clearInterval(interval);
+      // });
+
       console.log('connected', { clientId: client.id });
 
       
