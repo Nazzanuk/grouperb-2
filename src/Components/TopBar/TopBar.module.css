@@ -43,6 +43,11 @@
 
 .connectionStatus {
   font-size: 1vh;
+  transition: 0.6s;
+
+  & i {
+    /* transition: .2s; */
+  }
 
   &[data-status="Connected"] {
     color: #8fc15a;
