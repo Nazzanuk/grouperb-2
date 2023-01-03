@@ -61,22 +61,23 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
 
       console.log('connected', { clientId: client.id });
 
-      wss.clients.forEach((client: Client) => console.log('ClientId: ' + client.id));
+      const allIds = Array.from(wss.clients).map((client: Client) => client?.id);
+      console.log({ allIds });
 
       client.on('message', (json: string) => {
         const data: Payload = JSON.parse(json);
         console.log('SERVER RECIEVED: ', data);
-        client.send(JSON.stringify({ info: 'server confirmed payload', data }));
+        client.send(JSON.stringify({ info: `server confirmed: ${data.action}`, data }));
 
         if (data.action === 'updateUser') {
           console.log('???');
           ServerUsers[data.user.id] = data.user;
 
-          wss.clients.forEach((existingClient: Client) => {
-            if (!client.id && existingClient.id && existingClient.id === data.user.id) {
-              existingClient.close();
-            }
-          });
+          // wss.clients.forEach((existingClient: Client) => {
+          //   if (!client.id && existingClient.id && existingClient.id === data.user.id) {
+          //     existingClient.close();
+          //   }
+          // });
 
           client.id = data.user.id;
 
@@ -90,7 +91,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
           if (game) updateClientGames(game, wss.clients);
           else client.send(JSON.stringify({ alert: 'Error creating game' }));
 
-          console.log({ data, game });
+          // console.log({ data, game });
         }
 
         if (data.action === 'joinGame') {
@@ -99,7 +100,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
           if (game) updateClientGames(game, wss.clients);
           else client.send(JSON.stringify({ alert: 'Error joining game' }));
 
-          console.log({ data, game });
+          // console.log({ data, game });
         }
 
         if (data.action === 'getGame') {
@@ -108,7 +109,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
           if (game) client.send(JSON.stringify({ game }));
           else client.send(JSON.stringify({ alert: 'Error getting game' }));
 
-          console.log({ data, game });
+          // console.log({ data, game });
         }
 
         if (data.action === 'leaveGame') {
@@ -117,7 +118,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
           if (game) updateClientGames(game, wss.clients);
           else client.send(JSON.stringify({ alert: 'Error leaving game' }));
 
-          console.log({ data, game });
+          // console.log({ data, game });
         }
 
         if (data.action === 'startVoteGame') {
@@ -126,7 +127,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
           if (game) updateClientGames(game, wss.clients);
           else client.send(JSON.stringify({ alert: 'Error starting game' }));
 
-          console.log({ data, game });
+          // console.log({ data, game });
         }
 
         if (data.action === 'castVote') {
@@ -135,7 +136,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
           if (game) updateClientGames(game, wss.clients);
           else client.send(JSON.stringify({ alert: 'Error voting' }));
 
-          console.log({ data, game });
+          // console.log({ data, game });
         }
 
         if (data.action === 'startVoteRound') {
@@ -144,7 +145,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
           if (game) updateClientGames(game, wss.clients);
           else client.send(JSON.stringify({ alert: 'Error starting new round' }));
 
-          console.log({ data, game });
+          // console.log({ data, game });
         }
       });
     });

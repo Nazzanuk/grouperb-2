@@ -9,7 +9,7 @@ import NoSSR from 'react-no-ssr';
 
 import { routerAtom } from 'Atoms/Router.atom';
 import { userAtom } from 'Atoms/User.atom';
-import { wsAtom } from 'Atoms/Ws.atom';
+import { initWebSocketAtom, wsAtom } from 'Atoms/Ws.atom';
 import { BottomBar } from 'Components/BottomBar/BottomBar';
 import { TopBar } from 'Components/TopBar/TopBar';
 
@@ -30,14 +30,15 @@ const teko = Teko({
 });
 
 export default function App({ Component, pageProps }: AppProps) {
-  const [ws, send] = useAtom(wsAtom);
+  const [, send] = useAtom(wsAtom);
+  const [, connect] = useAtom(initWebSocketAtom);
   const user = useAtomValue(userAtom);
   const setRouter = useSetAtom(routerAtom);
   const router = useRouter();
 
   useEffect(() => {
-    send({ action: 'connect' });
     send({ action: 'updateUser', user });
+    connect(user);
   }, []);
 
   useEffect(() => {
@@ -47,11 +48,17 @@ export default function App({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     const handleVisibilityChange = () => {
-      if (!document.hidden) send({ action: 'reconnect' });
+      if (!document.hidden) {
+        console.log('VISIBLE');
+        connect(user);
+      }
     };
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
-    window.onfocus = () => send({ action: 'reconnect' });
+    window.onfocus = () => {
+      console.log('FOCUS');
+      connect(user);
+    }
     
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);

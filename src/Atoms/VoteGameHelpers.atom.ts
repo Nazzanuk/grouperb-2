@@ -20,6 +20,7 @@ export const voteGameHelpersAtom = atom((get) => {
   const userArray = values(game?.users);
   const isHost = user.id === game?.hostId;
   const isObserver = !game?.users[user.id];
+  const have3Users = Object.keys(game?.users ?? {}).length >= 3;
   const usersThatHaveVoted = keys(currentRound?.votes).map(
     (userId) => game!.users[userId as UserId],
   ) as User[];
@@ -31,6 +32,8 @@ export const voteGameHelpersAtom = atom((get) => {
   const usersWithoutMe = userArray.filter((u) => {
     return u.id !== user.id;
   });
+
+  const winnersArray = values(currentRound?.winners ?? {});
 
   const IHaveVoted = !!currentRound?.votes[user.id];
 
@@ -46,5 +49,7 @@ export const voteGameHelpersAtom = atom((get) => {
     usersWithoutMe,
     IHaveVoted,
     isObserver,
+    have3Users,
+    winnersArray,
   };
 });

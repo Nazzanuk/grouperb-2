@@ -74,9 +74,15 @@
 
 .userButtons {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 10px;
   margin-top: auto;
+  justify-content: center;
+
+  & :global(.button) {
+    min-width: 0;
+    padding: 0 20px;
+  }
 }
 
 .userButton {
@@ -95,4 +101,10 @@
   &:hover {
     background-color: rgba(255, 255, 255, 0.3);
   }
+}
+
+.blurb {
+  color: #bbb;
+  padding: 20px 0;
+  text-align: center;
 }

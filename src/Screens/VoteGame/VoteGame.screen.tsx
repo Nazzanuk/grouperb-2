@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 
 import { useAtomValue, useSetAtom } from 'jotai';
 import Link from 'next/link';
@@ -17,6 +17,7 @@ import { UserId } from 'Entities/UserId.entity';
 
 export const VoteGameScreen: FC = () => {
   const { query } = useRouter();
+  const i = useRef<NodeJS.Timer>(null);
   const game = useAtomValue(voteGameAtom);
   const send = useSetAtom(wsAtom);
   const user = useAtomValue(userAtom);
@@ -32,6 +33,8 @@ export const VoteGameScreen: FC = () => {
     usersWithoutMe,
     IHaveVoted,
     isObserver,
+    have3Users,
+    winnersArray,
   } = useAtomValue(voteGameHelpersAtom);
 
   console.log({ game, status });
@@ -47,6 +50,20 @@ export const VoteGameScreen: FC = () => {
     if (query.voteGameId) {
       send({ action: 'getGame', gameId: query.voteGameId as string });
     }
+  }, [query.voteGameId]);
+
+  useEffect(() => {
+    console.log({ query });
+
+    if (!query.voteGameId) return;
+
+    i.current = setInterval(() => {
+      send({ action: 'getGame', gameId: query.voteGameId as string });
+    }, 5000);
+
+    return () => {
+      clearInterval(i.current);
+    };
   }, [query.voteGameId]);
 
   if (!game)
@@ -83,7 +100,7 @@ export const VoteGameScreen: FC = () => {
 
             {!IHaveVoted && (
               <div className={styles.userButtons}>
-                {usersWithoutMe.map((user) => (
+                {userArray.map((user) => (
                   <div
                     className="button"
                     data-variant="orange"
@@ -107,11 +124,12 @@ export const VoteGameScreen: FC = () => {
             <div className={styles.singlePlayer}>
               <img
                 className={styles.playerImage}
-                src={`/img/avatars/${user.avatar}`}
+                src={`/img/avatars/${winnersArray[0].avatar}`}
                 alt="avatar"
               />
               <div className={styles.playerName}>
-                {game.hostId === user.id && <i className="fas fa-star" />} {user.username}
+                {winnersArray[0].id === game.hostId && <i className="fas fa-star" />}{' '}
+                {winnersArray[0].username}
               </div>
             </div>
           </>
@@ -132,16 +150,23 @@ export const VoteGameScreen: FC = () => {
         {status === 'lobby' && (
           <div className={styles.buttons}>
             <>
-              {isHost && (
-                <div className="button" data-variant="light" onClick={startGame}>
+              {!have3Users && (
+                <div className={styles.blurb}>At least 3 players are needed to start the game</div>
+              )}
+
+              {!isHost && have3Users && (
+                <div className={styles.blurb}>Waiting for host to start game...</div>
+              )}
+
+              {isHost && userArray.length > 2 && (
+                <div className="button" data-variant="orange" onClick={startGame}>
                   Start game
                 </div>
               )}
-              {!isObserver && (
-                <Link href="/home" className="button" onClick={leaveGame}>
-                  Leave game
-                </Link>
-              )}
+
+              <Link href="/home" className="button" onClick={leaveGame} data-variant="light">
+                Leave game
+              </Link>
             </>
           </div>
         )}

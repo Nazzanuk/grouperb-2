@@ -11,6 +11,11 @@ export const leaveGame = (payload: LeaveGamePayload): Game => {
     const userIds = Object.keys(game.users) as UserId[] ;
     game.hostId = userIds[0];
   }
+
+  // delete game if no players
+  if (Object.keys(game.users).length === 0) {
+    delete ServerGames[payload.gameId];
+  }
   
   return game;
 };

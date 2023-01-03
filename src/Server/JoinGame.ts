@@ -7,7 +7,7 @@ export const joinGame = (joinGamePayload: JoinGamePayload): Game | undefined => 
   const game = ServerGames[joinGamePayload.gameId] as VoteGame;
 
   if (!game) return;
-  if (game.status !== 'lobby') return;
+  if (game.status !== 'lobby') return game;
 
   const user = joinGamePayload.user;
   game.users[user.id] = user;

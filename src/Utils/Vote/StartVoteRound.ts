@@ -1,11 +1,11 @@
 import round from 'lodash/round';
 
 import { Game } from 'Entities/Game.entity';
-import { StartVoteGamePayload } from 'Entities/Payloads.entity';
+import { StartVoteRoundPayload } from 'Entities/Payloads.entity';
 import { VoteGame } from 'Entities/VoteGame.entity';
 import { ServerGames } from 'Server/ServerGames';
 
-export const startVoteRound = (payload: StartVoteGamePayload): Game => {
+export const startVoteRound = (payload: StartVoteRoundPayload): Game => {
   const game = ServerGames[payload.gameId] as VoteGame;
 
   const question = game.questionList[round(Math.random() * game.questionList.length)];
@@ -16,7 +16,7 @@ export const startVoteRound = (payload: StartVoteGamePayload): Game => {
 
   game.usedQuestionList.push(question);
 
-  game.rounds.push({ question, votes: {} });
+  game.rounds.push({ question, votes: {}, winners: {} });
   game.status = 'voting';
 
   return game;

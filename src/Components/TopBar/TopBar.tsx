@@ -25,7 +25,7 @@ export const TopBar: FC = () => {
           <i className="fas fa-circle"></i>
         </div>
       {/* )} */}
-      <Link href="/" className={styles.title}>{!isSplash && 'Grouperb'}</Link>
+      <Link href="/home" className={styles.title}>{!isSplash && 'Grouperb'}</Link>
       <div className={styles.menu}>
         <i className="fal fa-bars"></i>
       </div>

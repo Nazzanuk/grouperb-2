@@ -10,9 +10,10 @@ import { userAtom } from 'Atoms/User.atom';
 import { wsAtom } from 'Atoms/Ws.atom';
 
 import styles from './BottomBar.module.css';
+import { voteGameHelpersAtom } from 'Atoms/VoteGameHelpers.atom';
 
 export const BottomBar: FC = () => {
-  const { asPath, push } = useRouter();
+  const { asPath, push, query } = useRouter();
   const send = useSetAtom(wsAtom);
   const user = useAtomValue(userAtom);
   const gameCode = useAtomValue(gameCodeAtom);
@@ -21,13 +22,15 @@ export const BottomBar: FC = () => {
   const isSplash = asPath === '/';
   const isVoteGame = asPath.includes('/vote-game');
 
+  const { isHost, isObserver } = useAtomValue(voteGameHelpersAtom);
+
   const hostGame = () => {
     send({ action: 'hostGame', type: 'vote', user });
     // push('/vote-game');
   };
 
   const joinGame = () => {
-    send({ action: 'joinGame', gameId: gameCode, user });
+    send({ action: 'joinGame', gameId: query.voteGameId ?? gameCode, user });
   };
 
   return (
@@ -42,7 +45,7 @@ export const BottomBar: FC = () => {
 
           {isHome && (
             <>
-              <div className="button" onClick={joinGame}>
+              <div className="button" onClick={joinGame} data-disabled={gameCode.length < 5}>
                 Join game
               </div>
 
@@ -55,20 +58,27 @@ export const BottomBar: FC = () => {
           {isSplash && <div className={styles.blurb}>Group games for any occasion</div>}
 
           {isVoteGame && (
-            <div className={styles.icons}>
-              <div className={styles.icon}>
-                <i className="fas fa-trophy"></i>
+            <>
+              {isObserver && (
+                <div className="button" onClick={joinGame}>
+                  Join game
+                </div>
+              )}
+              <div className={styles.icons}>
+                <div className={styles.icon}>
+                  <i className="fas fa-trophy"></i>
+                </div>
+                <div className={styles.icon}>
+                  <i className="fas fa-star"></i>
+                </div>
+                <div className={styles.icon}>
+                  <i className="fas fa-info"></i>
+                </div>
+                <div className={styles.icon}>
+                  <i className="fas fa-cog"></i>
+                </div>
               </div>
-              <div className={styles.icon}>
-                <i className="fas fa-star"></i>
-              </div>
-              <div className={styles.icon}>
-                <i className="fas fa-info"></i>
-              </div>
-              <div className={styles.icon}>
-                <i className="fas fa-cog"></i>
-              </div>
-            </div>
+            </>
           )}
         </div>
 

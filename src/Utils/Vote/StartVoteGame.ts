@@ -17,7 +17,7 @@ export const startVoteGame = (payload: StartVoteGamePayload): Game | undefined =
 
   game.usedQuestionList.push(question);
 
-  game.rounds.push({ question, votes: {} });
+  game.rounds.push({ question, votes: {}, winners: {} });
   game.status = 'voting';
 
   return game;

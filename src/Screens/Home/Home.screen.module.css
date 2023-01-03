@@ -23,6 +23,15 @@
   line-height: 1;
 
   padding: 5px 0 0;
+  transition:  0.1s;
+
+  &:active {
+    transform: scale(0.95);
+    
+    background-color: #ff8c00;
+  }
+    
+  
 }
 
 .del {
