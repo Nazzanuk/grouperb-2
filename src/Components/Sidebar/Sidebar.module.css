@@ -2,35 +2,100 @@
   position: fixed;
   top: 0;
   right: 0;
-  bottom:0;
+  bottom: 0;
   width: 300px;
 
   background-color: #fff;
   z-index: 1001;
   border-radius: 10px 0 0 10px;
   transform: translateX(300px);
-  transition: transform 0.3s ease-in-out;
+  transition: 0.2s ease-in;
+  padding-top:10px;
+
+  display: flex;
+  flex-direction: column;
+  /* gap: 10px; */
+
+  flex: 1 1 auto;
 
   &[data-is-active='true'] {
     transform: translateX(0);
   }
 }
 
+.topPart {
+  flex: 0 1 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  flex-direction: row;
+  /* background: white; */
+  color: black;
+
+  /* font-family: 'Roboto', sans-serif; */
+  /* font-family: 'Delius', sans-serif; */
+  font-family: var(--teko);
+  text-transform: uppercase;
+  /* background: black; */
+  z-index: 100;
+}
+
+.menu {
+  display: flex;
+  height: 70px;
+  width: 70px;
+  justify-content: center;
+  align-items: center;
+  font-size: 3vh;
+  cursor: pointer;
+}
+
 .sidebarOverlay {
   position: fixed;
   top: 0;
   left: 0;
-  bottom:0;
+  bottom: 0;
   right: 0;
 
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000;
   transition: transform 0.3s ease-in-out;
   pointer-events: none;
   opacity: 0;
+  transition: 0.2s linear;
 
   &[data-is-active='true'] {
     pointer-events: all;
     opacity: 1;
   }
+}
+
+.menuItem {
+  padding: 0 20px;
+  height: 40px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 1.5rem;
+  transition: .1s;
+
+  &:active {
+    color: orange;
+  }
+}
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 auto;
+  height: 50px;
+  width: 50px;
+  margin: 5px 20px;
+  background: black;
+  border-radius: 100px;
+  flex: 0 1 50px;
+  margin-right: auto;
+  border: 1pxo solid black;
 }

@@ -24,6 +24,7 @@ export const BottomBar: FC = () => {
 
   const isHome = asPath === '/home';
   const isSplash = asPath === '/';
+  const isProfile = asPath === '/select-user';
   const isVoteGame = asPath.includes('/vote-game');
 
   const { isHost, isObserver } = useAtomValue(voteGameHelpersAtom);
@@ -37,6 +38,9 @@ export const BottomBar: FC = () => {
     console.log({ query})
     send({ action: 'joinGame', gameId: (query.voteGameId as string) ?? gameCode, user });
   };
+
+
+  if (isProfile) return null;
 
   return (
     <>
