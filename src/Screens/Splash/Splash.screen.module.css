@@ -34,7 +34,7 @@
   top:0;
   z-index: 2;
   position: absolute;
-  transform: translate(-50vw, 30vh);
+  transform: translate(-50vw, 50vh);
   width: 200vw;
   height: 300vw;
   border-radius: 100%;
