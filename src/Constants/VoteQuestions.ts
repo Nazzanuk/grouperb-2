@@ -93,7 +93,7 @@ const VOTE_QUESTIONS = [
   'is most likely to be a spy',
   'will we still remember in 20-years time',
   'is planning their escape',
-  'should narrate and nature documentary',
+  'should narrate a nature documentary',
   `do you want as your "hype man"`,
   'is always the bad cop',
   'is always the good cop',

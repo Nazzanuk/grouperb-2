@@ -7,6 +7,9 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import NoSSR from 'react-no-ssr';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import { routerAtom } from 'Atoms/Router.atom';
 import { userAtom } from 'Atoms/User.atom';
 import { initWebSocketAtom, wsAtom } from 'Atoms/Ws.atom';
@@ -58,14 +61,13 @@ export default function App({ Component, pageProps }: AppProps) {
     window.onfocus = () => {
       console.log('FOCUS');
       connect(user);
-    }
-    
+    };
+
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.onfocus = null;
     };
   }, []);
-
 
   return (
     <>
@@ -90,6 +92,22 @@ export default function App({ Component, pageProps }: AppProps) {
       `}</style> */}
       <NoSSR>
         <main className={`app ${bebasNeue.variable} ${teko.variable}`}>
+          <ToastContainer
+            position="top-left"
+            autoClose={2000}
+            hideProgressBar={true}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
+            limit={4}
+            progressStyle={{ background: 'orange', color: 'orange' }}
+            closeButton={false}
+            
+          />
           <TopBar />
           <Component {...pageProps} />
           <BottomBar />

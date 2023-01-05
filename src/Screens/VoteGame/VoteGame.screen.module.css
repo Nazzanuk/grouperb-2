@@ -41,6 +41,13 @@
   align-items: center;
   /* flex: 0 1 calc(50% - (60px / 4)); */
   margin-bottom: 20px;
+  will-change: opacity transform;
+
+  &[data-animate='true'] {
+    transform: scale(0);
+    animation: showPlayer 2s cubic-bezier(0.44, 1.37, 0.68, 0.92) forwards;
+    /* animation-delay: 0.5s; */
+  }
 
   & .player {
     flex: 1 1 calc(25% - (60px / 4));
@@ -51,6 +58,7 @@
     flex: 1 1 calc(25% - (60px / 4));
     font-size: 4vh;
   }
+
   & .playerImage {
     width: 50vw;
   }
@@ -107,4 +115,16 @@
   color: #bbb;
   padding: 20px 0;
   text-align: center;
+}
+
+@keyframes showPlayer {
+  0% {
+    transform: scale(0) rotate(-360deg);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
 }

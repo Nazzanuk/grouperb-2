@@ -8,6 +8,10 @@ body,
   position: relative;
 }
 
+:root {
+  --toastify-color-progress-dark: rgba(255, 120, 0, 1);
+}
+
 * {
   box-sizing: border-box;
   user-select: none;
@@ -15,6 +19,21 @@ body,
   -webkit-tap-highlight-color: transparent;
   -ms-touch-action: manipulation;
   touch-action: manipulation;
+}
+
+.Toastify__progress-bar {
+  height: 2px;
+}
+.Toastify__toast {
+  background:  rgba(255, 255, 255, 0.96);
+  color:black;
+  border-radius: 10px;
+  height: 40px;
+  min-height: auto;
+  margin:5px;
+  font-size: 12px;
+  font-family: var(--teko);
+  text-transform: uppercase;
 }
 
 input {
@@ -64,6 +83,7 @@ input {
   justify-content: center;
   align-items: center;
   font-size: 3vh;
+  text-align: center;
 
   border-radius: 100px;
 
@@ -93,7 +113,8 @@ input {
     background: linear-gradient(140deg, rgba(255, 195, 0, 1) 0%, rgba(255, 120, 0, 1) 100%);
     color: white;
 
-    &:active {  background: linear-gradient(140deg, rgba(255, 195, 0, 1) 0%, rgba(255, 120, 0, 1) 100%);
+    &:active {
+      background: linear-gradient(140deg, rgba(255, 195, 0, 1) 0%, rgba(255, 120, 0, 1) 100%);
     }
   }
 

@@ -20,6 +20,8 @@ export const voteGameHelpersAtom = atom((get) => {
   const userArray = values(game?.users);
   const isHost = user.id === game?.hostId;
   const isObserver = !game?.users[user.id];
+  const isWinner = !!currentRound?.winners[user.id];
+  const allAreWinners = keys(currentRound?.winners ?? {}).length === keys(game?.users ?? {}).length;
   const have3Users = Object.keys(game?.users ?? {}).length >= 3;
   const usersThatHaveVoted = keys(currentRound?.votes).map(
     (userId) => game!.users[userId as UserId],
@@ -37,6 +39,20 @@ export const voteGameHelpersAtom = atom((get) => {
 
   const IHaveVoted = !!currentRound?.votes[user.id];
 
+  //string which lists all winners in a sentence
+  const winnersString = winnersArray
+    .map((winner) => winner.username)
+    .reduce((acc, name, index, array) => {
+      if (index === 0) {
+        return name;
+      } else if (index === array.length - 1) {
+        return `${acc} and ${name}`;
+      } else {
+        return `${acc}, ${name}`;
+      }
+    }, '');
+  
+
   return {
     currentRound,
     currentRoundIndex,
@@ -51,5 +67,8 @@ export const voteGameHelpersAtom = atom((get) => {
     isObserver,
     have3Users,
     winnersArray,
+    isWinner,
+    allAreWinners,
+    winnersString,
   };
 });

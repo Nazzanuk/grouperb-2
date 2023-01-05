@@ -5,11 +5,12 @@ import { routerAtom } from 'Atoms/Router.atom';
 import { userAtom } from 'Atoms/User.atom';
 import { Payload } from 'Entities/Payloads.entity';
 import { connectionStatusAtom } from 'Atoms/ConnectionStatus.atom';
+import { ToastContainer, toast } from 'react-toastify';
 import { User } from 'Entities/User.entity';
 
 type GameWs = { instance: WebSocket };
 
-const gameWs: GameWs = { instance: null };
+const gameWs: GameWs = { instance: null as any };
 
 console.log('wsAtom');
 
@@ -101,7 +102,9 @@ export const initWebSocketAtom = atom<GameWs, User>(
       }
 
       if (data.alert) {
-        alert(data.alert);
+
+      toast(data.alert);
+        // alert(data.alert);
       }
     };
 

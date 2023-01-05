@@ -2,6 +2,7 @@
 import { FC, useEffect, useRef, useState } from 'react';
 
 import { useAtomValue, useSetAtom } from 'jotai';
+import random from 'lodash/random';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -9,15 +10,16 @@ import { userAtom } from 'Atoms/User.atom';
 import { voteGameAtom } from 'Atoms/VoteGame.atom';
 import { voteGameHelpersAtom } from 'Atoms/VoteGameHelpers.atom';
 import { wsAtom } from 'Atoms/Ws.atom';
+import { User } from 'Entities/User.entity';
+import { UserId } from 'Entities/UserId.entity';
+import { VoteGame } from 'Entities/VoteGame.entity';
 
 import styles from './VoteGame.screen.module.css';
-import { User } from 'Entities/User.entity';
-import { VoteGame } from 'Entities/VoteGame.entity';
-import { UserId } from 'Entities/UserId.entity';
 
 export const VoteGameScreen: FC = () => {
   const { query } = useRouter();
   const i = useRef<NodeJS.Timer>(null);
+  const [trophyIndex, setTrophyIndex] = useState(1);
   const game = useAtomValue(voteGameAtom);
   const send = useSetAtom(wsAtom);
   const user = useAtomValue(userAtom);
@@ -35,6 +37,9 @@ export const VoteGameScreen: FC = () => {
     isObserver,
     have3Users,
     winnersArray,
+    isWinner,
+    allAreWinners,
+    winnersString,
   } = useAtomValue(voteGameHelpersAtom);
 
   console.log({ game, status });
@@ -44,6 +49,10 @@ export const VoteGameScreen: FC = () => {
   const startRound = () => send({ action: 'startVoteRound', gameId: game!.id, userId: user.id });
   const castVote = (voteUserId: UserId) =>
     send({ action: 'castVote', gameId: game!.id, userId: user.id, vote: voteUserId });
+
+  useEffect(() => {
+    setTrophyIndex(random(1, 3));
+  }, [game?.rounds.length]);
 
   useEffect(() => {
     console.log({ query });
@@ -92,13 +101,13 @@ export const VoteGameScreen: FC = () => {
 
             <div className="shout">Who {currentQuestion}?</div>
 
-            <div className="label">Voted</div>
-            <PlayerList users={usersThatHaveVoted} game={game} />
+            {/* <div className="label">Voted</div>
+            <PlayerList users={usersThatHaveVoted} game={game} /> */}
 
             <div className="label">Still pondering</div>
             <PlayerList users={usersThatHaveNotVoted} game={game} />
 
-            {!IHaveVoted && (
+            {!IHaveVoted && !isObserver && (
               <div className={styles.userButtons}>
                 {userArray.map((user) => (
                   <div
@@ -121,30 +130,43 @@ export const VoteGameScreen: FC = () => {
             <div className="label">Round {currentRoundIndex}</div>
             <div className="shout">Who {currentQuestion}?</div>
 
-            <div className={styles.singlePlayer}>
-              <img
-                className={styles.playerImage}
-                src={`/img/avatars/${winnersArray[0].avatar}`}
-                alt="avatar"
-              />
-              <div className={styles.playerName}>
-                {winnersArray[0].id === game.hostId && <i className="fas fa-star" />}{' '}
-                {winnersArray[0].username}
+            {!isWinner && (
+              <div className={styles.singlePlayer} data-animate key="looser">
+                <img
+                  className={styles.playerImage}
+                  src={`/img/avatars/${winnersArray[0].avatar}`}
+                  alt="avatar"
+                />
+
+                <div className={styles.playerName}>{winnersString}</div>
               </div>
+            )}
+
+            {isWinner && (
+              <div className={styles.singlePlayer} data-animate key="winner">
+                Z
+                <img
+                  className={styles.playerImage}
+                  src={`/img/trophies/trophy-${trophyIndex}.png`}
+                  alt="trophy"
+                />
+
+                <div className={styles.playerName}>
+                  {allAreWinners ? 'All of You!' : winnersString}
+                </div>
+              </div>
+            )}
+
+            <div className={styles.buttons}>
+              <>
+                {!isObserver && (
+                  <div className="button" data-variant="light" onClick={startRound}>
+                    Next round
+                  </div>
+                )}
+              </>
             </div>
           </>
-        )}
-
-        {status === 'results' && (
-          <div className={styles.buttons}>
-            <>
-              {!isObserver && (
-                <div className="button" data-variant="light" onClick={startRound}>
-                  Next round
-                </div>
-              )}
-            </>
-          </div>
         )}
 
         {status === 'lobby' && (

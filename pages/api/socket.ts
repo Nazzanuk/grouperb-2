@@ -125,6 +125,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
           const game = startVoteGame(data);
 
           if (game) updateClientGames(game, wss.clients);
+          if (game) updateClientGames(game, wss.clients, { alert: `Game started!` });
           else client.send(JSON.stringify({ alert: 'Error starting game' }));
 
           // console.log({ data, game });
@@ -133,8 +134,14 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
         if (data.action === 'castVote') {
           const game = castVote(data);
 
-          if (game) updateClientGames(game, wss.clients);
-          else client.send(JSON.stringify({ alert: 'Error voting' }));
+          if (game) {
+            updateClientGames(game, wss.clients);
+            updateClientGames(game, wss.clients, {
+              alert: `${game.users[data.userId].username} voted`,
+            });
+          } else {
+            client.send(JSON.stringify({ alert: 'Error voting' }));
+          }
 
           // console.log({ data, game });
         }
