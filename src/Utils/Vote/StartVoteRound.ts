@@ -16,7 +16,8 @@ export const startVoteRound = (payload: StartVoteRoundPayload): Game => {
 
   game.usedQuestionList.push(question);
 
-  const currentRoundHasWinner = !!Object.values(game.rounds[game.rounds.length].winners).length;
+  const currentRoundHasWinner = !!Object.values(game.rounds?.[game.rounds.length]?.winners ?? {})
+    .length;
   if (currentRoundHasWinner) game.rounds.push({ question, votes: {}, winners: {} });
 
   game.status = 'voting';
