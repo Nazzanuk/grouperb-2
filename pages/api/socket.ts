@@ -97,8 +97,13 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
         if (data.action === 'joinGame') {
           const game = joinGame(data);
 
-          if (game) updateClientGames(game, wss.clients);
-          else client.send(JSON.stringify({ alert: 'Error joining game' }));
+          if (game) {
+            client.send(JSON.stringify({ game }));
+            updateClientGames(game, wss.clients);
+            updateClientGames(game, wss.clients, {
+              alert: `${data.user.username} joined the game`,
+            });
+          } else client.send(JSON.stringify({ alert: 'Error joining game' }));
 
           // console.log({ data, game });
         }
@@ -115,8 +120,12 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
         if (data.action === 'leaveGame') {
           const game = leaveGame(data);
 
-          if (game) updateClientGames(game, wss.clients);
-          else client.send(JSON.stringify({ alert: 'Error leaving game' }));
+          if (game) {
+            updateClientGames(game, wss.clients);
+            updateClientGames(game, wss.clients, {
+              alert: `${game.users[data.userId].username} left the game`,
+            });
+          } else client.send(JSON.stringify({ alert: 'Error leaving game' }));
 
           // console.log({ data, game });
         }

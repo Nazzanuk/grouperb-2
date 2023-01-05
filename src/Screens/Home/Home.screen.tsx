@@ -19,7 +19,8 @@ export const HomeScreen: FC = () => {
   const { push } = useRouter();
   const [code, setCode] = useAtom(gameCodeAtom);
 
-  const handleKeyPress = (number: number | 'delete') => {
+  const handleKeyPress = (number: number | 'delete' | 'clear') => {
+    if (number === 'clear') return setCode('');
     setCode(number === 'delete' ? code.slice(0, -1) : code.length < 5 ? code + number : code);
   };
 
@@ -42,12 +43,14 @@ export const HomeScreen: FC = () => {
               {number}
             </button>
           ))}
-          <div className={styles.gap}></div>
+          <button className={styles.del} onClick={() => handleKeyPress('delete')}>
+            <i className="fal fa-angle-left"/>
+          </button>
           <button className={styles.zero} onClick={() => handleKeyPress(0)}>
             0
           </button>
-          <button className={styles.del} onClick={() => handleKeyPress('delete')}>
-            <i className="fal fa-angle-left"/>
+          <button className={styles.clear} onClick={() => handleKeyPress('clear')}>
+            <i className="fal fa-times"/>
           </button>
         </div>
 

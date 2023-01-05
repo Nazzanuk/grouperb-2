@@ -72,7 +72,6 @@ export const initWebSocketAtom = atom<GameWs, User>(
     set(connectionStatusAtom, 'Connecting');
     gameWs.instance?.close?.();
 
-
     setTimeout(() => {
       if (gameWs.instance?.readyState !== WebSocket.OPEN) {
         window.location.reload();
@@ -99,11 +98,11 @@ export const initWebSocketAtom = atom<GameWs, User>(
       if (data.game) {
         set(currentGameAtom, data.game);
         router?.push(`/vote-game/${data.game.id}`);
+        console.log('game', data.game.id);
       }
 
       if (data.alert) {
-
-      toast(data.alert);
+        toast(data.alert);
         // alert(data.alert);
       }
     };

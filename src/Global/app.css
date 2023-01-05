@@ -27,13 +27,14 @@ body,
 .Toastify__toast {
   background:  rgba(255, 255, 255, 0.96);
   color:black;
-  border-radius: 10px;
-  height: 40px;
+  border-radius: 100px;
+  height: 30px;
   min-height: auto;
-  margin:5px;
-  font-size: 12px;
+  margin:10px 20px;
+  font-size: 14px;
   font-family: var(--teko);
   text-transform: uppercase;
+  padding:0 20px;
 }
 
 input {
@@ -97,6 +98,7 @@ input {
   text-decoration: none;
   transition: 0.1s;
   cursor: pointer;
+  line-height: 0.8;
 
   &[data-size='s'] {
     height: 50px;

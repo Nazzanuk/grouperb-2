@@ -131,7 +131,7 @@ export const VoteGameScreen: FC = () => {
             <div className="shout">Who {currentQuestion}?</div>
 
             {!isWinner && (
-              <div className={styles.singlePlayer} data-animate key="looser">
+              <div className={styles.singlePlayer} data-animate key="winner">
                 <img
                   className={styles.playerImage}
                   src={`/img/avatars/${winnersArray[0].avatar}`}
@@ -144,7 +144,6 @@ export const VoteGameScreen: FC = () => {
 
             {isWinner && (
               <div className={styles.singlePlayer} data-animate key="winner">
-                Z
                 <img
                   className={styles.playerImage}
                   src={`/img/trophies/trophy-${trophyIndex}.png`}

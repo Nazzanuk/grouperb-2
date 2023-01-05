@@ -1,22 +1,26 @@
 import { FC } from 'react';
 
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import Link from 'next/link';
 
 import { useRouter } from 'next/router';
 
 import { gameCodeAtom } from 'Atoms/GameCodeAtom';
 import { userAtom } from 'Atoms/User.atom';
+import { voteGameHelpersAtom } from 'Atoms/VoteGameHelpers.atom';
 import { wsAtom } from 'Atoms/Ws.atom';
 
+import { BottomOverlay } from 'Components/BottomOverlay/BottomOverlay';
+
 import styles from './BottomBar.module.css';
-import { voteGameHelpersAtom } from 'Atoms/VoteGameHelpers.atom';
+import { showBottomOverlayAtom } from 'Atoms/ShowBottomOverlay.atom';
 
 export const BottomBar: FC = () => {
   const { asPath, push, query } = useRouter();
   const send = useSetAtom(wsAtom);
   const user = useAtomValue(userAtom);
   const gameCode = useAtomValue(gameCodeAtom);
+  const [showBottomOverlay, setShowBottomOverlay] = useAtom(showBottomOverlayAtom);
 
   const isHome = asPath === '/home';
   const isSplash = asPath === '/';
@@ -30,12 +34,14 @@ export const BottomBar: FC = () => {
   };
 
   const joinGame = () => {
-    send({ action: 'joinGame', gameId: query.voteGameId ?? gameCode, user });
+    send({ action: 'joinGame', gameId: (query.voteGameId as string) ?? gameCode, user });
   };
 
   return (
     <>
       <div className={styles.bottomBar}>
+      <div className={styles.overlay}/>
+        <BottomOverlay />
         <div className={styles.buttons}>
           {isSplash && (
             <Link href="/select-user" className="button">
@@ -59,11 +65,6 @@ export const BottomBar: FC = () => {
 
           {isVoteGame && (
             <>
-              {isObserver && (
-                <div className="button" onClick={joinGame}>
-                  Join game
-                </div>
-              )}
               <div className={styles.icons}>
                 <div className={styles.icon}>
                   <i className="fas fa-trophy"></i>
@@ -74,7 +75,10 @@ export const BottomBar: FC = () => {
                 <div className={styles.icon}>
                   <i className="fas fa-info"></i>
                 </div>
-                <div className={styles.icon}>
+                <div
+                  className={styles.icon}
+                  onClick={() => setShowBottomOverlay('voteGameOptions')}
+                >
                   <i className="fas fa-cog"></i>
                 </div>
               </div>

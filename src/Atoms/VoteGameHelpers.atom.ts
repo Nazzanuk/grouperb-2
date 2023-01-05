@@ -44,7 +44,7 @@ export const voteGameHelpersAtom = atom((get) => {
     .map((winner) => winner.username)
     .reduce((acc, name, index, array) => {
       if (index === 0) {
-        return name;
+        return name === user.username ? 'You!' : name;
       } else if (index === array.length - 1) {
         return `${acc} and ${name}`;
       } else {
