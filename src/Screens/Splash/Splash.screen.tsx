@@ -10,7 +10,7 @@ export const SplashScreen: FC = () => {
 
         <div className={styles.bottomCircle}></div>
         <div className={styles.img}>
-          <img src="/img/splash.png" alt="" />
+          <img src="/android-chrome-512x512.png" alt="" />
 
           {/* <div className={styles.bottomSvg}>
             <svg

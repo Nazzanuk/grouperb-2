@@ -44,7 +44,7 @@ export const BottomBar: FC = () => {
         <BottomOverlay />
         <div className={styles.buttons}>
           {isSplash && (
-            <Link href="/select-user" className="button">
+            <Link href="/home" className="button">
               Start
             </Link>
           )}

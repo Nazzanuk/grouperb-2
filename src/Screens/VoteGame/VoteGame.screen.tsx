@@ -68,7 +68,7 @@ export const VoteGameScreen: FC = () => {
 
     i.current = setInterval(() => {
       send({ action: 'getGame', gameId: query.voteGameId as string });
-    }, 5000);
+    }, 10000);
 
     return () => {
       clearInterval(i.current);

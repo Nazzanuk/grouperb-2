@@ -82,7 +82,7 @@ export default function App({ Component, pageProps }: AppProps) {
           content="minimal-ui, width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
         />
 
-        {/* <link rel="icon" href="/favicon.ico" /> */}
+        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       {/* <style jsx global>{`
