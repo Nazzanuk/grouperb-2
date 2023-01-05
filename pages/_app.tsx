@@ -19,6 +19,7 @@ import { TopBar } from 'Components/TopBar/TopBar';
 import 'Global/normalize.css';
 import 'Global/app.css';
 import '../public/fontawesome/css/all.min.css';
+import { Sidebar } from 'Components/Sidebar/Sidebar';
 
 const bebasNeue = Bebas_Neue({
   weight: '400',
@@ -113,6 +114,7 @@ export default function App({ Component, pageProps }: AppProps) {
             progressStyle={{ background: 'orange', color: 'orange' }}
             closeButton={false}
           />
+          <Sidebar />
           <TopBar />
           <Component {...pageProps} />
           <BottomBar />

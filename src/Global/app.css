@@ -25,16 +25,16 @@ body,
   height: 2px;
 }
 .Toastify__toast {
-  background:  rgba(255, 255, 255, 0.96);
-  color:black;
+  background: rgba(255, 255, 255, 0.96);
+  color: black;
   border-radius: 100px;
   height: 30px;
   min-height: auto;
-  margin:10px 20px;
+  margin: 10px 20px;
   font-size: 14px;
   font-family: var(--teko);
   text-transform: uppercase;
-  padding:0 20px;
+  padding: 0 20px;
 }
 
 input {
@@ -77,6 +77,30 @@ input {
   gap: 10px;
 
   overflow: auto;
+  position: relative;
+}
+
+.darkScreenOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  background: linear-gradient(rgba(25, 31, 37, 1) 20%, rgba(0, 0, 0, 0) 80%, rgba(255, 255, 255, 1) 1000%);
+
+  z-index: 1;
+}
+
+.darkScreenContent {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  flex: 1 1 auto;
 }
 
 .button {
@@ -197,4 +221,11 @@ input {
 a {
   text-decoration: none;
   color: inherit;
+}
+
+.blurb {
+  color: rgba(255, 255, 255, 0.7);
+  /* padding: 20px 0; */
+  text-align: center;
+  /* margin-top: -20px; */
 }

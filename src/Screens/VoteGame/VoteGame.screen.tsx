@@ -84,113 +84,118 @@ export const VoteGameScreen: FC = () => {
 
   return (
     <>
-      <div className="darkScreen">
-        {status === 'lobby' && (
-          <>
-            <div className="label">Game ID</div>
-            <div className="textOutput">{game.id}</div>
+      <div className="darkScreen" style={{ backgroundImage: `url('/img/backgrounds/b9.png')` }}>
+        <div className="darkScreenOverlay" />
+        <div className="darkScreenContent">
+          {status === 'lobby' && (
+            <>
+              <div className="label">Game ID</div>
+              <div className="textOutput">{game.id}</div>
 
-            <div className="label">Players</div>
-            <PlayerList users={userArray} game={game} />
-          </>
-        )}
+              <div className="label">Players</div>
+              <PlayerList users={userArray} game={game} />
+            </>
+          )}
 
-        {status === 'voting' && (
-          <>
-            <div className="label">Round {currentRoundIndex}</div>
+          {status === 'voting' && (
+            <>
+              <div className="label">Round {currentRoundIndex}</div>
 
-            <div className="shout">Who {currentQuestion}?</div>
+              <div className="shout">Who {currentQuestion}?</div>
 
-            {/* <div className="label">Voted</div>
+              {/* <div className="label">Voted</div>
             <PlayerList users={usersThatHaveVoted} game={game} /> */}
 
-            <div className="label">Still pondering</div>
-            <PlayerList users={usersThatHaveNotVoted} game={game} />
+              <div className="label">Still pondering</div>
+              <PlayerList users={usersThatHaveNotVoted} game={game} />
 
-            {!IHaveVoted && !isObserver && (
-              <div className={styles.userButtons}>
-                {userArray.map((user) => (
-                  <div
-                    className="button"
-                    data-variant="orange"
-                    data-size="s"
-                    key={user.id}
-                    onClick={() => castVote(user.id)}
-                  >
-                    {user.username}
-                  </div>
-                ))}
-              </div>
-            )}
-          </>
-        )}
-
-        {status === 'results' && (
-          <>
-            <div className="label">Round {currentRoundIndex}</div>
-            <div className="shout">Who {currentQuestion}?</div>
-
-            {!isWinner && (
-              <div className={styles.singlePlayer} data-animate key="winner">
-                <img
-                  className={styles.playerImage}
-                  src={`/img/avatars/${winnersArray[0].avatar}`}
-                  alt="avatar"
-                />
-
-                <div className={styles.playerName}>{winnersString}</div>
-              </div>
-            )}
-
-            {isWinner && (
-              <div className={styles.singlePlayer} data-animate key="winner">
-                <img
-                  className={styles.playerImage}
-                  src={`/img/trophies/trophy-${trophyIndex}.png`}
-                  alt="trophy"
-                />
-
-                <div className={styles.playerName}>
-                  {allAreWinners ? 'All of You!' : winnersString}
+              {!IHaveVoted && !isObserver && (
+                <div className={styles.userButtons}>
+                  {userArray.map((user) => (
+                    <div
+                      className="button"
+                      data-variant="orange"
+                      data-size="s"
+                      key={user.id}
+                      onClick={() => castVote(user.id)}
+                    >
+                      {user.username}
+                    </div>
+                  ))}
                 </div>
-              </div>
-            )}
+              )}
+            </>
+          )}
 
+          {status === 'results' && (
+            <>
+              <div className="label">Round {currentRoundIndex}</div>
+              <div className="shout">Who {currentQuestion}?</div>
+
+              {!isWinner && (
+                <div className={styles.singlePlayer} data-animate key="winner">
+                  <img
+                    className={styles.playerImage}
+                    src={`/img/avatars/${winnersArray[0].avatar}`}
+                    alt="avatar"
+                  />
+
+                  <div className={styles.playerName}>{winnersString}</div>
+                </div>
+              )}
+
+              {isWinner && (
+                <div className={styles.singlePlayer} data-animate key="winner">
+                  <img
+                    className={styles.playerImage}
+                    src={`/img/trophies/trophy-${trophyIndex}.png`}
+                    alt="trophy"
+                  />
+
+                  <div className={styles.playerName}>
+                    {allAreWinners ? 'All of You!' : winnersString}
+                  </div>
+                </div>
+              )}
+
+              <div className={styles.buttons}>
+                <>
+                  {!isObserver && (
+                    <div className="button" data-variant="light" onClick={startRound}>
+                      Next round
+                    </div>
+                  )}
+                </>
+              </div>
+            </>
+          )}
+
+          {status === 'lobby' && (
             <div className={styles.buttons}>
               <>
-                {!isObserver && (
-                  <div className="button" data-variant="light" onClick={startRound}>
-                    Next round
+                {!have3Users && (
+                  <div className={styles.blurb}>
+                    At least 3 players are needed to start the game
                   </div>
                 )}
+
+                {!isHost && have3Users && (
+                  <div className={styles.blurb}>Waiting for host to start game...</div>
+                )}
+
+                {isHost && userArray.length > 2 && (
+                  <div className="button" data-variant="orange" onClick={startGame}>
+                    Start game
+                  </div>
+                )}
+
+                <Link href="/home" className="button" onClick={leaveGame} data-variant="light">
+                  Leave game
+                </Link>
               </>
             </div>
-          </>
-        )}
-
-        {status === 'lobby' && (
-          <div className={styles.buttons}>
-            <>
-              {!have3Users && (
-                <div className={styles.blurb}>At least 3 players are needed to start the game</div>
-              )}
-
-              {!isHost && have3Users && (
-                <div className={styles.blurb}>Waiting for host to start game...</div>
-              )}
-
-              {isHost && userArray.length > 2 && (
-                <div className="button" data-variant="orange" onClick={startGame}>
-                  Start game
-                </div>
-              )}
-
-              <Link href="/home" className="button" onClick={leaveGame} data-variant="light">
-                Leave game
-              </Link>
-            </>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </>
   );

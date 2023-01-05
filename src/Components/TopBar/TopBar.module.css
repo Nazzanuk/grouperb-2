@@ -16,6 +16,7 @@
   font-family: var(--teko);
   text-transform: uppercase;
   /* background: black; */
+  z-index: 100;
 }
 
 .title {

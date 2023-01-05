@@ -1,18 +1,24 @@
-import { FC } from "react";
+import { FC } from 'react';
 
-import styles from "./Splash.screen.module.css";
+import styles from './Splash.screen.module.css';
 
 export const SplashScreen: FC = () => {
   return (
     <>
-      <div className="darkScreen">
-        <div className={styles.title}>GROUPERB</div>
+      <div className="darkScreen" style={{ backgroundImage: `url('/img/backgrounds/b1.png')` }}>
+        <div className="darkScreenOverlay" />
+        <div className="darkScreenContent">
+          <div className={styles.title}>GROUPERB</div>
+          <div className="blurb">Group games for any occasion</div>
 
-        <div className={styles.bottomCircle}></div>
-        <div className={styles.img}>
-          <img src="/nazzanuk_abstract_watercolor_picture_of_a_trophy_black_yellow_o_ecb5504a-4b7c-43e7-b80d-14cf1f248c37-removebg.png" alt="" />
+          {/* <div className={styles.bottomCircle}></div> */}
+          <div className={styles.img}>
+            <img
+              src="/nazzanuk_abstract_watercolor_picture_of_a_trophy_black_yellow_o_ecb5504a-4b7c-43e7-b80d-14cf1f248c37-removebg.png"
+              alt=""
+            />
 
-          {/* <div className={styles.bottomSvg}>
+            {/* <div className={styles.bottomSvg}>
             <svg
               viewBox="0 0 615 288"
               fill="none"
@@ -24,6 +30,7 @@ export const SplashScreen: FC = () => {
               />
             </svg>
           </div> */}
+          </div>
         </div>
       </div>
     </>

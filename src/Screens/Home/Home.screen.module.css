@@ -24,6 +24,7 @@
 
   padding: 5px 0 0;
   transition:  0.1s;
+  cursor: pointer;
 
   &:active {
     transform: scale(0.95);

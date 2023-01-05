@@ -61,7 +61,7 @@ export const BottomBar: FC = () => {
             </>
           )}
 
-          {isSplash && <div className={styles.blurb}>Group games for any occasion</div>}
+          {isSplash && <div className={styles.blurb}>Let's go</div>}
 
           {isVoteGame && (
             <>
