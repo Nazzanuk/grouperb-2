@@ -32,7 +32,7 @@ export const Sidebar: FC = () => {
         </div>
 
         <Link href="/home" className={styles.menuItem}>
-          Menu
+          Home
         </Link>
         <Link href="/select-user" className={styles.menuItem}>
           Profile
