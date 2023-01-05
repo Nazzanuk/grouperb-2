@@ -34,6 +34,7 @@ export const BottomBar: FC = () => {
   };
 
   const joinGame = () => {
+    console.log({ query})
     send({ action: 'joinGame', gameId: (query.voteGameId as string) ?? gameCode, user });
   };
 

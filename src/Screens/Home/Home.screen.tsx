@@ -31,7 +31,7 @@ export const HomeScreen: FC = () => {
 
   return (
     <>
-      <div className="darkScreen" style={{ backgroundImage: `url('/img/backgrounds/b8.png')` }}>
+      <div className="darkScreen" style={{ backgroundImage: `url('/img/backgrounds/b12.png')` }}>
         <div className="darkScreenOverlay"/>
         <div className="darkScreenContent">
           <div className="label">Enter game code</div>

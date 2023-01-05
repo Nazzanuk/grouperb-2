@@ -70,7 +70,6 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
         client.send(JSON.stringify({ info: `server confirmed: ${data.action}`, data }));
 
         if (data.action === 'updateUser') {
-          console.log('???');
           ServerUsers[data.user.id] = data.user;
 
           // wss.clients.forEach((existingClient: Client) => {
@@ -97,6 +96,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
         if (data.action === 'joinGame') {
           const game = joinGame(data);
 
+          console.log('joinGame...', { game });
           if (game) {
             client.send(JSON.stringify({ game }));
             updateClientGames(game, wss.clients);
@@ -122,9 +122,9 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
 
           if (game) {
             updateClientGames(game, wss.clients);
-            updateClientGames(game, wss.clients, {
-              alert: `${game.users[data.userId].username} left the game`,
-            });
+            // updateClientGames(game, wss.clients, {
+            //   alert: `${game.users[data.userId].username} left the game`,
+            // });
           } else client.send(JSON.stringify({ alert: 'Error leaving game' }));
 
           // console.log({ data, game });
