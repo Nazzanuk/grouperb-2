@@ -15,6 +15,7 @@ import { UserId } from 'Entities/UserId.entity';
 import { VoteGame } from 'Entities/VoteGame.entity';
 
 import styles from './VoteGame.screen.module.css';
+import { WinnerBroadcast } from 'Components/WinnerBroadcast/WinnerBroadcast';
 
 export const VoteGameScreen: FC = () => {
   const { query } = useRouter();
@@ -139,29 +140,39 @@ export const VoteGameScreen: FC = () => {
               <div className="shout">Who {currentQuestion}?</div>
 
               {!isWinner && (
-                <div className={styles.singlePlayer} data-animate key="winner">
-                  <img
-                    className={styles.playerImage}
-                    src={`/img/avatars/${winnersArray[0].avatar}`}
-                    alt="avatar"
-                  />
+                <>
+                  <WinnerBroadcast user={winnersArray[0]} subText={currentQuestion} />
+                  <div className={styles.singlePlayer} data-animate key="winner">
+                    <img
+                      className={styles.playerImage}
+                      src={`/img/avatars/${winnersArray[0].avatar}`}
+                      alt="avatar"
+                    />
 
-                  <div className={styles.playerName}>{winnersString}</div>
-                </div>
+                    <div className={styles.playerName}>{winnersString}</div>
+                  </div>
+                </>
               )}
 
               {isWinner && (
-                <div className={styles.singlePlayer} data-animate key="winner">
-                  <img
-                    className={styles.playerImage}
-                    src={`/img/trophies/trophy-${trophyIndex}.jpeg`}
-                    alt="trophy"
+                <>
+                  <WinnerBroadcast
+                    img={`/img/trophies/trophy-${trophyIndex}.jpeg`}
+                    text={allAreWinners ? 'All of You!' : winnersString}
+                    subText={currentQuestion}
                   />
+                  <div className={styles.singlePlayer} data-animate key="winner">
+                    <img
+                      className={styles.playerImage}
+                      src={`/img/trophies/trophy-${trophyIndex}.jpeg`}
+                      alt="trophy"
+                    />
 
-                  <div className={styles.playerName}>
-                    {allAreWinners ? 'All of You!' : winnersString}
+                    <div className={styles.playerName}>
+                      {allAreWinners ? 'All of You!' : winnersString}
+                    </div>
                   </div>
-                </div>
+                </>
               )}
 
               <div className={styles.buttons}>
