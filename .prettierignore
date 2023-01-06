@@ -6,4 +6,5 @@ package-lock.json
 yarn.lock
 package.json
 app/index.html
+
 **/*.hbs
