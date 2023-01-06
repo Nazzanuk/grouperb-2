@@ -46,7 +46,7 @@
 
   &[data-animate='true'] {
     transform: scale(0);
-    animation: showPlayer 1s cubic-bezier(.89,1.81,.75,.86) forwards;
+    animation: showPlayer 0.5s cubic-bezier(.89,1.81,.75,.86) forwards;
     animation-delay: 2s;
   }
 

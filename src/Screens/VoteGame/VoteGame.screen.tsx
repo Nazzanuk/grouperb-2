@@ -20,6 +20,7 @@ export const VoteGameScreen: FC = () => {
   const { query } = useRouter();
   const i = useRef<NodeJS.Timer>(null);
   const [trophyIndex, setTrophyIndex] = useState(1);
+  const [isNextRoundEnabled, setIsNextRoundEnabled] = useState(false);
   const game = useAtomValue(voteGameAtom);
   const send = useSetAtom(wsAtom);
   const user = useAtomValue(userAtom);
@@ -49,6 +50,11 @@ export const VoteGameScreen: FC = () => {
   const startRound = () => send({ action: 'startVoteRound', gameId: game!.id, userId: user.id });
   const castVote = (voteUserId: UserId) =>
     send({ action: 'castVote', gameId: game!.id, userId: user.id, vote: voteUserId });
+
+  useEffect(() => {
+    if (game?.status !== 'results') return setIsNextRoundEnabled(false);
+    setTimeout(() => setIsNextRoundEnabled(true), 4000);
+  }, [game?.status === 'results']);
 
   useEffect(() => {
     setTrophyIndex(random(1, 3));
@@ -161,7 +167,12 @@ export const VoteGameScreen: FC = () => {
               <div className={styles.buttons}>
                 <>
                   {!isObserver && (
-                    <div className="button" data-variant="light" onClick={startRound}>
+                    <div
+                      className="button"
+                      data-variant="light"
+                      onClick={startRound}
+                      data-disabled={!isNextRoundEnabled}
+                    >
                       Next round
                     </div>
                   )}

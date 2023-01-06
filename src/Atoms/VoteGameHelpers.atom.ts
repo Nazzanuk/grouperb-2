@@ -39,6 +39,11 @@ export const voteGameHelpersAtom = atom((get) => {
 
   const IHaveVoted = !!currentRound?.votes[user.id];
 
+  // get all questions that I have won
+  const myWinningQuestions = values(game?.rounds ?? [])
+    .filter((round) => round.winners[user.id])
+    .map((round) => round.question);
+
   //string which lists all winners in a sentence
   const winnersString = winnersArray
     .map((winner) => winner.username)
@@ -51,7 +56,24 @@ export const voteGameHelpersAtom = atom((get) => {
         return `${acc}, ${name}`;
       }
     }, '');
-  
+
+  const usersWithScores = userArray.map((user) => {
+    const userWinningQuestions = values(game?.rounds ?? [])
+      .filter((round) => round.winners[user.id])
+      .map((round) => round.question);
+    const userCorrectVotes = userWinningQuestions.filter((question) =>
+      myWinningQuestions.includes(question),
+    ).length;
+    return { ...user, score: userCorrectVotes };
+  });
+
+  const usersSortedByScore = usersWithScores.sort((a, b) => b.score - a.score);
+  const usersWithHighestScore = usersSortedByScore.filter(
+    (user) => user.score === usersSortedByScore[0].score,
+  );
+
+  console.log({usersSortedByScore})
+  // if there is a
 
   return {
     currentRound,
@@ -70,5 +92,7 @@ export const voteGameHelpersAtom = atom((get) => {
     isWinner,
     allAreWinners,
     winnersString,
+    myWinningQuestions,
+    usersSortedByScore,
   };
 });

@@ -35,17 +35,16 @@ export const BottomBar: FC = () => {
   };
 
   const joinGame = () => {
-    console.log({ query})
+    console.log({ query });
     send({ action: 'joinGame', gameId: (query.voteGameId as string) ?? gameCode, user });
   };
-
 
   if (isProfile) return null;
 
   return (
     <>
       <div className={styles.bottomBar}>
-      <div className={styles.overlay}/>
+        <div className={styles.overlay} />
         <BottomOverlay />
         <div className={styles.buttons}>
           {isSplash && (
@@ -71,13 +70,16 @@ export const BottomBar: FC = () => {
           {isVoteGame && (
             <>
               <div className={styles.icons}>
-                <div className={styles.icon}>
+                <div
+                  className={styles.icon}
+                  onClick={() => setShowBottomOverlay('voteGameLeaderboard')}
+                >
                   <i className="fas fa-trophy"></i>
                 </div>
-                <div className={styles.icon}>
+                <div className={styles.icon} onClick={() => setShowBottomOverlay('voteGameFavs')}>
                   <i className="fas fa-star"></i>
                 </div>
-                <div className={styles.icon}>
+                <div className={styles.icon} onClick={() => setShowBottomOverlay('voteGameInfo')}>
                   <i className="fas fa-info"></i>
                 </div>
                 <div
