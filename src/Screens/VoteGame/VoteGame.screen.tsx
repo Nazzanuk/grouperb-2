@@ -90,7 +90,7 @@ export const VoteGameScreen: FC = () => {
 
   return (
     <>
-      <div className="darkScreen" style={{ backgroundImage: `url('/img/backgrounds/b9.png')` }}>
+      <div className="darkScreen" style={{ backgroundImage: `url('/img/backgrounds/b9.jpeg')` }}>
         <div className="darkScreenOverlay" />
         <div className="darkScreenContent">
           {status === 'lobby' && (
@@ -154,7 +154,7 @@ export const VoteGameScreen: FC = () => {
                 <div className={styles.singlePlayer} data-animate key="winner">
                   <img
                     className={styles.playerImage}
-                    src={`/img/trophies/trophy-${trophyIndex}.png`}
+                    src={`/img/trophies/trophy-${trophyIndex}.jpeg`}
                     alt="trophy"
                   />
 

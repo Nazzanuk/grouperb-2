@@ -4,12 +4,13 @@ import { useEffect } from 'react';
 
 import { useSetAtom, useAtom, useAtomValue } from 'jotai';
 
+import { useRouter } from 'next/router';
+
 import { gameCodeAtom } from 'Atoms/GameCodeAtom';
+import { userAtom } from 'Atoms/User.atom';
 import { wsAtom } from 'Atoms/Ws.atom';
 
 import styles from './Home.screen.module.css';
-import { useRouter } from 'next/router';
-import { userAtom } from 'Atoms/User.atom';
 
 const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -31,8 +32,8 @@ export const HomeScreen: FC = () => {
 
   return (
     <>
-      <div className="darkScreen" style={{ backgroundImage: `url('/img/backgrounds/b12.png')` }}>
-        <div className="darkScreenOverlay"/>
+      <div className="darkScreen" style={{ backgroundImage: `url('/img/backgrounds/b12.jpeg')` }}>
+        <div className="darkScreenOverlay" />
         <div className="darkScreenContent">
           <div className="label">Enter game code</div>
 
