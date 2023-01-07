@@ -60,6 +60,9 @@ input {
 }
 
 .darkScreen {
+  --width: min(900px, 100%);
+  --sidePadding: calc(((100vw - var(--width)) / 2) + 20px);
+
   flex: 1 1 auto;
   min-height: 100px;
   padding: 90px 20px 20px;
@@ -78,6 +81,10 @@ input {
 
   overflow: auto;
   position: relative;
+  background-size: cover;
+  padding-left: var(--sidePadding);
+  padding-right: var(--sidePadding);
+  /* margin: 0 auto; */
 }
 
 .darkScreenOverlay {

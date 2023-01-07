@@ -14,12 +14,12 @@ import { routerAtom } from 'Atoms/Router.atom';
 import { userAtom } from 'Atoms/User.atom';
 import { initWebSocketAtom, wsAtom } from 'Atoms/Ws.atom';
 import { BottomBar } from 'Components/BottomBar/BottomBar';
+import { Sidebar } from 'Components/Sidebar/Sidebar';
 import { TopBar } from 'Components/TopBar/TopBar';
 
 import 'Global/normalize.css';
 import 'Global/app.css';
 import '../public/fontawesome/css/all.min.css';
-import { Sidebar } from 'Components/Sidebar/Sidebar';
 
 const bebasNeue = Bebas_Neue({
   weight: '400',

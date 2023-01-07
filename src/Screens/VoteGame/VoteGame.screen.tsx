@@ -22,6 +22,7 @@ export const VoteGameScreen: FC = () => {
   const i = useRef<NodeJS.Timer>(null);
   const [trophyIndex, setTrophyIndex] = useState(1);
   const [isNextRoundEnabled, setIsNextRoundEnabled] = useState(false);
+  const [isVoteButtonsEnabled, setIsVoteButtonsEnabled] = useState(false);
   const game = useAtomValue(voteGameAtom);
   const send = useSetAtom(wsAtom);
   const user = useAtomValue(userAtom);
@@ -56,6 +57,11 @@ export const VoteGameScreen: FC = () => {
     if (game?.status !== 'results') return setIsNextRoundEnabled(false);
     setTimeout(() => setIsNextRoundEnabled(true), 4000);
   }, [game?.status === 'results']);
+
+  useEffect(() => {
+    if (game?.status !== 'voting') return setIsVoteButtonsEnabled(false);
+    setTimeout(() => setIsVoteButtonsEnabled(true), 2000);
+  }, [game?.status === 'voting']);
 
   useEffect(() => {
     setTrophyIndex(random(1, 3));
@@ -106,6 +112,7 @@ export const VoteGameScreen: FC = () => {
 
           {status === 'voting' && (
             <>
+              <WinnerBroadcast text={`Round ${currentRoundIndex}`} duration={'1.5s'} bits={5} />
               <div className="label">Round {currentRoundIndex}</div>
 
               <div className="shout">Who {currentQuestion}?</div>
@@ -125,6 +132,7 @@ export const VoteGameScreen: FC = () => {
                       data-size="s"
                       key={user.id}
                       onClick={() => castVote(user.id)}
+                      data-disabled={!isVoteButtonsEnabled}
                     >
                       {user.username}
                     </div>
