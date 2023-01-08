@@ -20,6 +20,7 @@ export const createVoteGame = ({ host }: CreateVoteGameProps): VoteGame => {
     usedQuestionList: [],
     rounds: [],
     status: 'lobby',
+    maxRoundsIndex: 20,
   };
 
   return voteGame;

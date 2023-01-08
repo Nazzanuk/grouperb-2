@@ -6,6 +6,7 @@ export type VoteGame = Game & {
   questionList: string[];
   usedQuestionList: string[];
   rounds: VoteRound[];
-  status: 'lobby' | 'voting' | 'results';
+  maxRoundsIndex: number;
+  status: 'lobby' | 'voting' | 'results' | 'finished';
 };
 

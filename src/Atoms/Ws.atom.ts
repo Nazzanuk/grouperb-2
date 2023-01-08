@@ -89,6 +89,7 @@ export const initWebSocketAtom = atom<GameWs, User>(
       gameWs.instance.send(JSON.stringify({ action: 'updateUser', user }));
     };
 
+    toast.clearWaitingQueue();
     gameWs.instance.onmessage = (event) => {
       const router = get(routerAtom);
       set(connectionStatusAtom, 'Connected');
@@ -102,7 +103,7 @@ export const initWebSocketAtom = atom<GameWs, User>(
       }
 
       if (data.alert) {
-        toast(data.alert);
+        toast?.(data?.alert, { toastId: data?.alert });
         // alert(data.alert);
       }
     };

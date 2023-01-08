@@ -14,7 +14,7 @@ export const SplashScreen: FC = () => {
           {/* <div className={styles.bottomCircle}></div> */}
           <div className={styles.img}>
             <img
-              src="/nazzanuk_abstract_watercolor_picture_of_a_trophy_black_yellow_o_ecb5504a-4b7c-43e7-b80d-14cf1f248c37-removebg.jpeg"
+              src="/nazzanuk_abstract_watercolor_picture_of_a_trophy_black_yellow_o_ecb5504a-4b7c-43e7-b80d-14cf1f248c37-removebg.png"
               alt=""
             />
 

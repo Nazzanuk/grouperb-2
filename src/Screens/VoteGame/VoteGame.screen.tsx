@@ -43,6 +43,12 @@ export const VoteGameScreen: FC = () => {
     isWinner,
     allAreWinners,
     winnersString,
+    usersSortedByScore,
+    topScorer,
+    mostQuestionsAssignedUser,
+    leastQuestionsAssignedUser,
+    mostSelfVotesUser,
+    stalkers,
   } = useAtomValue(voteGameHelpersAtom);
 
   console.log({ game, status });
@@ -102,7 +108,7 @@ export const VoteGameScreen: FC = () => {
         <div className="darkScreenContent">
           {status === 'lobby' && (
             <>
-              <div className="label">Game ID</div>
+              <div className="label">Game code</div>
               <div className="textOutput">{game.id}</div>
 
               <div className="label">Players</div>
@@ -113,7 +119,9 @@ export const VoteGameScreen: FC = () => {
           {status === 'voting' && (
             <>
               <WinnerBroadcast text={`Round ${currentRoundIndex}`} duration={'1.5s'} bits={5} />
-              <div className="label">Round {currentRoundIndex}</div>
+              <div className="label">
+                Round {currentRoundIndex} of {game.maxRoundsIndex}
+              </div>
 
               <div className="shout">Who {currentQuestion}?</div>
 
@@ -142,6 +150,65 @@ export const VoteGameScreen: FC = () => {
             </>
           )}
 
+          {status === 'finished' && (
+            <>
+              <WinnerBroadcast
+                user={topScorer}
+                text={`${topScorer.username} wins!`}
+                subText={`Game Over`}
+                duration={'10s'}
+                bits={50}
+              />
+              {/* <div className="label">Round {currentRoundIndex} of {game.maxRoundsIndex}</div> */}
+
+              <div className="shout">Game over</div>
+
+              <div className="label">leaderboard</div>
+
+              <div className={styles.list}>
+                {usersSortedByScore.map((user, i) => (
+                  <div className={styles.listItem} key={user.id} data-highlight>
+                    <img className={styles.playerIcon} src={`/img/avatars/${user.avatar}`} alt="avatar" />
+                    {i + 1}. {user.username}
+                    <div className={styles.score}> {user.score}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="label">Awards</div>
+              <div className={styles.list}>
+                <div className={styles.listItem} data-highlight>
+                  <img
+                    className={styles.playerIcon}
+                    src={`/img/avatars/${mostQuestionsAssignedUser?.avatar}`}
+                    alt="avatar"
+                  />
+                  Popular - {mostQuestionsAssignedUser?.username} had the most questions assigned to them
+                </div>
+                <div className={styles.listItem} data-highlight>
+                  <img
+                    className={styles.playerIcon}
+                    src={`/img/avatars/${leastQuestionsAssignedUser?.avatar}`}
+                    alt="avatar"
+                  />
+                  Nobody - {leastQuestionsAssignedUser?.username} had the fewest questions assigned to them
+                </div>
+                <div className={styles.listItem} data-highlight>
+                  <img className={styles.playerIcon} src={`/img/avatars/${mostSelfVotesUser?.avatar}`} alt="avatar" />
+                  Narcissist - {mostSelfVotesUser?.username} voted for themself the most
+                </div>
+                <div className={styles.listItem} data-highlight>
+                  <img className={styles.playerIcon} src={`/img/avatars/${stalkers?.[0]?.avatar}`} alt="avatar" />
+                  Stalker - {stalkers?.[0]?.username} voted for {stalkers?.[1]?.username} a record amount of times
+                </div>
+              </div>
+
+              {/* <div className={styles.singlePlayer}>
+                <div className={styles.playerName}>Game over</div>
+              </div> */}
+            </>
+          )}
+
           {status === 'results' && (
             <>
               <div className="label">Round {currentRoundIndex}</div>
@@ -149,13 +216,9 @@ export const VoteGameScreen: FC = () => {
 
               {!isWinner && (
                 <>
-                  <WinnerBroadcast user={winnersArray[0]} subText={currentQuestion} />
+                  <WinnerBroadcast user={winnersArray[0]} subText={`Who ${currentQuestion}?...`} />
                   <div className={styles.singlePlayer} data-animate key="winner">
-                    <img
-                      className={styles.playerImage}
-                      src={`/img/avatars/${winnersArray[0].avatar}`}
-                      alt="avatar"
-                    />
+                    <img className={styles.playerImage} src={`/img/avatars/${winnersArray[0].avatar}`} alt="avatar" />
 
                     <div className={styles.playerName}>{winnersString}</div>
                   </div>
@@ -170,15 +233,9 @@ export const VoteGameScreen: FC = () => {
                     subText={currentQuestion}
                   />
                   <div className={styles.singlePlayer} data-animate key="winner">
-                    <img
-                      className={styles.playerImage}
-                      src={`/img/trophies/trophy-${trophyIndex}.jpeg`}
-                      alt="trophy"
-                    />
+                    <img className={styles.playerImage} src={`/img/trophies/trophy-${trophyIndex}.jpeg`} alt="trophy" />
 
-                    <div className={styles.playerName}>
-                      {allAreWinners ? 'All of You!' : winnersString}
-                    </div>
+                    <div className={styles.playerName}>{allAreWinners ? 'All of You!' : winnersString}</div>
                   </div>
                 </>
               )}
@@ -203,15 +260,9 @@ export const VoteGameScreen: FC = () => {
           {status === 'lobby' && (
             <div className={styles.buttons}>
               <>
-                {!have3Users && (
-                  <div className={styles.blurb}>
-                    At least 3 players are needed to start the game
-                  </div>
-                )}
+                {!have3Users && <div className={styles.blurb}>At least 3 players are needed to start the game</div>}
 
-                {!isHost && have3Users && (
-                  <div className={styles.blurb}>Waiting for host to start game...</div>
-                )}
+                {!isHost && have3Users && <div className={styles.blurb}>Waiting for host to start game...</div>}
 
                 {isHost && userArray.length > 2 && (
                   <div className="button" data-variant="orange" onClick={startGame}>

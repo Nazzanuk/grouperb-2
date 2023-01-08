@@ -30,7 +30,7 @@ const genSquares = (bits:number) =>
     '--left': `${random(0, 100)}vw`,
     '--size': `${random(50, 300)}px`,
     '--speedMultiplier': random(-0.5, 1.5),
-    '--color': sample(['#e9771d', '#f7bb07', '#f49504', '#e4590e', '#f4d8d1', '#000']),
+    '--color': sample(['#e9771d', '#f7bb07', '#f49504', '#e4590e', '#dfcd68', '#000']),
   }));
 
 export const WinnerBroadcast: FC<WinnerBroadcastProps> = ({
@@ -83,7 +83,7 @@ export const WinnerBroadcast: FC<WinnerBroadcastProps> = ({
         <div className={styles.broadCastBoxAngle} style={{ '--angle': '-5deg' }}>
           <div className={styles.broadCastBox}>
             <div className={styles.user} style={{}}>
-              {user?.username ?? text}
+              {text ?? user?.username}
             </div>
           </div>
         </div>
@@ -92,7 +92,7 @@ export const WinnerBroadcast: FC<WinnerBroadcastProps> = ({
           <div className={styles.broadCastBoxAngle} style={{ '--angle': '-5deg' }}>
             <div className={styles.broadCastBox}>
               <div className={styles.subText} style={{}}>
-                Who {subText}?...
+                {subText}
               </div>
             </div>
           </div>
