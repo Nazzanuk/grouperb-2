@@ -222,9 +222,8 @@ input {
   font-size: 4vh;
   font-weight: 500;
   /* text-transform: uppercase; */
-  color: white;
+  color: #bbb;
   margin-bottom: 20px;
-  opacity: 0.6;
   text-align: center;
   padding: 0 40px;
 }

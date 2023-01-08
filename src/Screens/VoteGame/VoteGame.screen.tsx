@@ -49,6 +49,7 @@ export const VoteGameScreen: FC = () => {
     leastQuestionsAssignedUser,
     mostSelfVotesUser,
     stalkers,
+    didGuessCorrectly,
   } = useAtomValue(voteGameHelpersAtom);
 
   console.log({ game, status });
@@ -239,6 +240,9 @@ export const VoteGameScreen: FC = () => {
                   </div>
                 </>
               )}
+
+              {didGuessCorrectly && <div className={styles.correct}> +1 <span>You were right!</span></div>}
+              {!didGuessCorrectly && <div className={styles.correct}> +0 <span>You were wrong!</span></div>}
 
               <div className={styles.buttons}>
                 <>
