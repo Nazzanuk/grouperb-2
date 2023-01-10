@@ -10,12 +10,12 @@ import { userAtom } from 'Atoms/User.atom';
 import { voteGameAtom } from 'Atoms/VoteGame.atom';
 import { voteGameHelpersAtom } from 'Atoms/VoteGameHelpers.atom';
 import { wsAtom } from 'Atoms/Ws.atom';
+import { WinnerBroadcast } from 'Components/WinnerBroadcast/WinnerBroadcast';
 import { User } from 'Entities/User.entity';
 import { UserId } from 'Entities/UserId.entity';
 import { VoteGame } from 'Entities/VoteGame.entity';
 
 import styles from './VoteGame.screen.module.css';
-import { WinnerBroadcast } from 'Components/WinnerBroadcast/WinnerBroadcast';
 
 export const VoteGameScreen: FC = () => {
   const { query } = useRouter();
