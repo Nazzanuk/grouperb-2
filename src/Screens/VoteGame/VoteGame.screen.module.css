@@ -117,9 +117,11 @@
   gap: 10px;
   margin-top: auto;
   justify-content: center;
+  flex-wrap: wrap;
 
   & :global(.button) {
     min-width: 0;
+    min-width: auto;
     padding: 0 20px;
   }
 }
