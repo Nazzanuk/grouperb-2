@@ -17,6 +17,8 @@ import { startVoteGame } from 'Utils/Vote/StartVoteGame';
 import { send } from 'process';
 import { castVote } from 'Utils/Vote/CastVote';
 import { startVoteRound } from 'Utils/Vote/StartVoteRound';
+import { newDefuseRound } from 'Utils/Defuse/NewDefuseRound';
+import { chooseDefuseWire } from 'Utils/Defuse/ChooseDefuseWire';
 
 function heartbeat() {
   this.isAlive = true;
@@ -140,6 +142,14 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
           // console.log({ data, game });
         }
 
+        if (data.action === 'startDefuseRound') {
+          const game = newDefuseRound(data);
+
+          if (game) updateClientGames(game, wss.clients);
+          if (game) updateClientGames(game, wss.clients, { alert: `Game started!` });
+          else client.send(JSON.stringify({ alert: 'Error starting game' }));
+        }
+
         if (data.action === 'castVote') {
           const game = castVote(data);
 
@@ -159,6 +169,19 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
           const game = startVoteRound(data);
 
           if (game) updateClientGames(game, wss.clients);
+          else client.send(JSON.stringify({ alert: 'Error starting new round' }));
+
+          // console.log({ data, game });
+        }
+
+        if (data.action === 'chooseDefuseWire') {
+          const game = chooseDefuseWire(data);
+
+          if (game) updateClientGames(game, wss.clients);
+          if (game) {
+            const user = game.users[data.userId];
+            updateClientGames(game, wss.clients, { alert: `${user.username} cut wire ${data.letter}` });
+          }
           else client.send(JSON.stringify({ alert: 'Error starting new round' }));
 
           // console.log({ data, game });

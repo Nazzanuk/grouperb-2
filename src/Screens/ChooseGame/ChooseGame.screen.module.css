@@ -1,0 +1,54 @@
+.chooseGame {
+}
+
+.game {
+  height: 25vh;
+  width: 100%;
+
+  border-radius: 10px;
+
+  /* background: green; */
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap:10px;
+  margin-bottom:10px;
+
+  font-size: 6vh;
+  position:relative;
+  /* box-shadow:0 0 3px rgba(255,255,255,0.7) */
+  padding: 20px;
+  text-align: center;
+  font-weight: 100;
+
+  text-shadow: 0 0px 1px #000;
+  text-shadow: 0 5px 15px #000;
+
+}
+
+.background {
+  background-size: cover;
+  background-position:center;
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+  border-radius: 10px;
+  filter: brightness(0.9);
+}
+
+.title {
+  font-size: 6vh;
+  position:relative;
+  z-index:1;
+  font-weight: 400;
+}
+
+.subtitle {
+  font-size: 3vh;
+  position:relative;
+  z-index:2;
+}

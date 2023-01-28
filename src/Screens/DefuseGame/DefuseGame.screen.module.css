@@ -1,0 +1,384 @@
+.votegame {
+}
+
+.playerList {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 20px;
+  flex-wrap: wrap;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 0 1 min(calc(25% - (60px / 4)), 15vh);
+}
+
+.playerName {
+  font-size: min(3vw, 2vh);
+  /* font-weight: bold; */
+  margin-top: 1vh;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 10px;
+  text-align: center;
+
+  & i {
+    font-size: 1.5vh;
+    line-height: 1;
+    padding-bottom: 4px;
+  }
+}
+
+.correct {
+  font-size: 50px;
+  /* font-weight: bold; */
+  margin-top: 1vh;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  /* gap: 10px; */
+  text-align: center;
+  justify-content: center;
+  width: 100%;
+  margin: auto;
+  height: 150px;
+  width: 150px;
+  border-radius: 50%;
+  background: linear-gradient(140deg, rgba(255, 195, 0, 1) 0%, rgba(255, 120, 0, 1) 100%);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+
+  animation: slideUp 2s linear normal forwards;
+  animation-delay: 4s;
+  opacity: 0;
+
+  & span {
+    font-size: 16px;
+  }
+}
+
+.singlePlayer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* flex: 0 1 calc(50% - (60px / 4)); */
+  margin-bottom: 20px;
+  will-change: opacity transform;
+
+  &[data-animate='true'] {
+    transform: scale(0);
+    animation: showPlayer 0.5s cubic-bezier(0.89, 1.81, 0.75, 0.86) forwards;
+    animation-delay: 2s;
+  }
+
+  & .player {
+    flex: 1 1 calc(25% - (60px / 4));
+    width: min(50vw, 30vh);
+  }
+
+  & .playerName {
+    flex: 1 1 calc(25% - (60px / 4));
+    font-size: 4vh;
+  }
+
+  & .playerImage {
+    /* width: 50vw; */
+    width: min(50vw, 30vh);
+  }
+}
+
+.playerImage {
+  border-radius: 50%;
+  width: 100%;
+  object-fit: cover;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  flex: 1 1 auto;
+}
+
+.buttons {
+  margin-top: auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.userButtons {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  margin-top: auto;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  & :global(.button) {
+    min-width: auto;
+    padding: 0 20px;
+  }
+}
+
+.userButton {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  height: 50px;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+}
+
+.blurb {
+  color: #bbb;
+  padding: 20px 0;
+  text-align: center;
+}
+
+@keyframes showPlayer {
+  0% {
+    /* transform: scale(0) rotate(-360deg); */
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/*
+
+
+
+*/
+
+.list {
+  display: flex;
+  flex-direction: column;
+  /* gap: 5px; */
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.listItem {
+  font-size: 22px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  font-weight: 100;
+  justify-content: flex-start;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.3);
+
+  padding: 10px 20px;
+  margin: 0 -20px;
+
+  width: calc(100% + 40px);
+
+  & i {
+    font-size: 12px;
+    position: relative;
+    top: -2px;
+  }
+
+  &[data-highlight] {
+    &:nth-child(2n - 1) {
+      background: rgba(0, 0, 0, 0.4);
+    }
+  }
+}
+
+.score {
+  background: black;
+  color: orange;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+
+  font-size: 22px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+}
+
+.copy {
+  /* background: black; */
+  /* color: orange; */
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+
+  font-size: 20px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+  cursor: pointer;
+  transition: 0.1s;
+
+  & i {
+    font-size: inherit;
+  }
+
+  &:active {
+    background: orange;
+    color: white;
+  }
+}
+
+.playerIcon {
+  background: black;
+  color: orange;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+
+  font-size: 22px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bigBox {
+  --color: red;
+  width: 100%;
+  height: calc(10vw + 90px);
+  background: #f7f7f7;
+  box-shadow: inset 40vw 0vw 40vw 0vw rgba(0,0,0,0.5), inset 0vw 0vw 0.8vw 0vw rgba(255,255,255,0.7);
+
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: -20px;
+  position: relative;
+  margin-top:-90px;
+  z-index: 1;
+}
+
+.wireBox {
+  display: flex;
+  flex-direction: column;
+}
+
+.wires {
+  display: flex;
+  flex-direction: row;
+  /* gap: 10px; */
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.wire {
+  --color: red;
+
+
+  height: 20vh;
+  width: 3vw;
+  margin: 3.5vw;
+  color: var(--color);
+  background: var(--color);
+  box-shadow: inset 0 0 2vw 0.5vw rgba(0,0,0,0.5);
+
+  &[data-cut="true"] {
+    filter: grayscale(30%) brightness(0.5);
+  }
+}
+
+.lights {
+  display: flex;
+  flex-direction: row;
+  /* gap: 10px; */
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  margin-top: -3vh;
+}
+
+.lightBox {
+  --color: red;
+  width: 10vw;
+  height: 10vw;
+  background: #f7f7f7;
+  box-shadow: inset 4vw 0vw 5vw 0vw rgba(0,0,0,0.7), inset 0vw 0vw 0.8vw 0vw rgba(255,255,255,0.7);
+
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  cursor:pointer;
+  position: relative;
+}
+
+.light {
+  --color: red;
+  width: 8vw;
+  height: 8vw;
+  background: var(--color);
+  border-radius: 50%;
+  box-shadow: inset 0 0 2vw 1vw rgba(0,0,0,0.2), 0vw 0vw 3vw 0vw var(--color), 0vw 0vw 3vw 0vw rgba(255,255,255,0.6);
+
+
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  padding-top:3px;
+  font-size:6vw;
+  font-weight: 100;
+  color: rgba(255,255,255,0.7);
+
+  &[data-cut="true"] {
+    filter: grayscale(30%) brightness(0.5);
+  }
+}
+
+.clues {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.clue {
+  /* border: 1px solid white; */
+  color: black;
+  padding:8px 10px 5px;
+  font-size:16px;
+  font-weight: 100;
+  /* text-transform: uppercase; */
+  background: white;
+
+  &[data-pass="true"] {
+    background: green;
+    color: white;
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

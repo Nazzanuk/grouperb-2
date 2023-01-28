@@ -19,6 +19,7 @@ specifiers:
   jotai: ^1.12.0
   lodash: ^4.17.21
   next: 13.1.1
+  ordinal: ^1.0.3
   postcss: ^8.4.20
   postcss-flexbugs-fixes: ^5.0.2
   postcss-preset-env: ^7.8.3
@@ -45,6 +46,7 @@ dependencies:
   jotai: 1.12.0_react@18.2.0
   lodash: 4.17.21
   next: 13.1.1_biqbaboplfbrettd7655fr4n2y
+  ordinal: 1.0.3
   postcss: 8.4.20
   postcss-flexbugs-fixes: 5.0.2_postcss@8.4.20
   postcss-preset-env: 7.8.3_postcss@8.4.20
@@ -1949,6 +1951,10 @@ packages:
       prelude-ls: 1.2.1
       type-check: 0.4.0
       word-wrap: 1.2.3
+    dev: false
+
+  /ordinal/1.0.3:
+    resolution: {integrity: sha512-cMddMgb2QElm8G7vdaa02jhUNbTSrhsgAGUz1OokD83uJTwSUn+nKoNoKVVaRa08yF6sgfO7Maou1+bgLd9rdQ==}
     dev: false
 
   /p-limit/3.1.0:

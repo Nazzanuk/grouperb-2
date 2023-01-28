@@ -3,7 +3,7 @@ import { UserId } from 'Entities/UserId.entity';
 
 export type HostGamePayload = {
   action: 'hostGame';
-  type: 'vote';
+  type: 'vote' | 'defuse';
   user: User;
 };
 
@@ -45,14 +45,36 @@ export type StartVoteGamePayload = {
   gameId: string;
   userId: UserId;
 };
+
+export type StartDefuseGamePayload = {
+  action: 'startDefuseGame';
+  gameId: string;
+  userId: UserId;
+};
+
 export type StartVoteRoundPayload = {
   action: 'startVoteRound';
   gameId: string;
   userId: UserId;
 };
 
+export type StartDefuseRoundPayload = {
+  action: 'startDefuseRound';
+  gameId: string;
+  userId: UserId;
+};
+
+export type ChooseDefuseWire = {
+  action: 'chooseDefuseWire';
+  gameId: string;
+  userId: UserId;
+  letter: string;
+};
+
 export type Payload =
   | HostGamePayload
+  | StartDefuseGamePayload
+  | StartDefuseRoundPayload
   | UpdateUserPayload
   | ConnectPayload
   | JoinGamePayload
@@ -60,4 +82,5 @@ export type Payload =
   | GetGamePayload
   | StartVoteGamePayload
   | StartVoteRoundPayload
+  | ChooseDefuseWire
   | LeaveGamePayload;

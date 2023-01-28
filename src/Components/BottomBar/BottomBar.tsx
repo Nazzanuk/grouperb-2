@@ -26,12 +26,15 @@ export const BottomBar: FC = () => {
   const isSplash = asPath === '/';
   const isProfile = asPath === '/select-user';
   const isVoteGame = asPath.includes('/vote-game');
+  const isDefuseGame = asPath.includes('/defuse-game');
+  const isChooseGame = asPath.includes('/choose-game');
 
   const { isHost, isObserver } = useAtomValue(voteGameHelpersAtom);
 
   const hostGame = () => {
-    send({ action: 'hostGame', type: 'vote', user });
-    // push('/vote-game');
+    // send({ action: 'hostGame', type: 'vote', user });
+    // send({ action: 'hostGame', type: 'defuse', user });
+    push('/choose-game');
   };
 
   const joinGame = () => {
@@ -65,9 +68,36 @@ export const BottomBar: FC = () => {
             </>
           )}
 
+          {isChooseGame && (
+            <>
+              <Link href="/home" className="button">
+                Home
+              </Link>
+            </>
+          )}
+
           {isSplash && <div className={styles.blurb}>Let's go</div>}
 
           {isVoteGame && (
+            <>
+              <div className={styles.icons}>
+                <div className={styles.icon} onClick={() => setShowBottomOverlay('voteGameLeaderboard')}>
+                  <i className="fas fa-trophy"></i>
+                </div>
+                <div className={styles.icon} onClick={() => setShowBottomOverlay('voteGameFavs')}>
+                  <i className="fas fa-star"></i>
+                </div>
+                <div className={styles.icon} onClick={() => setShowBottomOverlay('voteGameInfo')}>
+                  <i className="fas fa-info"></i>
+                </div>
+                <div className={styles.icon} onClick={() => setShowBottomOverlay('voteGameOptions')}>
+                  <i className="fas fa-cog"></i>
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* {isDefuseGame && (
             <>
               <div className={styles.icons}>
                 <div
@@ -90,7 +120,7 @@ export const BottomBar: FC = () => {
                 </div>
               </div>
             </>
-          )}
+          )} */}
         </div>
 
         {/* <div className={styles.bottomSvg}>
