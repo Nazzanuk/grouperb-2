@@ -15,13 +15,13 @@ const ruleTypes = {
   colorBeforeColor: 'C-C',
   letterBeforeColor: 'L-C',
   letterAfterColor: 'L-C',
-  // colorBeforeLetter: 'C-L',
-  // colorAfterLetter: 'C-L',
+  colorBeforeLetter: 'C-L',
+  colorAfterLetter: 'C-L',
   letterAtIndex: 'L-I',
-  // letterAfterIndex: 'L-I',
+  letterAfterIndex: 'L-I',
   colorAtIndex: 'C-I',
-  // colorBeforeIndex: 'C-I',
-  // colorsTogether: 'C',
+  colorBeforeIndex: 'C-I',
+  colorsTogether: 'C',
 };
 
 const rules = [
@@ -63,14 +63,14 @@ const colorBeforeColor = (ruleValue: string, wires: DefuseWire[]): [string, bool
 
   const description = `All ${colorA} wires must be cut before any ${colorB} wires`;
 
-  wires.forEach(({ color }, i) => {
+  [...wires].reverse().forEach(({ color }, i) => {
     if (color === colorA) colorAIndex = i;
-    if (color === colorB && colorAIndex < i) colorBIndex = i;
+    if (color === colorB) colorBIndex = i;
   });
 
   if (colorAIndex === -1 || colorBIndex === -1) return [description, false];
 
-  return [description, colorAIndex < colorBIndex];
+  return [description, colorAIndex > colorBIndex];
 };
 
 const letterBeforeColor = (ruleValue: string, wires: DefuseWire[]): [string, boolean] => {
@@ -111,12 +111,14 @@ const colorBeforeLetter = (ruleValue: string, wires: DefuseWire[]): [string, boo
 
   const description = `All ${color} wires must be cut before wire ${letter}`;
 
-  wires.forEach(({ letter: l, color: c }, i) => {
+  [...wires].forEach(({ letter: l, color: c }, i) => {
     if (c === color) colorIndex = i;
-    if (l === letter && colorIndex < i) letterIndex = i;
+    if (l === letter) letterIndex = i;
   });
 
-  return [description, colorIndex < letterIndex || colorIndex === -1 || letterIndex === -1];
+  if (letterIndex === -1 || colorIndex === -1) return [description, false];
+
+  return [description, colorIndex < letterIndex];
 };
 
 const letterAtIndex = (ruleValue: string, wires: DefuseWire[]): [string, boolean] => {
@@ -153,7 +155,8 @@ const colorBeforeIndex = (ruleValue: string, wires: DefuseWire[]): [string, bool
     if (c === color) colorIndex = i + 1;
   });
 
-  return [description, colorIndex < parseInt(index, 10) || colorIndex === -1];
+  if (colorIndex === -1) return [description, false];
+  return [description, colorIndex < parseInt(index, 10)];
 };
 
 const colorAfterLetter = (ruleValue: string, wires: DefuseWire[]): [string, boolean] => {
@@ -162,12 +165,14 @@ const colorAfterLetter = (ruleValue: string, wires: DefuseWire[]): [string, bool
 
   const description = `All ${color} wires must be cut after wire ${letter}`;
 
-  wires.forEach(({ letter: l, color: c }, i) => {
+  [...wires].reverse().forEach(({ letter: l, color: c }, i) => {
     if (l === letter) letterIndex = i;
-    if (c === color && letterIndex < i) colorIndex = i;
+    if (c === color) colorIndex = i;
   });
 
-  return [description, colorIndex > letterIndex || colorIndex === -1 || letterIndex === -1];
+  if (letterIndex === -1 || colorIndex === -1) return [description, false];
+
+  return [description, colorIndex < letterIndex];
 };
 
 const letterAfterIndex = (ruleValue: string, wires: DefuseWire[]): [string, boolean] => {
@@ -204,12 +209,36 @@ const colorsTogether = (ruleValue: string, wires: DefuseWire[]): [string, boolea
 };
 
 const w = [
-  { color: 'blue', letter: 'B' },
-  { color: 'purple', letter: 'C' },
-  { color: 'orange', letter: 'E' },
-  { color: 'blue', letter: 'D' },
-  { color: 'gold', letter: 'F' },
-  { color: 'orange', letter: 'A' },
+  {
+    color: 'red',
+    letter: 'C',
+    index: 1,
+  },
+  {
+    color: 'green',
+    letter: 'B',
+    index: 3,
+  },
+  {
+    color: 'purple',
+    letter: 'D',
+    index: 2,
+  },
+  {
+    color: 'orange',
+    letter: 'F',
+    index: 4,
+  },
+  {
+    color: 'purple',
+    letter: 'E',
+    index: 5,
+  },
+  {
+    color: 'orange',
+    letter: 'A',
+    index: 0,
+  },
 ];
 
 const ruleMap = {
@@ -241,7 +270,7 @@ export const checkDefuseRule = (rule: DefuseRule, wires: DefuseWire[]): [string,
   return ['Unknown rule argh', true];
 };
 
-const result = checkDefuseRule('letterAtIndex|A-6', w);
+const result = checkDefuseRule('colorsTogether|orange', w);
 result;
 
 // generate rules as codes

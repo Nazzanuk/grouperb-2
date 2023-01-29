@@ -46,6 +46,7 @@ export const DefuseGameScreen: FC = () => {
 
   console.log({ game, status });
   console.log({ cutWiresWires });
+  console.log(currentRound?.wires);
 
   const leaveGame = () => send({ action: 'leaveGame', gameId: game!.id, userId: user.id });
   const startGame = () => send({ action: 'startDefuseRound', gameId: game!.id, userId: user.id });
@@ -132,7 +133,23 @@ export const DefuseGameScreen: FC = () => {
           {(status === 'playing' || status === 'defused' || status === 'failed') && (
             <>
               <div className={styles.wirebox}>
-                <div className={styles.bigBox}></div>
+                <div className={styles.bigBox}>
+
+                  <div className={styles.armed}>
+                    {status === 'playing' ? 'Bomb armed': <>&nbsp;</>}
+                    </div>
+                  <div className={styles.answers}>
+                    {orderedWires.map((wire, i) => (
+                      <div
+                        className={styles.answer}
+                        key={cutWiresWires[i]?.letter ?? i}
+                        style={{ '--color': cutWiresWires[i]?.color }}
+                      >
+                        {cutWiresWires[i]?.letter}
+                      </div>
+                    ))}
+                  </div>
+                </div>
                 <div className={styles.wires}>
                   {orderedWires.map((wire, i) => (
                     <div

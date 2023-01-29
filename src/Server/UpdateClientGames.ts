@@ -15,7 +15,7 @@ export const updateClientGames = (game: Game, clients: Set<WebSocket>, object?: 
   users.forEach((user) => {
     Array.from(clients).forEach((client: Client) => {
       if (client.id === user.id) {
-        client.send(JSON.stringify(object ?? { game }));
+        client.send(JSON.stringify({ game, ...object }));
         console.log('SERVER SENT TO CLIENT: ', client?.id);
       }
     });

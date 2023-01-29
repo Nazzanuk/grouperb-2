@@ -262,17 +262,59 @@
 .bigBox {
   --color: red;
   width: 100%;
-  height: calc(10vw + 90px);
-  background: #f7f7f7;
+  /* height: calc(10vw + 90px); */
+  padding: 70px 20px 20px;
+  background: #333;
   box-shadow: inset 40vw 0vw 40vw 0vw rgba(0,0,0,0.5), inset 0vw 0vw 0.8vw 0vw rgba(255,255,255,0.7);
 
   display:flex;
+  flex-direction: column;
+  gap:10px;
   align-items: center;
   justify-content: center;
   margin-bottom: -20px;
   position: relative;
   margin-top:-90px;
   z-index: 1;
+
+  /* font-family: var(--shareTechMono); */
+}
+
+.armed {
+  --color: red;
+
+  font-family: var(--shareTechMono);
+  font-size: 30px;
+  text-transform: uppercase;
+  color: var(--color);
+
+  animation: flash 1s infinite;
+}
+
+.answers {
+  display: flex;
+  flex-direction: row;
+  /* gap: 1px; */
+  width: 100%;
+  justify-content: center;
+}
+
+.answer {
+  --color: #222;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: var(--color);
+  color: white;
+  height: 40px;
+  width: 30px;
+  font-weight: 100;
+  font-size: 30px;
+  padding: 14px 10px 10px;
+  /* border-radius: 2px; */
+  margin-right: -1px;
+  border: 1px solid #444;
 }
 
 .wireBox {
@@ -380,5 +422,23 @@
   100% {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes flash {
+  0% {
+    opacity: 0;
+  }
+  
+  49% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
   }
 }

@@ -21,7 +21,7 @@ export const defuseGameHelpersAtom = atom((get) => {
   const isHost = user.id === game?.hostId;
   const isObserver = !game?.users[user.id];
   const usersWithoutMe = userArray.filter((u) => u.id !== user.id);
-  const orderedWires = currentRound?.wires?.sort((a, b) => a.letter.charCodeAt(0) - b.letter.charCodeAt(0));
+  const orderedWires = [...(currentRound?.wires ?? [])].sort((a, b) => a.letter.charCodeAt(0) - b.letter.charCodeAt(0));
   const rulesChunks = chunk(currentRules, Math.round(currentRules.length / userArray.length));
   const hasBeenCut = (letter: string) => currentRound?.cutWires?.some(([userId, wire]) => wire.letter === letter);
 

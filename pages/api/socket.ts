@@ -1,5 +1,7 @@
 import { Server } from 'http';
 
+import { send } from 'process';
+
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -12,13 +14,12 @@ import { ServerGames } from 'Server/ServerGames';
 import { ServerUsers } from 'Server/ServerUsers';
 
 import { updateClientGames } from 'Server/UpdateClientGames';
+import { chooseDefuseWire } from 'Utils/Defuse/ChooseDefuseWire';
+import { newDefuseRound } from 'Utils/Defuse/NewDefuseRound';
+import { castVote } from 'Utils/Vote/CastVote';
 import { leaveGame } from 'Utils/Vote/LeaveGame';
 import { startVoteGame } from 'Utils/Vote/StartVoteGame';
-import { send } from 'process';
-import { castVote } from 'Utils/Vote/CastVote';
 import { startVoteRound } from 'Utils/Vote/StartVoteRound';
-import { newDefuseRound } from 'Utils/Defuse/NewDefuseRound';
-import { chooseDefuseWire } from 'Utils/Defuse/ChooseDefuseWire';
 
 function heartbeat() {
   this.isAlive = true;
@@ -101,7 +102,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
           console.log('joinGame...', { game });
           if (game) {
             client.send(JSON.stringify({ game }));
-            updateClientGames(game, wss.clients);
+            // updateClientGames(game, wss.clients);
             updateClientGames(game, wss.clients, {
               alert: `${data.user.username} joined the game`,
             });
@@ -135,7 +136,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
         if (data.action === 'startVoteGame') {
           const game = startVoteGame(data);
 
-          if (game) updateClientGames(game, wss.clients);
+          // if (game) updateClientGames(game, wss.clients);
           if (game) updateClientGames(game, wss.clients, { alert: `Game started!` });
           else client.send(JSON.stringify({ alert: 'Error starting game' }));
 
@@ -145,7 +146,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
         if (data.action === 'startDefuseRound') {
           const game = newDefuseRound(data);
 
-          if (game) updateClientGames(game, wss.clients);
+          // if (game) updateClientGames(game, wss.clients);
           if (game) updateClientGames(game, wss.clients, { alert: `Game started!` });
           else client.send(JSON.stringify({ alert: 'Error starting game' }));
         }
@@ -154,7 +155,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
           const game = castVote(data);
 
           if (game) {
-            updateClientGames(game, wss.clients);
+            // updateClientGames(game, wss.clients);
             updateClientGames(game, wss.clients, {
               alert: `${game.users[data.userId].username} voted`,
             });
@@ -177,12 +178,11 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
         if (data.action === 'chooseDefuseWire') {
           const game = chooseDefuseWire(data);
 
-          if (game) updateClientGames(game, wss.clients);
+          // if (game) updateClientGames(game, wss.clients);
           if (game) {
             const user = game.users[data.userId];
             updateClientGames(game, wss.clients, { alert: `${user.username} cut wire ${data.letter}` });
-          }
-          else client.send(JSON.stringify({ alert: 'Error starting new round' }));
+          } else client.send(JSON.stringify({ alert: 'Error starting new round' }));
 
           // console.log({ data, game });
         }

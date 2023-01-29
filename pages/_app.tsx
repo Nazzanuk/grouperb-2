@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { Bebas_Neue, Teko } from '@next/font/google';
+import { Bebas_Neue, Teko, Share_Tech_Mono } from '@next/font/google';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
@@ -20,6 +20,12 @@ import { TopBar } from 'Components/TopBar/TopBar';
 import 'Global/normalize.css';
 import 'Global/app.css';
 import '../public/fontawesome/css/all.min.css';
+
+const shareTechMono = Share_Tech_Mono({
+  weight: '400',
+  variable: '--shareTechMono',
+  subsets: ['latin'],
+});
 
 const bebasNeue = Bebas_Neue({
   weight: '400',
@@ -92,13 +98,8 @@ export default function App({ Component, pageProps }: AppProps) {
         <link rel="manifest" href="/site.webmanifest"></link>
       </Head>
 
-      {/* <style jsx global>{`
-        html {
-          font-family: ${bebasNeue.style.fontFamily};
-        }
-      `}</style> */}
       <NoSSR>
-        <main className={`app ${bebasNeue.variable} ${teko.variable}`}>
+        <main className={`app ${bebasNeue.variable} ${teko.variable} ${shareTechMono.variable}`}>
           <ToastContainer
             position="top-left"
             autoClose={2000}
