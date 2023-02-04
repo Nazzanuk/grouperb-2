@@ -24,6 +24,7 @@ export const defuseGameHelpersAtom = atom((get) => {
   const orderedWires = [...(currentRound?.wires ?? [])].sort((a, b) => a.letter.charCodeAt(0) - b.letter.charCodeAt(0));
   const rulesChunks = chunk(currentRules, Math.round(currentRules.length / userArray.length));
   const hasBeenCut = (letter: string) => currentRound?.cutWires?.some(([userId, wire]) => wire.letter === letter);
+  const timeRemaining = (currentRound?.duration ?? 0) - (Date.now() - new Date(currentRound?.timeStarted ?? 0).getTime()) / 1000;
 
   if (rulesChunks.length > userArray.length) {
     rulesChunks[0] = rulesChunks[0].concat(rulesChunks[rulesChunks.length - 1]);
@@ -52,5 +53,6 @@ export const defuseGameHelpersAtom = atom((get) => {
     myRules,
     cutWiresWires,
     hasBeenCut,
+    timeRemaining,
   };
 });

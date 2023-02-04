@@ -48,6 +48,9 @@ input {
   justify-content: space-between;
   overflow: hidden;
 
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
   /* background: linear-gradient(
     140deg,
     rgba(25, 31, 37, 1) 0%,

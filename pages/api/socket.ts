@@ -1,3 +1,4 @@
+import { createDefuseGame } from 'Utils/Defuse/CreateDefuseGame';
 import { Server } from 'http';
 
 import { send } from 'process';
@@ -20,6 +21,7 @@ import { castVote } from 'Utils/Vote/CastVote';
 import { leaveGame } from 'Utils/Vote/LeaveGame';
 import { startVoteGame } from 'Utils/Vote/StartVoteGame';
 import { startVoteRound } from 'Utils/Vote/StartVoteRound';
+import { DefuseGame } from 'Entities/DefuseGame.entity';
 
 function heartbeat() {
   this.isAlive = true;
@@ -84,7 +86,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
           client.id = data.user.id;
 
           // console.log(client);
-          console.log({ ServerUsers });
+          // console.log({ ServerUsers });
         }
 
         if (data.action === 'hostGame') {
@@ -185,6 +187,26 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
           } else client.send(JSON.stringify({ alert: 'Error starting new round' }));
 
           // console.log({ data, game });
+        }
+
+        if (data.action === 'restartDefuseGame') {
+          const prevGame = ServerGames[data.gameId];
+
+          const game = createDefuseGame({ host: prevGame.users[prevGame.hostId], id: data.gameId });
+          game.users = prevGame.users;
+
+          ServerGames[data.gameId] = game;
+
+          if (game) updateClientGames(game, wss.clients, { alert: `Game restarted!` });
+          else client.send(JSON.stringify({ alert: 'Error restarting game' }));
+        }
+
+        if (data.action === 'defuseTimeUp') {
+          const game = ServerGames[data.gameId] as DefuseGame;
+          game.status = 'failed';
+
+          if (game) updateClientGames(game, wss.clients, { alert: `Time is up!` });
+          else client.send(JSON.stringify({ alert: 'Error doing time upe' }));
         }
       });
     });

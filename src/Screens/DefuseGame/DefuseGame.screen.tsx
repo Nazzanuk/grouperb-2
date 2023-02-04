@@ -12,19 +12,22 @@ import { defuseGameHelpersAtom } from 'Atoms/DefuseGameHelpers.atom';
 import { userAtom } from 'Atoms/User.atom';
 
 import { wsAtom } from 'Atoms/Ws.atom';
+import { BombBroadcast } from 'Components/BombBroadcast/BombBroadcast';
+import { InfoOverlay } from 'Components/InfoOverlay/InfoOverlay';
 import { WinnerBroadcast } from 'Components/WinnerBroadcast/WinnerBroadcast';
 import { DefuseGame } from 'Entities/DefuseGame.entity';
 import { User } from 'Entities/User.entity';
 import { UserId } from 'Entities/UserId.entity';
 
-import styles from './DefuseGame.screen.module.css';
 import { checkDefuseRule, generateRule } from 'Utils/Defuse/Defuse.utils';
-import { BombBroadcast } from 'Components/BombBroadcast/BombBroadcast';
+
+import styles from './DefuseGame.screen.module.css';
 
 export const DefuseGameScreen: FC = () => {
   const { query } = useRouter();
   const i = useRef<NodeJS.Timer>(null);
   const [trophyIndex, setTrophyIndex] = useState(1);
+  const [timer, setTimer] = useState(0);
   const [isNextRoundEnabled, setIsNextRoundEnabled] = useState(false);
   const [isDefuseButtonsEnabled, setIsDefuseButtonsEnabled] = useState(false);
   const game = useAtomValue(defuseGameAtom);
@@ -41,6 +44,7 @@ export const DefuseGameScreen: FC = () => {
     orderedWires,
     myRules,
     cutWiresWires,
+    timeRemaining,
     hasBeenCut,
   } = useAtomValue(defuseGameHelpersAtom);
 
@@ -50,10 +54,32 @@ export const DefuseGameScreen: FC = () => {
 
   const leaveGame = () => send({ action: 'leaveGame', gameId: game!.id, userId: user.id });
   const startGame = () => send({ action: 'startDefuseRound', gameId: game!.id, userId: user.id });
+  const restartGame = () => send({ action: 'restartDefuseGame', gameId: game!.id, userId: user.id });
   const startRound = () => send({ action: 'startDefuseRound', gameId: game!.id, userId: user.id });
+  const timeUp = () => send({ action: 'defuseTimeUp', gameId: game!.id, userId: user.id });
+
   const chooseWire = (letter: string) => {
     send({ action: 'chooseDefuseWire', gameId: game!.id, userId: user.id, letter });
   };
+
+  useEffect(() => {
+    if (game?.status !== 'playing') return;
+
+    const interval = setInterval(() => {
+      const timeRemaining =
+        (currentRound?.duration ?? 0) - (Date.now() - new Date(currentRound?.timeStarted ?? 0).getTime()) / 1000;
+
+      setTimer(Math.round(timeRemaining));
+
+      if (timeRemaining <= -1) {
+        clearInterval(interval);
+        setTimer(0);
+        timeUp();
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [game?.status]);
 
   useEffect(() => {
     setTrophyIndex(random(1, 3));
@@ -89,6 +115,7 @@ export const DefuseGameScreen: FC = () => {
 
   return (
     <>
+      <InfoOverlay />
       <div className="darkScreen" style={{ backgroundImage: `url('/img/backgrounds/b9.jpeg')` }}>
         <div className="darkScreenOverlay" />
         <div className="darkScreenContent">
@@ -132,12 +159,14 @@ export const DefuseGameScreen: FC = () => {
           )}
           {(status === 'playing' || status === 'defused' || status === 'failed') && (
             <>
-              <div className={styles.wirebox}>
+              <div className={styles.wireBox}>
                 <div className={styles.bigBox}>
+                  <div className={styles.armed} data-status={status}>
+                    {status === 'playing' ? 'Bomb armed' : ''}
+                    {status === 'failed' ? `${timer === 0 ? 'You ran out of time!' : ''}` : ''}
+                    {status === 'defused' ? `Bomb inactive` : ''}
+                  </div>
 
-                  <div className={styles.armed}>
-                    {status === 'playing' ? 'Bomb armed': <>&nbsp;</>}
-                    </div>
                   <div className={styles.answers}>
                     {orderedWires.map((wire, i) => (
                       <div
@@ -148,6 +177,15 @@ export const DefuseGameScreen: FC = () => {
                         {cutWiresWires[i]?.letter}
                       </div>
                     ))}
+                  </div>
+
+                  <div className={styles.clock} style={{ '--timeRemaining': timer, '--time': (game.rounds.length - 1) * 10 + 19 }}>
+                    <div className={styles.time}>
+                      <div
+                        className={styles.timeFill}
+                       
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className={styles.wires}>
@@ -175,6 +213,9 @@ export const DefuseGameScreen: FC = () => {
                   ))}
                 </div>
               </div>
+
+              <div className="label">Round {game.rounds.length} instructions</div>
+              {/* <div className="textOutput">{game.id}</div> */}
 
               <div className={styles.clues}>
                 {myRules.map((rule, i) => (
@@ -213,7 +254,7 @@ export const DefuseGameScreen: FC = () => {
               />
 
               <div className={styles.buttons}>
-                <div className="button" data-variant="orange" onClick={startRound}>
+                <div className="button" data-variant="orange" onClick={restartGame}>
                   New game
                 </div>
               </div>

@@ -10,6 +10,7 @@ import { userAtom } from 'Atoms/User.atom';
 import { voteGameAtom } from 'Atoms/VoteGame.atom';
 import { voteGameHelpersAtom } from 'Atoms/VoteGameHelpers.atom';
 import { wsAtom } from 'Atoms/Ws.atom';
+import { InfoOverlay } from 'Components/InfoOverlay/InfoOverlay';
 import { WinnerBroadcast } from 'Components/WinnerBroadcast/WinnerBroadcast';
 import { User } from 'Entities/User.entity';
 import { UserId } from 'Entities/UserId.entity';
@@ -104,6 +105,7 @@ export const VoteGameScreen: FC = () => {
 
   return (
     <>
+      <InfoOverlay />
       <div className="darkScreen" style={{ backgroundImage: `url('/img/backgrounds/b9.jpeg')` }}>
         <div className="darkScreenOverlay" />
         <div className="darkScreenContent">
@@ -241,8 +243,18 @@ export const VoteGameScreen: FC = () => {
                 </>
               )}
 
-              {didGuessCorrectly && <div className={styles.correct}> +1 <span>You were right!</span></div>}
-              {!didGuessCorrectly && <div className={styles.correct}> +0 <span>You were wrong!</span></div>}
+              {didGuessCorrectly && (
+                <div className={styles.correct}>
+                  {' '}
+                  +1 <span>You were right!</span>
+                </div>
+              )}
+              {!didGuessCorrectly && (
+                <div className={styles.correct}>
+                  {' '}
+                  +0 <span>You were wrong!</span>
+                </div>
+              )}
 
               <div className={styles.buttons}>
                 <>

@@ -4,12 +4,13 @@ import times from 'lodash/times';
 
 import { DefuseGame } from 'Entities/DefuseGame.entity';
 import { DefuseRound } from 'Entities/DefuseRound.entity';
+import { DefuseRule } from 'Entities/DefuseRule.entity';
+import { DefuseWire } from 'Entities/DefuseWire.entity';
 import { StartDefuseRoundPayload } from 'Entities/Payloads.entity';
 
 import { ServerGames } from 'Server/ServerGames';
 
 import { checkDefuseRule, defuseColors, generateRule } from 'Utils/Defuse/Defuse.utils';
-import { DefuseWire } from 'Entities/DefuseWire.entity';
 
 export const newDefuseRound = (payload: StartDefuseRoundPayload): DefuseGame | undefined => {
   const game = ServerGames[payload.gameId] as DefuseGame;
@@ -20,17 +21,21 @@ export const newDefuseRound = (payload: StartDefuseRoundPayload): DefuseGame | u
     index: i,
   }));
 
-  const rules = [];
+  const rules: DefuseRule[] = [];
 
   while (rules.length < game.rounds.length + 1) {
     const newRule = generateRule();
     console.log({ newRule, wires }, checkDefuseRule(newRule, wires));
-    if (!!checkDefuseRule(newRule, wires)[1]) {
-      rules.push(newRule);
-    }
+
+    if (rules.includes(newRule)) continue;
+    if (!checkDefuseRule(newRule, wires)[1]) continue;
+    
+    rules.push(newRule);
   }
 
-  const round: DefuseRound = { wires, cutWires: [], rules };
+  const roundsIndex = game.rounds.length;
+
+  const round: DefuseRound = { wires, cutWires: [], rules, timeStarted: new Date().toISOString(), duration: roundsIndex * 10 + 20  };
 
   game.rounds.push(round);
   game.status = 'playing';

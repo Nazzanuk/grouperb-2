@@ -1,6 +1,33 @@
 .votegame {
 }
 
+.metal {
+  position: relative;
+  /* margin: 40px auto; */
+  outline: none;
+
+  /* font: bold 6em/2em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+  text-align: center; */
+  /* color: hsla(0, 0%, 20%, 1); */
+  /* text-shadow: hsla(0, 0%, 40%, 0.5) 0 -1px 0, hsla(0, 0%, 100%, 0.6) 0 2px 1px; */
+
+  background-color: hsl(0, 0%, 90%);
+  box-shadow: inset hsla(0, 0%, 15%, 1) 0 0px 0px 4px, /* border */ inset hsla(0, 0%, 15%, 0.8) 0 -1px 5px 4px,
+    /* soft SD */ inset hsla(0, 0%, 0%, 0.25) 0 -1px 0px 7px, /* bottom SD */ inset hsla(0, 0%, 100%, 0.7) 0 2px 1px 7px,
+    /* top HL */ hsla(0, 0%, 0%, 0.15) 0 -5px 6px 4px;
+  background-image: -webkit-repeating-linear-gradient(
+      left,
+      hsla(0, 0%, 100%, 0) 0%,
+      hsla(0, 0%, 100%, 0) 6%,
+      hsla(0, 0%, 100%, 0.1) 7.5%
+    ),
+    -webkit-repeating-linear-gradient(left, hsla(0, 0%, 0%, 0) 0%, hsla(0, 0%, 0%, 0) 4%, hsla(0, 0%, 0%, 0.03) 4.5%),
+    -webkit-repeating-linear-gradient(left, hsla(0, 0%, 100%, 0) 0%, hsla(0, 0%, 100%, 0) 1.2%, hsla(0, 0%, 100%, 0.15)
+          2.2%),
+    linear-gradient(180deg, hsl(0, 0%, 58%) 0%, hsl(0, 0%, 90%) 37%, hsl(0, 0%, 98%) 53%, hsl(0, 0%, 80%) 100%);
+  /* transition: color .2s; */
+}
+
 .playerList {
   display: flex;
   flex-direction: row;
@@ -260,21 +287,22 @@
 }
 
 .bigBox {
+  composes: metal;
   --color: red;
   width: 100%;
   /* height: calc(10vw + 90px); */
   padding: 70px 20px 20px;
-  background: #333;
-  box-shadow: inset 40vw 0vw 40vw 0vw rgba(0,0,0,0.5), inset 0vw 0vw 0.8vw 0vw rgba(255,255,255,0.7);
+  /* background: #333;
+  box-shadow: inset 40vw 0vw 40vw 0vw rgba(0,0,0,0.5), inset 0vw 0vw 0.8vw 0vw rgba(255,255,255,0.7); */
 
-  display:flex;
+  display: flex;
   flex-direction: column;
-  gap:10px;
+  gap: 10px;
   align-items: center;
   justify-content: center;
   margin-bottom: -20px;
   position: relative;
-  margin-top:-90px;
+  margin-top: -90px;
   z-index: 1;
 
   /* font-family: var(--shareTechMono); */
@@ -284,11 +312,21 @@
   --color: red;
 
   font-family: var(--shareTechMono);
-  font-size: 30px;
+  font-size: 20px;
   text-transform: uppercase;
   color: var(--color);
 
   animation: flash 1s infinite;
+
+  &[data-status="defused"] {
+    --color: green;
+    animation: none;
+  }
+
+  &[data-status="failed"] {
+    --color: red;
+    animation: none;
+  }
 }
 
 .answers {
@@ -305,8 +343,8 @@
   justify-content: center;
   align-items: center;
 
-  background: var(--color);
-  color: white;
+  color: var(--color);
+  background: #222;
   height: 40px;
   width: 30px;
   font-weight: 100;
@@ -320,6 +358,7 @@
 .wireBox {
   display: flex;
   flex-direction: column;
+  margin-bottom: 10px;
 }
 
 .wires {
@@ -333,15 +372,14 @@
 .wire {
   --color: red;
 
-
   height: 20vh;
   width: 3vw;
   margin: 3.5vw;
   color: var(--color);
   background: var(--color);
-  box-shadow: inset 0 0 2vw 0.5vw rgba(0,0,0,0.5);
+  box-shadow: inset 0 0 2vw 0.5vw rgba(0, 0, 0, 0.5);
 
-  &[data-cut="true"] {
+  &[data-cut='true'] {
     filter: grayscale(30%) brightness(0.5);
   }
 }
@@ -356,38 +394,39 @@
 }
 
 .lightBox {
+  composes: metal;
   --color: red;
-  width: 10vw;
-  height: 10vw;
-  background: #f7f7f7;
-  box-shadow: inset 4vw 0vw 5vw 0vw rgba(0,0,0,0.7), inset 0vw 0vw 0.8vw 0vw rgba(255,255,255,0.7);
+  width: 12vw;
+  height: 12vw;
+  /* background: #f7f7f7;
+  box-shadow: inset 4vw 0vw 5vw 0vw rgba(0, 0, 0, 0.7), inset 0vw 0vw 0.8vw 0vw rgba(255, 255, 255, 0.7); */
 
-  display:flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  cursor:pointer;
+  cursor: pointer;
   position: relative;
 }
 
 .light {
   --color: red;
-  width: 8vw;
-  height: 8vw;
+  width: 6vw;
+  height: 6vw;
   background: var(--color);
   border-radius: 50%;
-  box-shadow: inset 0 0 2vw 1vw rgba(0,0,0,0.2), 0vw 0vw 3vw 0vw var(--color), 0vw 0vw 3vw 0vw rgba(255,255,255,0.6);
+  box-shadow: inset 0 0 2vw 1vw rgba(0, 0, 0, 0.2), 0vw 0vw 3vw 0vw var(--color),
+    0vw 0vw 3vw 0vw rgba(255, 255, 255, 0.6);
 
-
-  display:flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  padding-top:3px;
-  font-size:6vw;
+  padding-top: 3px;
+  font-size: 5vw;
   font-weight: 100;
-  color: rgba(255,255,255,0.7);
+  color: rgba(255, 255, 255, 0.7);
 
-  &[data-cut="true"] {
+  &[data-cut='true'] {
     filter: grayscale(30%) brightness(0.5);
   }
 }
@@ -401,15 +440,52 @@
 .clue {
   /* border: 1px solid white; */
   color: black;
-  padding:8px 10px 5px;
-  font-size:16px;
+  padding: 8px 10px 5px;
+  font-size: 16px;
   font-weight: 100;
   /* text-transform: uppercase; */
   background: white;
 
-  &[data-pass="true"] {
+  &[data-pass='true'] {
     background: green;
     color: white;
+  }
+}
+
+.clock {
+  --time: 0;
+  --timeRemaining: 0;
+  --hue: calc(((var(--time) - var(--timeRemaining)) / var(--time)) * -131deg);
+  width: 100%;
+  height: 6px;
+  background: #fff;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  /* margin-top: 10px; */
+  /* padding:3px; */
+  border-radius: 10px;
+  overflow: hidden;
+
+  & .time {
+    background: #00a206;;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+
+    filter: hue-rotate(var(--hue));
+  }
+
+  & .timeFill {
+    background: black;
+    height: 100%;
+
+    /* width is percentage of time left, time is in seconds */
+    width: calc(var(--timeRemaining) / var(--time) * 100%);
+    transition: width 1s linear;
   }
 }
 
@@ -429,7 +505,7 @@
   0% {
     opacity: 0;
   }
-  
+
   49% {
     opacity: 0;
   }

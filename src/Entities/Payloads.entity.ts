@@ -71,6 +71,18 @@ export type ChooseDefuseWire = {
   letter: string;
 };
 
+export type RestartDefuseGame = {
+  action: 'restartDefuseGame';
+  gameId: string;
+  userId: UserId;
+};
+
+export type DefuseTimeUp = {
+  action: 'defuseTimeUp';
+  gameId: string;
+  userId: UserId;
+};
+
 export type Payload =
   | HostGamePayload
   | StartDefuseGamePayload
@@ -80,7 +92,9 @@ export type Payload =
   | JoinGamePayload
   | CastVotePayload
   | GetGamePayload
+  | DefuseTimeUp
   | StartVoteGamePayload
   | StartVoteRoundPayload
+  | RestartDefuseGame
   | ChooseDefuseWire
   | LeaveGamePayload;

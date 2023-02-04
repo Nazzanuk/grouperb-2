@@ -8,4 +8,6 @@ export type DefuseRound = {
   wires: DefuseWire[];
   cutWires: [UserId, DefuseWire][];
   rules: DefuseRule[];
+  timeStarted: string;
+  duration: number;
 };
