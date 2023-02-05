@@ -6,5 +6,5 @@ import { VoteRound } from 'Entities/VoteRound.entity';
 export type DefuseGame = Game & {
   type: 'defuse';
   rounds: DefuseRound[];
-  status: 'lobby' | 'playing' | 'endRound' | 'gameOver';
+  status: 'lobby' | 'playing' | 'defused' | 'failed';
 };

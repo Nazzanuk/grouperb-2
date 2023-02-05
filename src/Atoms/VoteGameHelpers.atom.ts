@@ -6,28 +6,27 @@ import sortBy from 'lodash/sortBy';
 import toPairs from 'lodash/toPairs';
 import values from 'lodash/values';
 
+import { sharedGameHelpersAtom } from 'Atoms/SharedGameHelpers.atom';
 import { userAtom } from 'Atoms/User.atom';
 import { voteGameAtom } from 'Atoms/VoteGame.atom';
 import { User } from 'Entities/User.entity';
 import { UserId } from 'Entities/UserId.entity';
+import { VoteGame } from 'Entities/VoteGame.entity';
 import { getUserAssignedLeastQuestions } from 'Utils/Vote/GetUserAssignedLeastQuestions';
 import { getUserAssignedMostQuestions } from 'Utils/Vote/GetUserAssignedMostQuestions';
 import { getUserWhoVotedForThemselvesMost } from 'Utils/Vote/GetUserWhoVotedForThemselvesMost';
 import { getWinnersString } from 'Utils/Vote/GetWinnersString';
-import { VoteGame } from 'Entities/VoteGame.entity';
 
 export const voteGameHelpersAtom = atom((get) => {
   const game = get(voteGameAtom);
   const user = get(userAtom);
+  const sharedHelpers = get(sharedGameHelpersAtom);
+  const { status, currentRound, currentRoundIndex, isHost, isObserver, userArray, usersWithoutMe } = sharedHelpers;
 
-  const status = game?.status;
-  const currentRound = game?.rounds[game.rounds.length - 1];
-  const currentRoundIndex = game?.rounds.length ?? 0;
+  if (!game) return sharedHelpers;
+
   const currentQuestion = currentRound?.question;
-  const userArray = values(game?.users);
-  const isHost = user.id === game?.hostId;
-  const isObserver = !game?.users[user.id];
-  const isWinner = !!currentRound?.winners[user.id];
+  const isWinner = !!currentRound?.winners?.[user.id];
   const allAreWinners = keys(currentRound?.winners ?? {}).length === keys(game?.users ?? {}).length;
   const hasFinished = game?.status === 'finished' || (game?.maxRoundsIndex ?? 0) < currentRoundIndex;
   const have3Users = Object.keys(game?.users ?? {}).length >= 3;
@@ -37,11 +36,9 @@ export const voteGameHelpersAtom = atom((get) => {
     return !usersThatHaveVoted.find((votedUser) => votedUser.id === user.id);
   });
 
-  const usersWithoutMe = userArray.filter((u) => u.id !== user.id);
-
   const winnersArray = values(currentRound?.winners ?? {});
 
-  const IHaveVoted = !!currentRound?.votes[user.id];
+  const IHaveVoted = !!currentRound?.votes?.[user.id];
 
   const myWinningQuestions = getMyWinningQuestions(game, user);
   const winnersString = getWinnersString(game, user);

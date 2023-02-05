@@ -11,10 +11,14 @@ import { voteGameAtom } from 'Atoms/VoteGame.atom';
 import { voteGameHelpersAtom } from 'Atoms/VoteGameHelpers.atom';
 import { wsAtom } from 'Atoms/Ws.atom';
 import { InfoOverlay } from 'Components/InfoOverlay/InfoOverlay';
+import { LoadingGame } from 'Components/LoadingGame/LoadingGame';
 import { WinnerBroadcast } from 'Components/WinnerBroadcast/WinnerBroadcast';
 import { User } from 'Entities/User.entity';
 import { UserId } from 'Entities/UserId.entity';
 import { VoteGame } from 'Entities/VoteGame.entity';
+
+import { useLoadGame } from 'Hooks/useLoadGame';
+import { useUpdateGame } from 'Hooks/useUpdateGame';
 
 import styles from './VoteGame.screen.module.css';
 
@@ -53,6 +57,9 @@ export const VoteGameScreen: FC = () => {
     didGuessCorrectly,
   } = useAtomValue(voteGameHelpersAtom);
 
+  useLoadGame(query.voteGameId as string | undefined);
+  useUpdateGame(query.voteGameId as string | undefined);
+
   console.log({ game, status });
 
   const leaveGame = () => send({ action: 'leaveGame', gameId: game!.id, userId: user.id });
@@ -75,33 +82,7 @@ export const VoteGameScreen: FC = () => {
     setTrophyIndex(random(1, 3));
   }, [game?.rounds.length]);
 
-  useEffect(() => {
-    console.log({ query });
-    if (query.voteGameId) {
-      send({ action: 'getGame', gameId: query.voteGameId as string });
-    }
-  }, [query.voteGameId]);
-
-  useEffect(() => {
-    console.log({ query });
-
-    if (!query.voteGameId) return;
-
-    i.current = setInterval(() => {
-      send({ action: 'getGame', gameId: query.voteGameId as string });
-    }, 10000);
-
-    return () => {
-      clearInterval(i.current);
-    };
-  }, [query.voteGameId]);
-
-  if (!game)
-    return (
-      <div className="darkScreen">
-        <div className="label">Loading...</div>
-      </div>
-    );
+  if (!game) <LoadingGame/>
 
   return (
     <>

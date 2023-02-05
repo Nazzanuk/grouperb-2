@@ -1,4 +1,3 @@
-import { createDefuseGame } from 'Utils/Defuse/CreateDefuseGame';
 import { Server } from 'http';
 
 import { send } from 'process';
@@ -8,20 +7,22 @@ import { v4 as uuidv4 } from 'uuid';
 
 import WebSocket, { WebSocketServer } from 'ws';
 
+import { DefuseGame } from 'Entities/DefuseGame.entity';
 import { Payload } from 'Entities/Payloads.entity';
 import { addServerGame } from 'Server/AddServerGame';
+import { charlatanActions } from 'Server/CharlatanActions';
 import { joinGame } from 'Server/JoinGame';
 import { ServerGames } from 'Server/ServerGames';
 import { ServerUsers } from 'Server/ServerUsers';
 
 import { updateClientGames } from 'Server/UpdateClientGames';
 import { chooseDefuseWire } from 'Utils/Defuse/ChooseDefuseWire';
+import { createDefuseGame } from 'Utils/Defuse/CreateDefuseGame';
 import { newDefuseRound } from 'Utils/Defuse/NewDefuseRound';
 import { castVote } from 'Utils/Vote/CastVote';
 import { leaveGame } from 'Utils/Vote/LeaveGame';
 import { startVoteGame } from 'Utils/Vote/StartVoteGame';
 import { startVoteRound } from 'Utils/Vote/StartVoteRound';
-import { DefuseGame } from 'Entities/DefuseGame.entity';
 
 function heartbeat() {
   this.isAlive = true;
@@ -89,13 +90,13 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
           // console.log({ ServerUsers });
         }
 
+        charlatanActions({ client, data, wss });
+
         if (data.action === 'hostGame') {
           const game = addServerGame(data);
 
           if (game) updateClientGames(game, wss.clients);
           else client.send(JSON.stringify({ alert: 'Error creating game' }));
-
-          // console.log({ data, game });
         }
 
         if (data.action === 'joinGame') {

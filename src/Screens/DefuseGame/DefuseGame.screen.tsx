@@ -22,14 +22,15 @@ import { UserId } from 'Entities/UserId.entity';
 import { checkDefuseRule, generateRule } from 'Utils/Defuse/Defuse.utils';
 
 import styles from './DefuseGame.screen.module.css';
+import { useLoadGame } from 'Hooks/useLoadGame';
+import { useUpdateGame } from 'Hooks/useUpdateGame';
+import { LoadingGame } from 'Components/LoadingGame/LoadingGame';
 
 export const DefuseGameScreen: FC = () => {
   const { query } = useRouter();
   const i = useRef<NodeJS.Timer>(null);
   const [trophyIndex, setTrophyIndex] = useState(1);
   const [timer, setTimer] = useState(0);
-  const [isNextRoundEnabled, setIsNextRoundEnabled] = useState(false);
-  const [isDefuseButtonsEnabled, setIsDefuseButtonsEnabled] = useState(false);
   const game = useAtomValue(defuseGameAtom);
   const send = useSetAtom(wsAtom);
   const user = useAtomValue(userAtom);
@@ -48,9 +49,10 @@ export const DefuseGameScreen: FC = () => {
     hasBeenCut,
   } = useAtomValue(defuseGameHelpersAtom);
 
+  useLoadGame(query.defuseGameId as string | undefined);
+  useUpdateGame(query.defuseGameId as string | undefined);
+
   console.log({ game, status });
-  console.log({ cutWiresWires });
-  console.log(currentRound?.wires);
 
   const leaveGame = () => send({ action: 'leaveGame', gameId: game!.id, userId: user.id });
   const startGame = () => send({ action: 'startDefuseRound', gameId: game!.id, userId: user.id });
@@ -85,33 +87,7 @@ export const DefuseGameScreen: FC = () => {
     setTrophyIndex(random(1, 3));
   }, [game?.rounds.length]);
 
-  useEffect(() => {
-    console.log({ query });
-    if (query.defuseGameId) {
-      send({ action: 'getGame', gameId: query.defuseGameId as string });
-    }
-  }, [query.defuseGameId]);
-
-  useEffect(() => {
-    console.log({ query });
-
-    if (!query.defuseGameId) return;
-
-    i.current = setInterval(() => {
-      send({ action: 'getGame', gameId: query.defuseGameId as string });
-    }, 10000);
-
-    return () => {
-      clearInterval(i.current);
-    };
-  }, [query.defuseGameId]);
-
-  if (!game)
-    return (
-      <div className="darkScreen">
-        <div className="label">Loading...</div>
-      </div>
-    );
+  if (!game) return <LoadingGame />;
 
   return (
     <>
@@ -179,12 +155,12 @@ export const DefuseGameScreen: FC = () => {
                     ))}
                   </div>
 
-                  <div className={styles.clock} style={{ '--timeRemaining': timer, '--time': (game.rounds.length - 1) * 10 + 19 }}>
+                  <div
+                    className={styles.clock}
+                    style={{ '--timeRemaining': timer, '--time': (game.rounds.length - 1) * 10 + 19 }}
+                  >
                     <div className={styles.time}>
-                      <div
-                        className={styles.timeFill}
-                       
-                      />
+                      <div className={styles.timeFill} />
                     </div>
                   </div>
                 </div>
