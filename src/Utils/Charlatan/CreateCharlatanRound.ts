@@ -29,11 +29,12 @@ export const createCharlatanRound = (payload: CreateCharlatanRoundPayload): Char
 
   const newRound: CharlatanRound = {
     votes: {},
-    answer: sample(topicAnswers),
+    answer: sample(topicAnswers) as string,
     answers: topicAnswers,
     bluffer: sample(userIds) as UserId,
     playerAnswers: fromPairs(map(userIds, (userId, index) => [userId, playerAnswers[index as unknown as number]])),
     topic: topicName,
+    timeStarted: new Date().toISOString(),
   };
 
   game.status = 'thinking';

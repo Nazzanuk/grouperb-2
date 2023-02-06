@@ -28,6 +28,7 @@ import styles from './CharlatanGame.screen.module.css';
 export const CharlatanGameScreen: FC = () => {
   const { query } = useRouter();
 
+  const [timer, setTimer] = useState(30);
   const game = useAtomValue(charlatanGameAtom);
   const send = useSetAtom(wsAtom);
   const user = useAtomValue(userAtom);
@@ -45,12 +46,32 @@ export const CharlatanGameScreen: FC = () => {
   // const startRound = () => send({ action: 'startCharlatanRound', gameId: game!.id, userId: user.id });
   // const timeUp = () => send({ action: 'charlatanTimeUp', gameId: game!.id, userId: user.id });
 
+  useEffect(() => {
+    if (game?.status !== 'thinking') return;
+
+    const interval = setInterval(() => {
+      const startTime: string = currentRound.timeStarted;
+      const duration = 30;
+      const timeRemaining = duration - (Date.now() - new Date(startTime).getTime()) / 1000;
+
+      setTimer(Math.round(timeRemaining));
+
+      if (timeRemaining <= -1) {
+        clearInterval(interval);
+        setTimer(0);
+        // timeUp();
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [game?.status]);
+
   if (!game) return <LoadingGame />;
 
   return (
     <>
       <InfoOverlay />
-      <div className="darkScreen" style={{ backgroundImage: `url('/img/backgrounds/b9.jpeg')` }}>
+      <div className="darkScreen" style={{ backgroundImage: `url('/img/backgrounds/b13.jpeg')` }}>
         <div className="darkScreenOverlay" />
         <div className="darkScreenContent">
           {status === 'lobby' && (
@@ -81,21 +102,40 @@ export const CharlatanGameScreen: FC = () => {
 
           {status === 'thinking' && (
             <>
+              <div className={styles.actionArea}>
+                <h3>Thinking time: {timer}s</h3>
+                <p>Think of a word that describes the answer but doesn't give it away</p>
+              </div>
+
               <div className="label">Topic</div>
               <div className="textOutput">{currentRound.topic}</div>
 
               <div className="label">Possible answers</div>
               <div className={styles.answers}>
                 {currentRound.answers.map((answer) => (
-                  <div className={styles.answer} key={answer}>
+                  <div
+                    className={styles.answer}
+                    key={answer}
+                    data-is-answer={currentRound.answer === answer && currentRound.bluffer !== user.id}
+                  >
                     {answer}
                   </div>
                 ))}
               </div>
 
-              <div className="label">Answer</div>
-              <div className="textOutput">{currentRound.answer}</div>
+              {currentRound.bluffer === user.id && (
+                <>
+                  <div className="label">Answer </div>
+                  <div className="textOutput">You are the bluffer</div>
+                </>
+              )}
 
+              {currentRound.bluffer !== user.id && (
+                <>
+                  <div className="label">Answer</div>
+                  <div className="textOutput">{currentRound.answer}</div>
+                </>
+              )}
             </>
           )}
         </div>

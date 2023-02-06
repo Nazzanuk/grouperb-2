@@ -28,7 +28,6 @@ import { LoadingGame } from 'Components/LoadingGame/LoadingGame';
 
 export const DefuseGameScreen: FC = () => {
   const { query } = useRouter();
-  const i = useRef<NodeJS.Timer>(null);
   const [trophyIndex, setTrophyIndex] = useState(1);
   const [timer, setTimer] = useState(0);
   const game = useAtomValue(defuseGameAtom);
