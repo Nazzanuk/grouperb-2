@@ -9,4 +9,7 @@ export type CharlatanRound = {
   bluffer: UserId;
   votes: Record<UserId, string>;
   timeStarted: string;
+  startedAnswering: string;
+  startedDiscussing: string;
+  startedVoting: string;
 };

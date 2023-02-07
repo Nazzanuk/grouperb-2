@@ -42,6 +42,19 @@ export type CreateCharlatanRoundPayload = {
   userId: UserId;
 };
 
+export type StartCharlatanVotingPayload = {
+  action: 'startCharlatanVoting';
+  gameId: string;
+  userId: UserId;
+};
+
+export type VoteCharlatanPayload = {
+  action: 'voteCharlatan';
+  gameId: string;
+  userId: UserId;
+  vote: UserId;
+};
+
 export type LeaveGamePayload = {
   action: 'leaveGame';
   gameId: string;
@@ -90,6 +103,18 @@ export type RestartDefuseGame = {
   userId: UserId;
 };
 
+export type StartCharlatanDiscussionPayload = {
+  action: 'startCharlatanDiscussion';
+  gameId: string;
+  userId: UserId;
+};
+
+export type StartCharlatanAnsweringPayload = {
+  action: 'startCharlatanAnswering';
+  gameId: string;
+  userId: UserId;
+};
+
 export type DefuseTimeUp = {
   action: 'defuseTimeUp';
   gameId: string;
@@ -112,4 +137,8 @@ export type Payload =
   | CreateCharlatanRoundPayload
   | RestartDefuseGame
   | ChooseDefuseWire
+  | StartCharlatanDiscussionPayload
+  | StartCharlatanAnsweringPayload
+  | VoteCharlatanPayload
+  | StartCharlatanVotingPayload
   | LeaveGamePayload;

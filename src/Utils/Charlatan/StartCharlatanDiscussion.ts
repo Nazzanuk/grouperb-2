@@ -12,27 +12,18 @@ import { UserId } from 'Entities/UserId.entity';
 
 import { ServerGames } from 'Server/ServerGames';
 
-export const createCharlatanRound = (payload: CreateCharlatanRoundPayload): CharlatanGame => {
+export const startCharlatanDiscussion = (payload: CreateCharlatanRoundPayload): CharlatanGame => {
   const game = ServerGames[payload.gameId] as CharlatanGame;
   const userIds = Object.keys(game.users);
 
   const topicName = sample(Object.keys(CHARLATAN_TOPICS)) as keyof typeof CHARLATAN_TOPICS;
   const topicAnswers = sampleSize(CHARLATAN_TOPICS[topicName], 16);
   const playerAnswers = sampleSize(topicAnswers, Object.keys(game.users).length);
+  const currentRound = game.rounds[game.rounds.length - 1] as CharlatanRound;
 
-  const newRound: CharlatanRound = {
-    votes: {},
-    answer: sample(topicAnswers) as string,
-    answers: topicAnswers,
-    bluffer: sample(userIds) as UserId,
-    playerAnswers: fromPairs(map(userIds, (userId, index) => [userId, playerAnswers[index as unknown as number]])),
-    topic: topicName,
-    timeStarted: new Date().toISOString(),
-  };
+  currentRound.startedDiscussing = new Date().toISOString();
 
-  game.status = 'thinking';
-
-  game.rounds.push(newRound);
+  game.status = 'discuss';
 
   return game;
 };

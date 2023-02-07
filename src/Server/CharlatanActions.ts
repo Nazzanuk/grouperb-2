@@ -1,11 +1,21 @@
 import WebSocket, { WebSocketServer } from 'ws';
 
 import { CharlatanGame } from 'Entities/CharlatanGame.entity';
-import { CastCharlatanVotePayload, CreateCharlatanRoundPayload, Payload } from 'Entities/Payloads.entity';
+import {
+  CastCharlatanVotePayload,
+  CreateCharlatanRoundPayload,
+  Payload,
+  StartCharlatanVotingPayload,
+  VoteCharlatanPayload,
+} from 'Entities/Payloads.entity';
 import { addServerGame } from 'Server/AddServerGame';
 import { updateClientGames } from 'Server/UpdateClientGames';
 import { castCharlatanVote } from 'Utils/Charlatan/CastCharlatanVote';
 import { createCharlatanRound } from 'Utils/Charlatan/CreateCharlatanRound';
+import { startCharlatanAnswering } from 'Utils/Charlatan/StartCharlatanAnswering';
+import { startCharlatanDiscussion } from 'Utils/Charlatan/StartCharlatanDiscussion';
+import { startCharlatanVoting } from 'Utils/Charlatan/StartCharlatanVoting';
+import { voteCharlatan } from 'Utils/Charlatan/VoteCharlatan';
 
 type Actions = Payload['action'];
 
@@ -31,6 +41,26 @@ const actions: Partial<Record<Actions, (props: ActionProps) => CharlatanGame | u
   createCharlatanRound: ({ client, data, wss }) => {
     const game = createCharlatanRound(data as CreateCharlatanRoundPayload);
     update({ game, client, wss, alert: 'New round' });
+    return game;
+  },
+  startCharlatanAnswering: ({ client, data, wss }) => {
+    const game = startCharlatanAnswering(data as CreateCharlatanRoundPayload);
+    update({ game, client, wss, alert: 'Thinking time is up!' });
+    return game;
+  },
+  startCharlatanDiscussion: ({ client, data, wss }) => {
+    const game = startCharlatanDiscussion(data as CreateCharlatanRoundPayload);
+    update({ game, client, wss, alert: 'Time to discuss!' });
+    return game;
+  },
+  startCharlatanVoting: ({ client, data, wss }) => {
+    const game = startCharlatanVoting(data as StartCharlatanVotingPayload);
+    update({ game, client, wss, alert: 'Time to vote!' });
+    return game;
+  },
+  voteCharlatan: ({ client, data, wss }) => {
+    const game = voteCharlatan(data as VoteCharlatanPayload);
+    update({ game, client, wss, alert: 'Time to vote!' });
     return game;
   },
 };

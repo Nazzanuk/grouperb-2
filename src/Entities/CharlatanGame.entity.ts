@@ -7,6 +7,6 @@ export type CharlatanGame = Game & {
   topicList: string[];
   rounds: CharlatanRound[];
   maxRounds: number;
-  status: 'lobby' | 'thinking';
+  status: 'lobby' | 'thinking' | 'answering' | 'voting' | 'discuss' | 'results';
 };
 

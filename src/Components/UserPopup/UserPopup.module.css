@@ -1,0 +1,85 @@
+.userPopup {
+  background: rgba(0, 0, 0, 0.6);
+  /* backdrop-filter: blur(10px); */
+  border-radius: 10px;
+
+  z-index: 50;
+
+  position: fixed;
+  left: 20px;
+  right: 20px;
+  height: 80vh;
+  top: 10vh;
+
+  display: flex;
+  flex-direction: column;
+  /* justify-content: space-between; */
+  align-items: center;
+  padding: 40px 20px;
+  color: white;
+  gap: 20px;
+  text-align: center;
+
+  transition: 0.3s;
+  opacity: 0;
+  pointer-events: none;
+
+  &[data-is-visible='true'] {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  & > *:last-child {
+    margin-top: auto;
+  }
+
+  & > * {
+    max-width: 100%;
+  }
+}
+
+.userPopupBackground {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  z-index: 40;
+
+  transition: 0.3s;
+  opacity: 0;
+  pointer-events: none;
+
+  &[data-is-visible='true'] {
+    opacity: 1;
+    pointer-events: all;
+  }
+}
+
+.user {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.title {
+  color: white;
+  font-size: 40px;
+}
+
+.username {
+  color: white;
+  font-size: 40px;
+}
+
+.avatar {
+  flex: 1 1 auto;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  width: 30vh;
+}
