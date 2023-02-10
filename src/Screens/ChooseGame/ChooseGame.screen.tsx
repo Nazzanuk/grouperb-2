@@ -45,7 +45,7 @@ export const ChooseGameScreen: FC = () => {
           </div>
 
           <div className={styles.game} onClick={hostBlocksGame}>
-            <div className={styles.background} style={{ backgroundImage: `url('/img/charlatan-1.png')` }} />
+            <div className={styles.background} style={{ backgroundImage: `url('/img/blocks-1.png')` }} />
             <div className={styles.title}>Blocks</div>
             <div className={styles.subtitle}>A shape-shifting team game</div>
           </div>
