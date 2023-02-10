@@ -35,18 +35,20 @@ export const blocksGameHelpersAtom = atom((get) => {
   const splitAnswer = mapValues(usersWithoutGuesser, () => []);
   console.log({ splitAnswers: splitAnswer });
 
+  let n = 0;
   answer?.forEach((xAxis, x) =>
     xAxis?.forEach((yAxis, y) => {
-      const index = (x + y) % userArrayWithoutGuesser.length;
+      const index = n % userArrayWithoutGuesser.length;
       console.log('answerindex', index);
 
-      const user = userArrayWithoutGuesser[index];
-      console.log('answeruserId', user);
-      set(splitAnswer, [user.id, x, y], answer?.[x]?.[y]);
+      const selectedUser = userArrayWithoutGuesser[index];
+      set(splitAnswer, [selectedUser.id, x, y], answer?.[x]?.[y]);
 
       if (answer?.[x]?.[y]?.color === 'white') {
-        userArrayWithoutGuesser.forEach((user) => set(splitAnswer, [user.id, x, y], answer?.[x]?.[y]));
+        userArrayWithoutGuesser.forEach((u) => set(splitAnswer, [u.id, x, y], answer?.[x]?.[y]));
       }
+
+      n++;
     }),
   );
 
