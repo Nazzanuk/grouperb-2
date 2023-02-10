@@ -45,9 +45,9 @@ export const BlocksGameScreen: FC = () => {
   const { status, currentRound, currentRoundIndex, isHost, userArray } = useAtomValue(blocksGameHelpersAtom);
   const { isGuesser } = useAtomValue(blocksGameHelpersAtom);
 
-  const removeBlock = useLongPress((event, {context}) => {
-    console.log('long press',context)
-     send({ action: 'removeBlock', gameId: game!.id, userId: user.id, ...context });
+  const removeBlock = useLongPress((event, { context }) => {
+    console.log('long press', context);
+    send({ action: 'removeBlock', gameId: game!.id, userId: user.id, ...context });
   });
 
   useLoadGame(query.blocksGameId as string | undefined);
@@ -144,6 +144,7 @@ export const BlocksGameScreen: FC = () => {
 
 export const BlockEl: FC<{ block?: Block }> = ({ block }) => {
   const [isActive, setIsActive] = useState(false);
+  const [angle, setAngle] = useState(random(-100, 100));
 
   useEffect(() => {
     setIsActive(false);
@@ -155,7 +156,13 @@ export const BlockEl: FC<{ block?: Block }> = ({ block }) => {
 
   if (!block) return null;
 
-  return <div className={styles.block} data-is-active={isActive} style={{ '--color': block?.color }} />;
+  return (
+    <div
+      className={styles.block}
+      data-is-active={isActive}
+      style={{ '--color': block?.color, '--angle': `${angle}deg` }}
+    />
+  );
 };
 
 export const PlayerList: FC<{ users: User[]; game: BlocksGame }> = ({ users, game }) => {
