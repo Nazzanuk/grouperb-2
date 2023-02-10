@@ -35,6 +35,7 @@ import { useLoadGame } from 'Hooks/useLoadGame';
 import { useUpdateGame } from 'Hooks/useUpdateGame';
 
 import styles from './BlocksGame.screen.module.css';
+import { useBlocksTimer } from 'Hooks/Blocks/useBlocksTimer';
 
 export const BlocksGameScreen: FC = () => {
   const { query } = useRouter();
@@ -53,6 +54,7 @@ export const BlocksGameScreen: FC = () => {
 
   useLoadGame(query.blocksGameId as string | undefined);
   useUpdateGame(query.blocksGameId as string | undefined);
+  const {playingTime } = useBlocksTimer();
 
   console.log({ game, status });
 
@@ -85,17 +87,28 @@ export const BlocksGameScreen: FC = () => {
           )}
 
           {status === 'playing' && (
-            <WinnerBroadcast
-              text={`Round ${currentRoundIndex}`}
-              user={game.users[currentRound?.guesser]}
-              subText={`${game.users[currentRound?.guesser].username} is the guesser`}
-              duration={'1.5s'}
-              bits={5}
-            />
+            <>
+              <WinnerBroadcast
+                text={`Round ${currentRoundIndex}`}
+                user={game.users[currentRound?.guesser]}
+                subText={`${game.users[currentRound?.guesser].username} is the guesser`}
+                duration={'1.5s'}
+                bits={5}
+              />
+
+              <div className={styles.actionArea}>
+                <h3>{playingTime}s</h3>
+                <p>Help {game.users[currentRound.guesser].username}  match all the squares</p>
+              </div>
+            </>
           )}
+
+          
 
           {(status === 'playing' || status === 'complete') && (
             <>
+              <div className="label" style={{textAlign:'center'}}>Round {currentRoundIndex}</div>
+
               <div className={styles.grid}>
                 {times(9).map((x) =>
                   times(9).map((y) => (
@@ -140,6 +153,14 @@ export const BlocksGameScreen: FC = () => {
                 </div>
               </div>
             </>
+          )}
+
+          {status === 'playing' && isGuesser && (
+            <div className={styles.buttons}>
+              <div className="button" data-variant="light" onClick={startGame}>
+                Reset
+              </div>
+            </div>
           )}
 
           {status === 'lobby' && (
