@@ -24,12 +24,10 @@ export const clearBlocks = (payload: CreateBlocksRoundPayload): BlocksGame => {
 
   currentRound.guess = [];
 
-  set(currentRound.guess, `[${payload.x}][${payload.y}]`, {
-    id: random(100000),
-    x: payload.x,
-    y: payload.y,
-    color: colors[0],
-  });
+
+  const gridSize = 9;
+  const [x, y] = [Math.floor(gridSize / 2), Math.floor(gridSize / 2)];
+  set(currentRound.guess, `[${x}][${y}]`, { id: random(100000), x, y, color: 'white' });
 
   return game;
 };
