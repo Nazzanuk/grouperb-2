@@ -3,7 +3,7 @@ import { UserId } from 'Entities/UserId.entity';
 
 export type HostGamePayload = {
   action: 'hostGame';
-  type: 'vote' | 'defuse' | 'charlatan';
+  type: 'vote' | 'defuse' | 'charlatan' | 'blocks';
   user: User;
 };
 

@@ -11,6 +11,7 @@ import { wsAtom } from 'Atoms/Ws.atom';
 import styles from './BottomOverlay.module.css';
 import { voteGameHelpersAtom } from 'Atoms/VoteGameHelpers.atom';
 import { useRouter } from 'next/router';
+import { CharlatanBottomOverlay } from 'Components/BottomOverlay/views/CharlatanBottomOverlay';
 
 export const BottomOverlay: FC = () => {
   const { asPath } = useRouter();
@@ -19,8 +20,7 @@ export const BottomOverlay: FC = () => {
   const game = useAtomValue(voteGameAtom);
   const send = useSetAtom(wsAtom);
   const user = useAtomValue(userAtom);
-  const { isObserver, isHost, myWinningQuestions, usersSortedByScore } =
-    useAtomValue(voteGameHelpersAtom);
+  const { isObserver, isHost, myWinningQuestions, usersSortedByScore } = useAtomValue(voteGameHelpersAtom);
 
   const leaveGame = () => send({ action: 'leaveGame', gameId: game!.id, userId: user.id });
   const joinGame = () => send({ action: 'joinGame', gameId: game!.id, user });
@@ -40,6 +40,7 @@ export const BottomOverlay: FC = () => {
         onClick={() => setShowBottomOverlay(null)}
       />
       <div className={styles.bottomOverlay} data-is-open={!!showBottomOverlay}>
+        <CharlatanBottomOverlay />
         {showBottomOverlay === 'voteGameOptions' && (
           <>
             <div className={styles.title}>Options</div>
@@ -83,10 +84,7 @@ export const BottomOverlay: FC = () => {
               </div>
               <div className={styles.listItem} data-highlight>
                 Game Link: <strong>{window.location.href}</strong>
-                <div
-                  className={styles.copy}
-                  onClick={() => navigator.clipboard.writeText(window.location.href)}
-                >
+                <div className={styles.copy} onClick={() => navigator.clipboard.writeText(window.location.href)}>
                   <i className="fal fa-copy"></i>
                 </div>
               </div>
@@ -100,11 +98,7 @@ export const BottomOverlay: FC = () => {
             <div className={styles.list}>
               {usersSortedByScore.map((user) => (
                 <div className={styles.listItem} key={user.id} data-highlight>
-                  <img
-                    className={styles.playerIcon}
-                    src={`/img/avatars/${user.avatar}`}
-                    alt="avatar"
-                  />
+                  <img className={styles.playerIcon} src={`/img/avatars/${user.avatar}`} alt="avatar" />
                   {user.username}
                   <div className={styles.score}> {user.score}</div>
                 </div>

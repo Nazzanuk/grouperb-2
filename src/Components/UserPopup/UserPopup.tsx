@@ -25,7 +25,12 @@ export const UserPopup: FC = () => {
       <div className={styles.userPopupBackground} data-is-visible={isActive} />
       <div className={styles.userPopup} data-is-visible={isActive}>
         <div className={styles.title}>Who's the Charlatan?</div>
-        <Swiper loop slidesPerView={1} onSlideChange={(swiper) => setCurrentIndex(swiper.realIndex)}>
+        <Swiper
+          loop
+          slidesPerView={1}
+          onClick={(swiper) => swiper.slideNext()}
+          onSlideChange={(swiper) => setCurrentIndex(swiper.realIndex)}
+        >
           {users.map((user) => (
             <SwiperSlide key={user.id}>
               <div className={styles.user}>

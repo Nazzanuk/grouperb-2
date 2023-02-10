@@ -28,6 +28,7 @@ export const BottomBar: FC = () => {
   const isVoteGame = asPath.includes('/vote-game');
   const isDefuseGame = asPath.includes('/defuse-game');
   const isChooseGame = asPath.includes('/choose-game');
+  const isCharlatanGame = asPath.includes('/charlatan-game');
 
   const { isHost, isObserver } = useAtomValue(voteGameHelpersAtom);
 
@@ -91,6 +92,25 @@ export const BottomBar: FC = () => {
                   <i className="fas fa-info"></i>
                 </div>
                 <div className={styles.icon} onClick={() => setShowBottomOverlay('voteGameOptions')}>
+                  <i className="fas fa-cog"></i>
+                </div>
+              </div>
+            </>
+          )}
+
+          {isCharlatanGame && (
+            <>
+              <div className={styles.icons}>
+                <div className={styles.icon} onClick={() => setShowBottomOverlay('charlatanGameLeaderboard')}>
+                  <i className="fas fa-trophy"></i>
+                </div>
+                {/* <div className={styles.icon} onClick={() => setShowBottomOverlay('charlatanGameFavs')}>
+                  <i className="fas fa-star"></i>
+                </div> */}
+                <div className={styles.icon} onClick={() => setShowBottomOverlay('charlatanGameInfo')}>
+                  <i className="fas fa-info"></i>
+                </div>
+                <div className={styles.icon} onClick={() => setShowBottomOverlay('charlatanGameOptions')}>
                   <i className="fas fa-cog"></i>
                 </div>
               </div>

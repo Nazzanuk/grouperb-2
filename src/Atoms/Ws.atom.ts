@@ -102,6 +102,7 @@ export const initWebSocketAtom = atom<GameWs, User>(
         if (data.game.type === 'vote') router?.push(`/vote-game/${data.game.id}`);
         if (data.game.type === 'defuse') router?.push(`/defuse-game/${data.game.id}`);
         if (data.game.type === 'charlatan') router?.push(`/charlatan-game/${data.game.id}`);
+        if (data.game.type === 'blocks') router?.push(`/blocks-game/${data.game.id}`);
         console.log('game', data.game.id);
       }
 

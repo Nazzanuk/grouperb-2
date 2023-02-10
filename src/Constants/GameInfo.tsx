@@ -65,15 +65,16 @@ export const GAME_INFO = {
         Charlatan will be trying to blend in.
       </p>
       <p>
-        After everyone's had a go, it's time for the real fun to begin! The debate starts and it's time for you to ear
-        apart each other's arguments. If the player with the most votes is indeed the Charlatan, they'll have to take a
-        guess at the secret word.
+        After everyone's had a go, it's time for the real fun to begin! The debate starts and it's time for you to tear
+        apart each other's arguments. If the player with the half or more votes is indeed the Charlatan, they'll have to
+        take a guess at the secret word.
       </p>
       <p>
-        If the Charlatan slips through undetected, they'll score a cheeky 2 points, but everyone else scores nada. If
-        the Charlatan is caught but guesses the secret word, they'll score 1 point and everyone else scores 0 points.
-        But, if the Charlatan is caught and can't guess the secret word, they'll score 0 points and everyone else scores
-        a brilliant 2 points. The first player to score 5 points is the winner! Good luck and keep your eyes peeled.
+        If the Charlatan slips through undetected, they'll score a cheeky 2 points (3 if they receive 0 votes), and
+        everyone else scores nada. If the Charlatan is caught but guesses the secret word, they'll score 1 point and
+        everyone else scores 0 points. But, if the Charlatan is caught and can't guess the secret word, they'll score 0
+        points and everyone else scores a brilliant 2 points. The first player to score 7 points is the winner! Good
+        luck and keep your eyes peeled.
       </p>
     </>
   ),

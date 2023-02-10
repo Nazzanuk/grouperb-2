@@ -19,6 +19,7 @@ export const ChooseGameScreen: FC = () => {
   const hostVoteGame = () => send({ action: 'hostGame', type: 'vote', user });
   const hostDefuseGame = () => send({ action: 'hostGame', type: 'defuse', user });
   const hostCharlatanGame = () => send({ action: 'hostGame', type: 'charlatan', user });
+  const hostBlocksGame = () => send({ action: 'hostGame', type: 'blocks', user });
 
   return (
     <>
@@ -41,6 +42,12 @@ export const ChooseGameScreen: FC = () => {
             <div className={styles.background} style={{ backgroundImage: `url('/img/charlatan-1.png')` }} />
             <div className={styles.title}>Charlatan</div>
             <div className={styles.subtitle}>A game of big bluffing</div>
+          </div>
+
+          <div className={styles.game} onClick={hostBlocksGame}>
+            <div className={styles.background} style={{ backgroundImage: `url('/img/charlatan-1.png')` }} />
+            <div className={styles.title}>Blocks</div>
+            <div className={styles.subtitle}>A shape-shifting team game</div>
           </div>
         </div>
       </div>
