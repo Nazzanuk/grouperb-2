@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 import { FC, Fragment, useEffect, useMemo, useRef, useState } from 'react';
-import { useLongPress } from 'use-long-press';
 
 import { useAtomValue, useSetAtom } from 'jotai';
 
@@ -11,6 +10,8 @@ import times from 'lodash/times';
 import Link from 'next/link';
 
 import { useRouter } from 'next/router';
+import { useLongPress } from 'use-long-press';
+
 import { blocksGameAtom } from 'Atoms/BlocksGame.atom';
 import { blocksGameHelpersAtom } from 'Atoms/BlocksGameHelpers.atom';
 
@@ -84,6 +85,16 @@ export const BlocksGameScreen: FC = () => {
           )}
 
           {status === 'playing' && (
+            <WinnerBroadcast
+              text={`Round ${currentRoundIndex}`}
+              user={game.users[currentRound?.guesser]}
+              subText={`${game.users[currentRound?.guesser].username} is the guesser`}
+              duration={'1.5s'}
+              bits={5}
+            />
+          )}
+
+          {(status === 'playing' || status === 'complete') && (
             <>
               <div className={styles.grid}>
                 {times(9).map((x) =>
@@ -91,7 +102,7 @@ export const BlocksGameScreen: FC = () => {
                     <Fragment key={'' + x + y}>
                       <div
                         className={styles.gridItem}
-                        onClick={() => (isGuesser ? addBlock({ x, y }) : undefined)}
+                        onClick={() => (isGuesser && status === 'playing' ? addBlock({ x, y }) : undefined)}
                         {...removeBlock({ x, y })}
                       >
                         {!isGuesser && !currentRound?.answer?.[x]?.[y]?.color && <div className={styles.dot} />}
@@ -114,18 +125,32 @@ export const BlocksGameScreen: FC = () => {
           )}
 
           {status === 'complete' && (
-            <div className={styles.buttons}>
-              <div className="button" data-variant="orange" onClick={startGame}>
-                Next round
+            <>
+              <WinnerBroadcast
+                text={`Nice!`}
+                subText={`Round ${currentRoundIndex} complete`}
+                user={game.users[currentRound?.guesser]}
+                duration={'3s'}
+                bits={100}
+              />
+
+              <div className={styles.buttons}>
+                <div className="button" data-variant="orange" onClick={startGame}>
+                  Next round
+                </div>
               </div>
-            </div>
+            </>
           )}
 
           {status === 'lobby' && (
             <div className={styles.buttons}>
               {!isHost && <div className={styles.blurb}>Waiting for host to start game...</div>}
 
-              {isHost && (
+              {!(userArray.length >= 2) && (
+                <div className={styles.blurb}>At least 2 players are needed to start the game</div>
+              )}
+
+              {isHost && userArray.length >= 2 && (
                 <div className="button" data-variant="orange" onClick={startGame}>
                   Start game
                 </div>
