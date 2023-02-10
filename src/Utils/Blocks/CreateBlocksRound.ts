@@ -14,7 +14,7 @@ import { UserId } from 'Entities/UserId.entity';
 
 import { ServerGames } from 'Server/ServerGames';
 
-const colors = ['red', 'green', 'blue', 'yellow', 'purple', 'orange'];
+const colors = ['Crimson', 'LimeGreen', 'DodgerBlue', 'gold'];
 
 export const createBlocksRound = (payload: CreateBlocksRoundPayload): BlocksGame => {
   console.log('createBlocksRound', payload);
