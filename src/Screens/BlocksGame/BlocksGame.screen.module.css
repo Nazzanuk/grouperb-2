@@ -249,22 +249,38 @@
   & .block {
     --color: white;
     --angle: 360deg;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     background: var(--color);
     height: 80%;
     width: 80%;
     border-radius: 5px;
-    box-shadow: inset 0px -3px 0 rgba(0, 0, 0, 0.2), inset 18px 0px 14px rgba(0, 0, 0, 0.2), inset 0px 0px 5px var(--color);
-    transition: .2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: inset 0px -3px 0 rgba(0, 0, 0, 0.2), inset 18px 0px 14px rgba(0, 0, 0, 0.2),
+      inset 0px 0px 5px var(--color);
+    transition: 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 
     transform: scale(0) rotate(var(--angle));
 
-    &[data-is-active="true"] {
+    &[data-is-active='true'] {
       transform: scale(1);
-    } 
+    }
+
     &:active {
       transform: scale(1.2) rotate(var(--angle));
-      transition: .2s cubic-bezier(0.34, 1.56, 0.64, 1);
-    } 
+      transition: 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    & :global(.fa-star) {
+      transform: scale(0);
+      transition: 0.4s cubic-bezier(0.34, 3.56, 0.64, 1);
+
+      &[data-is-active='true'] {
+        transform: scale(1);
+      }
+    }
   }
 }
 

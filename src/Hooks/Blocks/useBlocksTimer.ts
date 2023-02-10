@@ -24,7 +24,7 @@ export const useBlocksTimer = () => {
 
     const interval = setInterval(() => {
       const startTime: string = currentRound.startTime;
-      const duration = 10 + 10 * currentRoundIndex;
+      const duration = 10 + 5 * currentRoundIndex;
       const timeRemaining = duration - (Date.now() - new Date(startTime).getTime()) / 1000;
 
       setTimer(Math.round(timeRemaining));

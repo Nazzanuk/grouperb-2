@@ -16,18 +16,49 @@ import omitBy from 'lodash/omitBy';
 import omit from 'lodash/omit';
 import every from 'lodash/every';
 import { BlocksRound } from 'Entities/BlocksRound.entity';
+import { blocksGameAtom } from 'Atoms/BlocksGame.atom';
+import { BlocksGame } from 'Entities/BlocksGame.entity';
+import { set } from 'lodash';
 
 export const blocksGameHelpersAtom = atom((get) => {
-  const game = get(charlatanGameAtom);
+  const game = get(blocksGameAtom) as BlocksGame;
   const user = get(userAtom);
   const sharedHelpers = get(sharedGameHelpersAtom);
 
   const currentRound: BlocksRound = sharedHelpers.currentRound ?? {};
-  const isGuesser = currentRound.guesser === user.id;
+  const answer = currentRound?.answer;
+  const isGuesser = currentRound?.guesser === user.id;
+
+  const userArrayWithoutGuesser = sharedHelpers.userArray.filter((user) => user.id !== currentRound.guesser);
+  const usersWithoutGuesser = omit(game?.users, currentRound.guesser);
+
+  const splitAnswer = mapValues(usersWithoutGuesser, () => []);
+  console.log({ splitAnswers: splitAnswer });
+
+  answer?.forEach((xAxis, x) =>
+    xAxis?.forEach((yAxis, y) => {
+      const index = (x + y) % userArrayWithoutGuesser.length;
+      console.log('answerindex', index);
+
+      const user = userArrayWithoutGuesser[index];
+      console.log('answeruserId', user);
+      set(splitAnswer, [user.id, x, y], answer?.[x]?.[y]);
+
+      if (answer?.[x]?.[y]?.color === 'white') {
+        userArrayWithoutGuesser.forEach((user) => set(splitAnswer, [user.id, x, y], answer?.[x]?.[y]));
+      }
+    }),
+  );
+
+  const myAnswer = splitAnswer[user.id];
+
+  console.log({ answers: answer, splitAnswers: splitAnswer, userArrayWithoutGuesser, usersWithoutGuesser });
 
   return {
     ...sharedHelpers,
     currentRound,
     isGuesser,
+    splitAnswer,
+    myAnswer,
   };
 });

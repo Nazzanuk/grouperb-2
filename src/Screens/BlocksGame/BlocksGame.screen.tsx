@@ -45,7 +45,7 @@ export const BlocksGameScreen: FC = () => {
   const user = useAtomValue(userAtom);
   const { selectedUser } = useAtomValue(userPopupAtom);
   const { status, currentRound, currentRoundIndex, isHost, userArray } = useAtomValue(blocksGameHelpersAtom);
-  const { isGuesser } = useAtomValue(blocksGameHelpersAtom);
+  const { isGuesser, myAnswer } = useAtomValue(blocksGameHelpersAtom);
 
   const removeBlock = useLongPress((event, { context }) => {
     console.log('long press', context);
@@ -54,13 +54,14 @@ export const BlocksGameScreen: FC = () => {
 
   useLoadGame(query.blocksGameId as string | undefined);
   useUpdateGame(query.blocksGameId as string | undefined);
-  const {playingTime } = useBlocksTimer();
+  const { playingTime } = useBlocksTimer();
 
   console.log({ game, status });
 
   const leaveGame = () => send({ action: 'leaveGame', gameId: game!.id, userId: user.id });
   const startGame = () => send({ action: 'createBlocksRound', gameId: game!.id, userId: user.id });
   const addBlock = ({ x, y }: any) => send({ action: 'addBlock', gameId: game!.id, userId: user.id, x, y });
+  const clearBlocks = ({ x, y }: any) => send({ action: 'clearBlocks', gameId: game!.id, userId: user.id, x, y });
 
   // const restartGame = () => send({ action: 'restartBlocksGame', gameId: game!.id, userId: user.id });
   // const startRound = () => send({ action: 'startBlocksRound', gameId: game!.id, userId: user.id });
@@ -95,19 +96,19 @@ export const BlocksGameScreen: FC = () => {
                 duration={'1.5s'}
                 bits={5}
               />
-
-              <div className={styles.actionArea}>
-                <h3>{playingTime}s</h3>
-                <p>Help {game.users[currentRound.guesser].username}  match all the squares</p>
-              </div>
             </>
           )}
 
-          
-
           {(status === 'playing' || status === 'complete') && (
             <>
-              <div className="label" style={{textAlign:'center'}}>Round {currentRoundIndex}</div>
+              <div className={styles.actionArea}>
+                <h3>{playingTime}s</h3>
+                <p>Help {game.users[currentRound.guesser].username} match all the squares</p>
+              </div>
+
+              <div className="label" style={{ textAlign: 'center' }}>
+                Round {currentRoundIndex}
+              </div>
 
               <div className={styles.grid}>
                 {times(9).map((x) =>
@@ -118,10 +119,10 @@ export const BlocksGameScreen: FC = () => {
                         onClick={() => (isGuesser && status === 'playing' ? addBlock({ x, y }) : undefined)}
                         {...removeBlock({ x, y })}
                       >
-                        {!isGuesser && !currentRound?.answer?.[x]?.[y]?.color && <div className={styles.dot} />}
+                        {!isGuesser && !myAnswer?.[x]?.[y]?.color && <div className={styles.dot} />}
 
-                        {!isGuesser && currentRound?.answer?.[x]?.[y]?.color && (
-                          <BlockEl block={currentRound?.answer?.[x]?.[y]} />
+                        {!isGuesser && myAnswer?.[x]?.[y]?.color && (
+                          <BlockEl block={myAnswer?.[x]?.[y]} star={currentRound?.guess?.[x]?.[y]} />
                         )}
 
                         {isGuesser && !currentRound?.guess?.[x]?.[y]?.color && <div className={styles.dot} />}
@@ -157,8 +158,8 @@ export const BlocksGameScreen: FC = () => {
 
           {status === 'playing' && isGuesser && (
             <div className={styles.buttons}>
-              <div className="button" data-variant="light" onClick={startGame}>
-                Reset
+              <div className="button" data-variant="light" onClick={clearBlocks}>
+                Clear
               </div>
             </div>
           )}
@@ -188,7 +189,7 @@ export const BlocksGameScreen: FC = () => {
   );
 };
 
-export const BlockEl: FC<{ block?: Block }> = ({ block }) => {
+export const BlockEl: FC<{ block?: Block }> = ({ block, star }) => {
   const [isActive, setIsActive] = useState(false);
   const [angle, setAngle] = useState(random(-100, 100));
 
@@ -207,7 +208,9 @@ export const BlockEl: FC<{ block?: Block }> = ({ block }) => {
       className={styles.block}
       data-is-active={isActive}
       style={{ '--color': block?.color, '--angle': `${angle}deg` }}
-    />
+    >
+      {star && <i className="fas fa-star" data-is-active={block?.color === star?.color} />}
+    </div>
   );
 };
 

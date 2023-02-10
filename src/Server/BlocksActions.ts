@@ -7,6 +7,7 @@ import { updateClientGames } from 'Server/UpdateClientGames';
 import { createBlocksRound } from 'Utils/Blocks/CreateBlocksRound';
 import { addBlock } from 'Utils/Blocks/AddBlock';
 import { removeBlock } from 'Utils/Blocks/RemoveBlock';
+import { clearBlocks } from 'Utils/Blocks/ClearBlocks';
 
 type Actions = Payload['action'];
 
@@ -36,6 +37,11 @@ const actions: Partial<Record<Actions, (props: ActionProps) => BlocksGame | unde
   },
   removeBlock: ({ client, data, wss }) => {
     const game = removeBlock(data as CastBlocksVotePayload);
+    update({ game, client, wss });
+    return game;
+  },
+  clearBlocks: ({ client, data, wss }) => {
+    const game = clearBlocks(data as CastBlocksVotePayload);
     update({ game, client, wss });
     return game;
   },
