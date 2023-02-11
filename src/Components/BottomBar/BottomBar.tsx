@@ -30,8 +30,6 @@ export const BottomBar: FC = () => {
   const isChooseGame = asPath.includes('/choose-game');
   const isCharlatanGame = asPath.includes('/charlatan-game');
 
-  const { isHost, isObserver } = useAtomValue(voteGameHelpersAtom);
-
   const hostGame = () => {
     // send({ action: 'hostGame', type: 'vote', user });
     // send({ action: 'hostGame', type: 'defuse', user });
