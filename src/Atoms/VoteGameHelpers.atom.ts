@@ -23,8 +23,6 @@ export const voteGameHelpersAtom = atom((get) => {
   const sharedHelpers = get(sharedGameHelpersAtom);
   const { status, currentRound, currentRoundIndex, isHost, isObserver, userArray, usersWithoutMe } = sharedHelpers;
 
-  if (!game) return sharedHelpers;
-
   const currentQuestion = currentRound?.question;
   const isWinner = !!currentRound?.winners?.[user.id];
   const allAreWinners = keys(currentRound?.winners ?? {}).length === keys(game?.users ?? {}).length;

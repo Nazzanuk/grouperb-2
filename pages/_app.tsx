@@ -107,12 +107,12 @@ export default function App({ Component, pageProps }: AppProps) {
           as="image"
           href="/nazzanuk_abstract_watercolor_picture_of_a_trophy_black_yellow_o_ecb5504a-4b7c-43e7-b80d-14cf1f248c37-removebg.png"
         />
-        <link rel="preload" as="image" href="/img/backgrounds/b1.png" />
+        <link rel="preload" as="image" href="/img/backgrounds/b1.jpeg" />
         <link rel="preload" as="image" href="/img/question-2.png" />
         <link rel="preload" as="image" href="/img/bomb-2.png" />
         <link rel="preload" as="image" href="/img/charlatan-1.png" />
         <link rel="preload" as="image" href="/img/blocks-1.png" />
-        <link rel="preload" as="image" href="/img/backgrounds/b11.png" />
+        <link rel="preload" as="image" href="/img/backgrounds/b11.jpeg" />
       </Head>
 
       <NoSSR>
