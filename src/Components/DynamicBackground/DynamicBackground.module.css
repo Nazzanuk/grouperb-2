@@ -22,6 +22,7 @@
   bottom: 0;
   left: 0;
   right: 0;
+  animation: zoom 30s infinite alternate;
 }
 
 .floater {
@@ -78,5 +79,27 @@
   100% {
     transform: translateX(var(--left));
     opacity: 1;
+  }
+}
+
+@keyframes zoom {
+  0% {
+    transform: scale(1) rotate(-10deg);
+  }
+
+  25% {
+    transform: scale(1.5) rotate(-30deg);
+  }
+
+  50% {
+    transform: scale(2) rotate(20deg);
+  }
+
+  75% {
+    transform: scale(2.5) rotate(90deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(-10deg);
   }
 }
