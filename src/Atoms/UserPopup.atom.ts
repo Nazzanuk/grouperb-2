@@ -7,18 +7,25 @@ import { sharedGameHelpersAtom } from 'Atoms/SharedGameHelpers.atom';
 import { User } from 'Entities/User.entity';
 
 export const userPopupAtom = atom({
+  title: '',
   isActive: false,
   selectedUser: null as null | User,
   userIds: [] as UserId[],
 });
 
-export const showUserPopupAtom = atom(null, (get, set, userIds?: UserId[] | undefined) => {
+type Props = {
+  title: string;
+  userIds?: UserId[] | undefined;
+};
+
+export const showUserPopupAtom = atom(null, (get, set, { userIds, title }: Props) => {
   const userPopup = get(userPopupAtom);
   const game = get(currentGameAtom);
   const { userArray } = get(sharedGameHelpersAtom);
 
   set(userPopupAtom, {
     ...userPopup,
+    title,
     isActive: true,
     selectedUser: null,
     userIds: userIds ?? userArray.map((user) => user.id),

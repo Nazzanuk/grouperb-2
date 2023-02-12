@@ -13,7 +13,7 @@ import styles from './UserPopup.module.css';
 export const UserPopup: FC = () => {
   const game = useAtomValue(currentGameAtom);
   const { userArray } = useAtomValue(sharedGameHelpersAtom);
-  const { isActive, selectedUser, userIds } = useAtomValue(userPopupAtom);
+  const { isActive, selectedUser, userIds, title } = useAtomValue(userPopupAtom);
   const selectUserPopup = useSetAtom(selectUserPopupAtom);
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -24,7 +24,7 @@ export const UserPopup: FC = () => {
     <>
       <div className={styles.userPopupBackground} data-is-visible={isActive} />
       <div className={styles.userPopup} data-is-visible={isActive}>
-        <div className={styles.title}>Who's the Charlatan?</div>
+        <div className={styles.title}>{title}</div>
         <Swiper
           loop
           slidesPerView={1}

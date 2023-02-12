@@ -42,6 +42,7 @@ export const BottomBar: FC = () => {
   };
 
   if (isProfile) return null;
+  if (isSplash) return null;
 
   return (
     <>
@@ -75,7 +76,6 @@ export const BottomBar: FC = () => {
             </>
           )}
 
-          {isSplash && <div className={styles.blurb}>Let's go</div>}
 
           {isVoteGame && (
             <>

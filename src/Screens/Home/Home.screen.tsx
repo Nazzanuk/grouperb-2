@@ -10,6 +10,8 @@ import { gameCodeAtom } from 'Atoms/GameCodeAtom';
 import { userAtom } from 'Atoms/User.atom';
 import { wsAtom } from 'Atoms/Ws.atom';
 
+import { DynamicBackground } from 'Components/DynamicBackground/DynamicBackground';
+
 import styles from './Home.screen.module.css';
 
 const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -32,8 +34,11 @@ export const HomeScreen: FC = () => {
 
   return (
     <>
-      <div className="darkScreen" style={{ backgroundImage: `url('/img/backgrounds/b12.jpeg')` }}>
+      <div className="darkScreen">
         <div className="darkScreenOverlay" />
+
+        <DynamicBackground floaterCount={20} />
+        
         <div className="darkScreenContent">
           <div className="label">Enter game code</div>
 

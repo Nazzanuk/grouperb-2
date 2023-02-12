@@ -1,0 +1,82 @@
+.bck {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.bckBox {
+  transform: rotate(348deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.floater {
+  --size: 10px;
+  --speed: 1s;
+  --left: 200vw;
+  --top: 20vw;
+  --color: #fff;
+  --delay: 0;
+
+  height: var(--size);
+  width: var(--size);
+  top: var(--top);
+
+  position: absolute;
+
+  opacity: 1;
+  background: var(--color);
+  z-index: 100;
+
+  animation: slide var(--speed) infinite;
+  animation-delay: var(--delay);
+  opacity: 0;
+
+  &[data-shape='square'] {
+    width: calc(var(--size) * 10);
+    height: calc(var(--size) * 10);
+    z-index: 99;
+    animation-duration: calc(var(--speed) * 10);
+    animation-delay: calc(var(--delay) * 10);
+  }
+
+  &[data-shape='line'] {
+    height: 2px;
+    width: calc(var(--size) * 5);
+    background: #eee;
+
+    &[data-no-lines='true'] {
+      display: none;
+    }
+  }
+
+  &[data-shape='circle'] {
+    border-radius: 50%;
+  }
+}
+
+@keyframes slide {
+  0% {
+    transform: translateX(calc(var(--left) * -1));
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(var(--left));
+    opacity: 1;
+  }
+}

@@ -16,12 +16,14 @@ import { getUserAssignedLeastQuestions } from 'Utils/Vote/GetUserAssignedLeastQu
 import { getUserAssignedMostQuestions } from 'Utils/Vote/GetUserAssignedMostQuestions';
 import { getUserWhoVotedForThemselvesMost } from 'Utils/Vote/GetUserWhoVotedForThemselvesMost';
 import { getWinnersString } from 'Utils/Vote/GetWinnersString';
+import { VoteRound } from 'Entities/VoteRound.entity';
 
 export const voteGameHelpersAtom = atom((get) => {
   const game = get(voteGameAtom);
   const user = get(userAtom);
   const sharedHelpers = get(sharedGameHelpersAtom);
-  const { status, currentRound, currentRoundIndex, isHost, isObserver, userArray, usersWithoutMe } = sharedHelpers;
+  const { status, currentRoundIndex, isHost, isObserver, userArray, usersWithoutMe } = sharedHelpers;
+  const currentRound = sharedHelpers.currentRound as VoteRound;
 
   const currentQuestion = currentRound?.question;
   const isWinner = !!currentRound?.winners?.[user.id];

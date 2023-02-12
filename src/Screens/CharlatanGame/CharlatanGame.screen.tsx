@@ -29,6 +29,7 @@ import { useLoadGame } from 'Hooks/useLoadGame';
 import { useUpdateGame } from 'Hooks/useUpdateGame';
 
 import styles from './CharlatanGame.screen.module.css';
+import { DynamicBackground } from 'Components/DynamicBackground/DynamicBackground';
 
 export const CharlatanGameScreen: FC = () => {
   const { query } = useRouter();
@@ -67,8 +68,9 @@ export const CharlatanGameScreen: FC = () => {
   return (
     <>
       <InfoOverlay />
-      <div className="darkScreen" style={{ backgroundImage: `url('/img/backgrounds/b13.jpeg')` }}>
+      <div className="darkScreen" >
         <div className="darkScreenOverlay" />
+        <DynamicBackground floaterCount={20} />
         <div className="darkScreenContent">
           <UserPopup />
 

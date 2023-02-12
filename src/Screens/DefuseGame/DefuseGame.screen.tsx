@@ -25,6 +25,7 @@ import styles from './DefuseGame.screen.module.css';
 import { useLoadGame } from 'Hooks/useLoadGame';
 import { useUpdateGame } from 'Hooks/useUpdateGame';
 import { LoadingGame } from 'Components/LoadingGame/LoadingGame';
+import { DynamicBackground } from 'Components/DynamicBackground/DynamicBackground';
 
 export const DefuseGameScreen: FC = () => {
   const { query } = useRouter();
@@ -91,8 +92,10 @@ export const DefuseGameScreen: FC = () => {
   return (
     <>
       <InfoOverlay />
-      <div className="darkScreen" style={{ backgroundImage: `url('/img/backgrounds/b9.jpeg')` }}>
+      <div className="darkScreen" >
         <div className="darkScreenOverlay" />
+
+      <DynamicBackground floaterCount={100} isDark noLines/>
         <div className="darkScreenContent">
           {status === 'lobby' && (
             <>

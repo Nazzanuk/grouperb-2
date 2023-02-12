@@ -21,6 +21,9 @@ import { useLoadGame } from 'Hooks/useLoadGame';
 import { useUpdateGame } from 'Hooks/useUpdateGame';
 
 import styles from './VoteGame.screen.module.css';
+import { DynamicBackground } from 'Components/DynamicBackground/DynamicBackground';
+import { UserPopup } from 'Components/UserPopup/UserPopup';
+import { showUserPopupAtom, userPopupAtom } from 'Atoms/UserPopup.atom';
 
 export const VoteGameScreen: FC = () => {
   const { query } = useRouter();
@@ -31,6 +34,9 @@ export const VoteGameScreen: FC = () => {
   const game = useAtomValue(voteGameAtom);
   const send = useSetAtom(wsAtom);
   const user = useAtomValue(userAtom);
+  const { selectedUser } = useAtomValue(userPopupAtom);
+  const showUserPopup = useSetAtom(showUserPopupAtom);
+
   const {
     status,
     currentQuestion,
@@ -65,8 +71,8 @@ export const VoteGameScreen: FC = () => {
   const leaveGame = () => send({ action: 'leaveGame', gameId: game!.id, userId: user.id });
   const startGame = () => send({ action: 'startVoteGame', gameId: game!.id, userId: user.id });
   const startRound = () => send({ action: 'startVoteRound', gameId: game!.id, userId: user.id });
-  const castVote = (voteUserId: UserId) =>
-    send({ action: 'castVote', gameId: game!.id, userId: user.id, vote: voteUserId });
+  // const castVote = (voteUserId: UserId) =>
+  //   send({ action: 'castVote', gameId: game!.id, userId: user.id, vote: voteUserId });
 
   useEffect(() => {
     if (game?.status !== 'results') return setIsNextRoundEnabled(false);
@@ -82,14 +88,31 @@ export const VoteGameScreen: FC = () => {
     setTrophyIndex(random(1, 3));
   }, [game?.rounds.length]);
 
-  if (!game) <LoadingGame/>
+  useEffect(() => {
+    if (game?.status !== 'voting') return;
+    if (!!currentRound.votes[user.id]) return;
+
+    showUserPopup({ title: `Who ${currentQuestion}?` });
+  }, [game?.status]);
+
+  useEffect(() => {
+    console.log({ selectedUser });
+    if (!selectedUser) return;
+
+    send({ action: 'castVote', gameId: game!.id, userId: user.id, vote: selectedUser.id });
+  }, [selectedUser]);
+
+  if (!game) <LoadingGame />;
 
   return (
     <>
       <InfoOverlay />
-      <div className="darkScreen" style={{ backgroundImage: `url('/img/backgrounds/b9.jpeg')` }}>
+      <div className="darkScreen">
         <div className="darkScreenOverlay" />
+        <DynamicBackground floaterCount={20} isDark />
         <div className="darkScreenContent">
+          <UserPopup />
+
           {status === 'lobby' && (
             <>
               <div className="label">Game code</div>
@@ -214,7 +237,7 @@ export const VoteGameScreen: FC = () => {
                   <WinnerBroadcast
                     img={`/img/trophies/trophy-${trophyIndex}.jpeg`}
                     text={allAreWinners ? 'All of You!' : winnersString}
-                    subText={currentQuestion}
+                    subText={`Who ${currentQuestion}?...`}
                   />
                   <div className={styles.singlePlayer} data-animate key="winner">
                     <img className={styles.playerImage} src={`/img/trophies/trophy-${trophyIndex}.jpeg`} alt="trophy" />

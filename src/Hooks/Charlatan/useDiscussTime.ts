@@ -43,7 +43,7 @@ export const useDiscussTime = () => {
     if (game?.status !== 'voting') return;
     if (!!currentRound.votes[user.id]) return;
 
-    showUserPopup();
+    showUserPopup({ title: `Who's the Charlatan?` });
   }, [game?.status]);
 
   return {

@@ -11,6 +11,7 @@ import { userAtom } from 'Atoms/User.atom';
 import { wsAtom } from 'Atoms/Ws.atom';
 
 import styles from './ChooseGame.screen.module.css';
+import { DynamicBackground } from 'Components/DynamicBackground/DynamicBackground';
 
 export const ChooseGameScreen: FC = () => {
   const user = useAtomValue(userAtom);
@@ -23,8 +24,10 @@ export const ChooseGameScreen: FC = () => {
 
   return (
     <>
-      <div className="darkScreen" style={{ backgroundImage: `url('/img/backgrounds/b11.jpeg')` }}>
+      <div className="darkScreen" >
         <div className="darkScreenOverlay" />
+
+        <DynamicBackground floaterCount={20} />
         <div className="darkScreenContent">
           <div className={styles.game} onClick={hostVoteGame}>
             <div className={styles.background} style={{ backgroundImage: `url('/img/question-2.png')` }} />

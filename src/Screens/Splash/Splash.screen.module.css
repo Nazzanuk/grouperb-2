@@ -1,5 +1,18 @@
 .splash {
 
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  height: 100%;
+
+  & :global(.blurb) {
+    margin-bottom:30vh;
+  }
+
+  & :global(.button) {
+    margin-bottom:10vh;
+  }
 }
 
 .title {
@@ -7,12 +20,13 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  font-size: 8vh;
+  font-size: 10vh;
   margin-bottom:0px;
   font-family: var(--bebasNeue);
   font-family: var(--teko);
   /* letter-spacing: 2px;
   font-weight: 300; */
+    transform: rotate(356deg);
 }
 .img {
   position: relative;
