@@ -19,6 +19,7 @@ export const DynamicBackground = ({ floaterCount = 10, isDark = false, noLines =
       '--delay': `${random(0, -15)}s`,
       shape: sample(['line', 'square']),
       noLines,
+      isDark,
     })),
   );
 
@@ -33,6 +34,7 @@ export const DynamicBackground = ({ floaterCount = 10, isDark = false, noLines =
               style={floater}
               data-shape={floater.shape}
               data-no-lines={floater.noLines}
+              data-is-dark={floater.isDark}
             />
           ))}
         </div>

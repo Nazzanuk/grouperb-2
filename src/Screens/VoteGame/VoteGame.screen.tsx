@@ -109,7 +109,7 @@ export const VoteGameScreen: FC = () => {
       <InfoOverlay />
       <div className="darkScreen">
         <div className="darkScreenOverlay" />
-        <DynamicBackground floaterCount={20} isDark />
+        <DynamicBackground floaterCount={40} isDark />
         <div className="darkScreenContent">
           <UserPopup />
 

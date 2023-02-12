@@ -60,6 +60,10 @@
     width: calc(var(--size) * 5);
     background: #eee;
 
+    &[data-is-dark='true'] {
+      background: #444;
+    }
+
     &[data-no-lines='true'] {
       display: none;
     }
