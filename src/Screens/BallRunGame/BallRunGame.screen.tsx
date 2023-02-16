@@ -59,8 +59,8 @@ export const BallRunGameScreen: FC = () => {
   // const { status, currentRound, currentRoundIndex, isHost, userArray } = useAtomValue(ballRunGameHelpersAtom);
   // const { isGuesser, myAnswer } = useAtomValue(ballRunGameHelpersAtom);
 
-  useLoadGame(query.ballRunGameId as string | undefined);
-  useUpdateGame(query.ballRunGameId as string | undefined);
+  // useLoadGame(query.ballRunGameId as string | undefined);
+  // useUpdateGame(query.ballRunGameId as string | undefined);
 
   console.log({ game, status });
 
@@ -88,7 +88,7 @@ export const BallRunGameScreen: FC = () => {
         width: 500,
         height: 600,
         wireframes: false,
-        background: 'red',
+        background: 'black',
       },
     });
 
@@ -101,15 +101,16 @@ export const BallRunGameScreen: FC = () => {
     var boxB = Bodies.rectangle(450, 50, 80, 80, { collisionFilter: { mask: defaultCategory } });
     var circleB = Bodies.circle(450, 50, 30, { collisionFilter: { mask: defaultCategory | mouseCategory } });
 
-    var ground = Bodies.rectangle(250, 600, 500, 10, {
-      isStatic: true,
-      collisionFilter: { category: defaultCategory },
-    });
-    var top = Bodies.rectangle(250, 0, 500, 10, { isStatic: true, collisionFilter: { category: defaultCategory } });
-    var left = Bodies.rectangle(0, 300, 10, 600, { isStatic: true, collisionFilter: { category: defaultCategory } });
-    var right = Bodies.rectangle(500, 300, 10, 600, { isStatic: true, collisionFilter: { category: defaultCategory } });
+    var ground = Bodies.rectangle(250, 600, 500, 10, { isStatic: true, render: { fillStyle: 'white' } });
+    var top = Bodies.rectangle(250, -45, 500, 100, { isStatic: true, render: { fillStyle: 'white' } });
+    var left = Bodies.rectangle(0, 300, 10, 600, { isStatic: true, render: { fillStyle: 'white' } });
+    var right = Bodies.rectangle(500, 300, 10, 600, { isStatic: true, render: { fillStyle: 'white' } });
 
-    let rock = Bodies.circle(250, 450, 20, { density: 0.004 });
+    var block = Bodies.rectangle(325, 300, 10, 100, { isStatic: true, chamfer: { radius: 4 }, render: { fillStyle: 'white' } });
+    Body.rotate(block, Math.PI / 3);
+    block.restitution = 1.5;
+
+    let rock = Bodies.circle(250, 450, 20, { density: 0.004, render: { fillStyle: 'orange' } })
     const elastic = Constraint.create({
       pointA: { x: 250, y: 450 },
       bodyB: rock,
@@ -118,36 +119,22 @@ export const BallRunGameScreen: FC = () => {
       stiffness: 0.1,
     });
 
-    var controlArea = Bodies.rectangle(250, 150, 500, 300, {
-      label: 'controlArea',
-      isStatic: true,
-      isSensor: true,
-      render: { fillStyle: 'blue', opacity: 0.1 },
-    });
-    // const bounds = Matter.Bounds.create([0, 0, 500, 600]);
-
     // add mouse control
     var mouse = Mouse.create(render.canvas),
       mouseConstraint = MouseConstraint.create(engine, {
-        // body: controlArea,
-
         collisionFilter: { mask: mouseCategory },
         mouse: mouse,
         constraint: {
           stiffness: 0.2,
-          render: {
-            visible: false,
-          },
+          render: { visible: false },
         },
       });
 
-    render.mouse = mouse;
-
     Events.on(engine, 'afterUpdate', function () {
-      if (rock.speed > 5) {
-        console.log({ rock }, rock.speed)
+      if (rock.speed > 2) {
+        console.log({ rock }, rock.speed);
       }
-      if (rock.velocity.y < -10 && (rock.position.y > 455)) {
+      if (rock.velocity.y < -10 && rock.position.y > 451) {
         // Limit maximum speed of current rock.
         // if (rock.speed > 45) {
         //   Body.setVelocity(rock, rock.velocity);
@@ -155,7 +142,11 @@ export const BallRunGameScreen: FC = () => {
 
         // Release current rock and add a new one.
         rock = Bodies.circle(250, 450, 20, { density: 0.004, velocity: rock.velocity });
-        const newRock = Bodies.circle(250, 450, 20, { density: 0.004, velocity: rock.velocity });
+        const newRock = Bodies.circle(250, 450, 20, {
+          density: 0.004,
+          velocity: rock.velocity,
+          render: { fillStyle: 'orange' },
+        });
         // const newRock = Bodies.polygon(250, 450, 7, 20, { density: 0.004 });
         Composite.add(engine.world, newRock);
         elastic.bodyB = newRock;
@@ -166,9 +157,10 @@ export const BallRunGameScreen: FC = () => {
     // Mouse.setElement(mouse, render.canvas);
 
     // add all of the bodies to the world
-    Composite.add(engine.world, [boxA, boxB, ground, top, left, right, controlArea, circleB, rock, elastic]);
+    Composite.add(engine.world, [top, left, right, rock, elastic, block]);
 
     Composite.add(world, mouseConstraint);
+    render.mouse = mouse;
 
     // mouseConstraint.collisionFilter.mask = mouseCategory;
 
@@ -201,8 +193,38 @@ export const BallRunGameScreen: FC = () => {
       }
     });
 
+    Matter.Events.on(engine, 'collisionStart', function (event) {
+      let a = event.pairs[0].bodyA;
+      let b = event.pairs[0].bodyB;
+
+      if (b.label === 'controlArea') {
+        console.log('controlArea', {
+          // mouseConstraint,
+          // mouse,
+          // a,
+          // b,
+          // event,
+          body: mouseConstraint.body,
+        });
+
+        console.log({ mouseConstraint, mouse });
+        // Matter.Mouse.clearSourceEvents(mouse);
+        // mouseConstraint.mouse?.mouseup?.()
+        // Matter.Events.trigger(mouseConstraint, 'enddrag', { mouse: mouse, body:a});
+        // Matter.Events.trigger(mouseConstraint, 'mouseup', { mouse: mouse, body:a});
+
+        // Matter.Events.trigger(mouseConstraint, 'mouseup', { mouse: mouse });
+        // mouseConstraint.mouse.mouseup({...event, body:a})
+      }
+    });
+
     // run the renderer
     Render.run(render);
+
+    Render.lookAt(render, {
+      min: { x: 0, y: 0 },
+      max: { x: 500, y: 600 },
+    });
 
     // create runner
     var runner = Runner.create();
