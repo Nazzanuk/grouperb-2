@@ -243,3 +243,12 @@ a {
   /* margin-top: -20px; */
   font-size: 20px;
 }
+
+
+particle {
+  border-radius: 50%;
+  left: 0;
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+}

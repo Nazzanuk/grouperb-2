@@ -13,7 +13,7 @@ export const BottomWall = (): Body => {
   const scorer = Rect(
     'bottomWall',
     offX(),
-    offBottom(-20),
+    offBottom(-1000),
     WALL_WIDTH,
     WALL_LENGTH,
     Math.PI / 2,

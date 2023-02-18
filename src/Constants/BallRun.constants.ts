@@ -3,7 +3,7 @@ export const WIDTH = 500;
 export const CENTER_X = WIDTH / 2;
 export const CENTER_Y = HEIGHT / 2;
 export const WALL_WIDTH = 50;
-export const WALL_LENGTH = 1000;
+export const WALL_LENGTH = 4000;
 
 export const offX = (n: number = 0) => CENTER_X + n;
 export const offY = (n: number = 0) => CENTER_Y + n;

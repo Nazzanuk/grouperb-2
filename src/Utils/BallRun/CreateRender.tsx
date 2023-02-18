@@ -6,7 +6,7 @@ export const CreateRender = (element: HTMLElement, canvas: HTMLCanvasElement, en
     element,
     canvas,
     engine: engine,
-    options: { width: 500, height: 600, wireframes: false, background: '#1b2025' },
+    options: { width: 500, height: 600, wireframes: false, background: 'transparent' },
   });
 
   return render;

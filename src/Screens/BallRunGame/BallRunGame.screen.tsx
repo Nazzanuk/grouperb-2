@@ -32,7 +32,18 @@ import { LoadingGame } from 'Components/LoadingGame/LoadingGame';
 import { UserPopup } from 'Components/UserPopup/UserPopup';
 import { WinnerBroadcast } from 'Components/WinnerBroadcast/WinnerBroadcast';
 
-import { offX, offTop, WALL_WIDTH, WALL_LENGTH, offLeft, offY, offRight, offBottom } from 'Constants/BallRun.constants';
+import {
+  offX,
+  offTop,
+  WALL_WIDTH,
+  WALL_LENGTH,
+  offLeft,
+  offY,
+  offRight,
+  offBottom,
+  WIDTH,
+  HEIGHT,
+} from 'Constants/BallRun.constants';
 import { User } from 'Entities/User.entity';
 import { UserId } from 'Entities/UserId.entity';
 
@@ -55,6 +66,7 @@ export const BallRunGameScreen: FC = () => {
   const { query } = useRouter();
 
   const $gameArea = useRef<HTMLDivElement>(null);
+  const $points = useRef<HTMLDivElement>(null);
   const $canvas = useRef<HTMLCanvasElement>(null);
 
   const game = useAtomValue(currentGameAtom);
@@ -74,6 +86,39 @@ export const BallRunGameScreen: FC = () => {
   // const startGame = () => send({ action: 'createBallRunRound', gameId: game!.id, userId: user.id });
   // const addBlock = ({ x, y }: any) => send({ action: 'addBlock', gameId: game!.id, userId: user.id, x, y });
   // const clearBallRun = ({ x, y }: any) => send({ action: 'clearBallRun', gameId: game!.id, userId: user.id, x, y });
+
+  const [gameSize, setGameSize] = useState({ x: 0, y: 0 });
+  const [points, _setPoints] = useState({ x: 0, y: 0 });
+  const [total, setTotal] = useState(0);
+  const [pointsText, setPointsText] = useState(0);
+  const [isShaking, setIsShaking] = useState(false);
+  console.log({ points });
+
+  const setPoints = ({ x, y }, amount) => {
+    _setPoints({ x, y });
+    anim();
+    setTotal(total => total + amount);
+    setPointsText(amount);
+    setIsShaking(true);
+    setTimeout(() => setIsShaking(false), 200);
+
+  };
+
+  const anim = () => {
+    const effect = new KeyframeEffect(
+      $points.current!, // Element to animate
+      [
+        // Keyframes
+        { transform: 'translateY(0)', opacity: 1  },
+        { transform: 'translateY(-30px) scale(2)', opacity: 0 },
+      ],
+      { duration: 1000, direction: 'alternate', easing: 'linear' }, // Keyframe settings
+    );
+
+    const animation = new Animation(effect, document.timeline);
+
+    animation.play();
+  };
 
   useEffect(() => {
     if (!$gameArea.current || !$canvas.current) return;
@@ -95,15 +140,21 @@ export const BallRunGameScreen: FC = () => {
       Rect('', offX(80), offTop(30), 15, 200, Math.PI / 3, undefined, { fillStyle: 'gold' }),
       Rect('', offX(-80), offTop(30), 15, 200, Math.PI / -3, undefined, { fillStyle: 'gold' }),
 
-      Rect('', offX(-45), offY(90), 15, 150, Math.PI / -50, undefined, { fillStyle: '#8B0000' }),
-      Rect('', offX(45), offY(90), 15, 150, Math.PI / 50, undefined, { fillStyle: '#8B0000' }),
+      Rect('', offX(-45), offY(250), 15, 200, Math.PI / -50, undefined, { fillStyle: '#8B3333' }),
+      Rect('', offX(45), offY(250), 15, 200, Math.PI / 50, undefined, { fillStyle: '#8B3333' }),
     ];
 
     const bouncers = [
-      Scorer(offX(-60), offY(-100), 15),
-      Scorer(offX(60), offY(-100), 15),
-      Scorer(offX(150), offY(-30), 15),
-      Scorer(offX(-150), offY(-30), 15),
+      Scorer(offX(-60), offY(-100), 15, setPoints, 50),
+      Scorer(offX(60), offY(-100), 15, setPoints, 50),
+      Scorer(offX(150), offY(-30), 15, setPoints, 50),
+      Scorer(offX(-150), offY(-30), 15, setPoints, 50),
+
+      Scorer(offX(-200), offY(60), 10, setPoints, 100),
+      Scorer(offX(200), offY(60), 10, setPoints, 100),
+
+      Scorer(offX(110), offY(60), 10, setPoints, 100),
+      Scorer(offX(-110), offY(60), 10, setPoints, 100),
     ];
 
     const allBodies = [player, Elastic(player), ...objects, ...bouncers, ...walls];
@@ -116,13 +167,13 @@ export const BallRunGameScreen: FC = () => {
     Events.on(engine, 'afterUpdate', function () {
       const player = Composite.allBodies(engine.world).find((body) => body.label === 'player');
       const elastic = Composite.allConstraints(engine.world).find((body) => body.label === 'elastic');
-  
+
       if (!elastic || !player) return;
-  
+
       // if (player.speed > 2) {
       //   console.log({ player }, player.speed);
       // }
-  
+
       if (player.velocity.y < -10 && player.position.y > 451) {
         Composite.remove(engine.world, elastic);
         // @ts-expect-error
@@ -132,7 +183,6 @@ export const BallRunGameScreen: FC = () => {
 
     EnableCollisionEvents(engine, world);
 
-  
     // run the renderer
     Render.run(render);
     Render.lookAt(render, { min: { x: 0, y: 0 }, max: { x: 500, y: 600 } });
@@ -144,6 +194,8 @@ export const BallRunGameScreen: FC = () => {
     //   console.log('mc runner', mouseConstraint.body);
     // });
 
+    setGameSize({ x: $canvas.current.clientWidth, y: $canvas.current.clientHeight });
+
     return () => {
       Render.stop(render);
       Runner.stop(runner);
@@ -153,6 +205,15 @@ export const BallRunGameScreen: FC = () => {
 
   // if (!game) return <LoadingGame />;
 
+  console.log('$canvas.current', {
+    x: $canvas.current?.clientWidth,
+    y: $canvas.current?.clientHeight,
+  });
+
+  console.log('$canvas.2', {
+    side: (points.x / WIDTH) * $canvas.current?.clientWidth,
+    y: $canvas.current?.clientHeight,
+  });
   return (
     <>
       {/* <InfoOverlay /> */}
@@ -163,8 +224,19 @@ export const BallRunGameScreen: FC = () => {
         <div className="darkScreenContent">
           <UserPopup />
 
-          <div className={styles.gameArea} ref={$gameArea}>
-            <canvas ref={$canvas} />
+          <div className={styles.gameArea} ref={$gameArea} data-is-shaking={isShaking}>
+            <div className={styles.total} ref={$gameArea}>{total}</div>
+            <div
+              ref={$points}
+              className={styles.points}
+              style={{
+                left: (points.x / WIDTH) * $canvas.current?.clientWidth,
+                top: (points.y / HEIGHT) * $canvas.current?.clientHeight,
+              }}
+            >
+              +{pointsText}
+            </div>
+            <canvas ref={$canvas}  />
           </div>
 
           {/* {status === 'lobby' && (

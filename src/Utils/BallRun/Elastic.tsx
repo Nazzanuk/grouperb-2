@@ -11,7 +11,7 @@ export const Elastic = (player: PlayerBallBody) => {
     length: 0.0001,
     // length: 100,
     damping: 0.1,
-    stiffness: 0.1,
+    stiffness: 0.03,
     // stiffness: 0.01,
   });
 
