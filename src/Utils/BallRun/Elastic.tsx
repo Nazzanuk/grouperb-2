@@ -6,7 +6,7 @@ import { PlayerBall } from 'Utils/BallRun/PlayerBall';
 export const Elastic = (player: PlayerBallBody) => {
   const elastic =  Constraint.create({
     label: 'elastic',
-    pointA: { x: 250, y: 450 },
+    pointA: { x: 250, y: 500 },
     bodyB:player,
     length: 0.0001,
     // length: 100,

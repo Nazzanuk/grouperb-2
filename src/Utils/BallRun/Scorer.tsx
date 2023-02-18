@@ -36,7 +36,7 @@ export const Scorer: Rect = (x, y, radius, setPoints, amount) => {
 
       },
     },
-    { opacity: 0.5 },
+    { opacity: 0.5,lineWidth:5, strokeStyle: '#fff' },
     1.1,
   );
 

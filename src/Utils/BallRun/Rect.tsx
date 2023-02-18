@@ -17,7 +17,7 @@ export const Rect: Rect = (label, x, y, width, height, rotation = 0, options = {
     label,
     isStatic: true,
     chamfer: { radius: 8 },
-    render: { fillStyle: 'white', opacity: 0.5, ...render },
+    render: { fillStyle: 'white', opacity: 0.5, lineWidth:10, ...render },
     friction: 0.5,
     ...options,
   });

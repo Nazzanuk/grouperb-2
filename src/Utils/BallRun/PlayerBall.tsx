@@ -1,11 +1,45 @@
 import type { PlayerBallBody } from 'Entities/BallRun.entities';
+import { Body, Composite } from 'matter-js';
 import { Circle } from 'Utils/BallRun/Circle';
+import { Elastic } from 'Utils/BallRun/Elastic';
 
 export const PlayerBall = (): PlayerBallBody => {
-  const playerBall = Circle('player', 250, 450, 20, {
+  let i: NodeJS.Timeout | null = null;
+  const radius = 20;
+
+  const playerBall = Circle('player', 250, 500, 15, {
     isStatic: false,
     density: 0.004,
-    render: { fillStyle: 'orange' },
+    render: { fillStyle: '#1E90FF', lineWidth:5, strokeStyle: '#00BFFF' },
+    // @ts-expect-error
+    isFree: false,
+    onCollide: (self, otherBody, world): OnCollide => {
+      if (otherBody.label === 'gameArea' && self.isFree === false) {
+        const elastic = Composite.allConstraints(world).find((body) => body.label === 'elastic');
+
+        Composite.remove(world, self);
+
+        const player = Composite.allBodies(world).find((body) => body.label === 'player');
+        if (elastic) Composite.remove(world, elastic);
+        if (player) Composite.remove(world, player);
+
+        const newPlayer = PlayerBall();
+        const newElastic = Elastic(newPlayer);
+        Composite.add(world, newElastic);
+        Composite.add(world, newPlayer);
+      }
+
+      if (otherBody.label === 'scorer') {
+        clearTimeout(i as NodeJS.Timeout);
+        console.log('oncollide scorer', self);
+        self.render.opacity = 1;
+        self.render.fillStyle = 'white';
+
+        i = setTimeout(() => {
+          self.render.fillStyle = '#1E90FF';
+        }, 200);
+      }
+    },
   });
 
   return playerBall as PlayerBallBody;

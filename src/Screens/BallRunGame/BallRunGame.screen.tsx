@@ -97,11 +97,10 @@ export const BallRunGameScreen: FC = () => {
   const setPoints = ({ x, y }, amount) => {
     _setPoints({ x, y });
     anim();
-    setTotal(total => total + amount);
+    setTotal((total) => total + amount);
     setPointsText(amount);
     setIsShaking(true);
     setTimeout(() => setIsShaking(false), 200);
-
   };
 
   const anim = () => {
@@ -109,7 +108,7 @@ export const BallRunGameScreen: FC = () => {
       $points.current!, // Element to animate
       [
         // Keyframes
-        { transform: 'translateY(0)', opacity: 1  },
+        { transform: 'translateY(0)', opacity: 1 },
         { transform: 'translateY(-30px) scale(2)', opacity: 0 },
       ],
       { duration: 1000, direction: 'alternate', easing: 'linear' }, // Keyframe settings
@@ -130,31 +129,67 @@ export const BallRunGameScreen: FC = () => {
     const player = PlayerBall();
 
     const walls = [
-      Rect('topWall', offX(), offTop(-20), WALL_WIDTH, WALL_LENGTH, Math.PI / 2, undefined, { fillStyle: '#00000000' }),
-      Rect('leftWall', offLeft(-20), offY(), WALL_WIDTH, WALL_LENGTH, 0, undefined, { fillStyle: '#00000000' }),
-      Rect('rightWall', offRight(-20), offY(), WALL_WIDTH, WALL_LENGTH, 0, undefined, { fillStyle: '#00000000' }),
+      Rect('topWall', offX(), offTop(-20), WALL_WIDTH, WALL_LENGTH, Math.PI / 2, undefined, {
+        fillStyle: '#00000000',
+        lineWidth: 0,
+      }),
+      Rect('leftWall', offLeft(-20), offY(), WALL_WIDTH, WALL_LENGTH, 0, undefined, {
+        fillStyle: '#00000000',
+        lineWidth: 0,
+      }),
+      Rect('rightWall', offRight(-20), offY(), WALL_WIDTH, WALL_LENGTH, 0, undefined, {
+        fillStyle: '#00000000',
+        lineWidth: 0,
+      }),
       BottomWall(),
     ];
 
     const objects = [
-      Rect('', offX(80), offTop(30), 15, 200, Math.PI / 3, undefined, { fillStyle: 'gold' }),
-      Rect('', offX(-80), offTop(30), 15, 200, Math.PI / -3, undefined, { fillStyle: 'gold' }),
+      Rect(
+        'gameArea',
+        offX(0),
+        offTop(160),
+        WIDTH,
+        HEIGHT,
+        Math.PI,
+        {
+          isSensor: true,
+        },
+        { fillStyle: 'transparent', lineWidth: 0, },
+      ),
 
-      Rect('', offX(-45), offY(250), 15, 200, Math.PI / -50, undefined, { fillStyle: '#8B3333' }),
-      Rect('', offX(45), offY(250), 15, 200, Math.PI / 50, undefined, { fillStyle: '#8B3333' }),
+      Rect('', offX(0), offTop(-30), 200, 200, Math.PI / 4, undefined, { fillStyle: 'gold' }),
+      Rect('', offX(200), offTop(-60), 200, 200, Math.PI / 4, undefined, { fillStyle: 'gold' }),
+      Rect('', offX(-200), offTop(-60), 200, 200, Math.PI / 4, undefined, { fillStyle: 'gold' }),
+
+      Rect('', offX(-120), offY(120), 20, 100, Math.PI / 4, undefined, { fillStyle: 'grey' }),
+      Rect('', offX(120), offY(120), 20, 100, Math.PI / -4, undefined, { fillStyle: 'grey' }),
+
+      Rect('', offX(90), offTop(250), 20, 50, Math.PI / 2.1, undefined, { fillStyle: 'grey' }),
+      Rect('', offX(-90), offTop(250), 20, 50, Math.PI / -2.1, undefined, { fillStyle: 'grey' }),
+
+      Rect('', offX(250), offTop(250), 20, 50, Math.PI / 2.4, undefined, { fillStyle: 'grey' }),
+      Rect('', offX(-250), offTop(250), 20, 50, Math.PI / -2.4, undefined, { fillStyle: 'grey' }),
+
+      Rect('', offX(-230), offTop(450), 20, 50, Math.PI / -2.6, undefined, { fillStyle: 'grey' }),
+      Rect('', offX(230), offTop(450), 20, 50, Math.PI / 2.6, undefined, { fillStyle: 'grey' }),
+      // Rect('', offX(-80), offTop(30), 15, 200, Math.PI / -3, undefined, { fillStyle: 'gold' }),
+
+      // Rect('', offX(-45), offY(250), 15, 200, Math.PI / -50, undefined, { fillStyle: '#8B3333' }),
+      // Rect('', offX(45), offY(250), 15, 200, Math.PI / 50, undefined, { fillStyle: '#8B3333' }),
     ];
 
     const bouncers = [
-      Scorer(offX(-60), offY(-100), 15, setPoints, 50),
-      Scorer(offX(60), offY(-100), 15, setPoints, 50),
-      Scorer(offX(150), offY(-30), 15, setPoints, 50),
-      Scorer(offX(-150), offY(-30), 15, setPoints, 50),
+      Scorer(offX(-90), offY(-100), 10, setPoints, 50),
+      Scorer(offX(90), offY(-100), 10, setPoints, 50),
+      Scorer(offX(150), offY(-30), 10, setPoints, 50),
+      Scorer(offX(-150), offY(-30), 10, setPoints, 50),
 
-      Scorer(offX(-200), offY(60), 10, setPoints, 100),
-      Scorer(offX(200), offY(60), 10, setPoints, 100),
+      Scorer(offX(-200), offY(60), 5, setPoints, 100),
+      Scorer(offX(200), offY(60), 5, setPoints, 100),
 
-      Scorer(offX(110), offY(60), 10, setPoints, 100),
-      Scorer(offX(-110), offY(60), 10, setPoints, 100),
+      Scorer(offX(110), offY(60), 5, setPoints, 100),
+      Scorer(offX(-110), offY(60), 5, setPoints, 100),
     ];
 
     const allBodies = [player, Elastic(player), ...objects, ...bouncers, ...walls];
@@ -175,6 +210,7 @@ export const BallRunGameScreen: FC = () => {
       // }
 
       if (player.velocity.y < -10 && player.position.y > 451) {
+        player.isFree = true;
         Composite.remove(engine.world, elastic);
         // @ts-expect-error
         elastic.bodyB = null;
@@ -225,7 +261,9 @@ export const BallRunGameScreen: FC = () => {
           <UserPopup />
 
           <div className={styles.gameArea} ref={$gameArea} data-is-shaking={isShaking}>
-            <div className={styles.total} ref={$gameArea}>{total}</div>
+            <div className={styles.total} ref={$gameArea}>
+              {total}
+            </div>
             <div
               ref={$points}
               className={styles.points}
@@ -236,7 +274,7 @@ export const BallRunGameScreen: FC = () => {
             >
               +{pointsText}
             </div>
-            <canvas ref={$canvas}  />
+            <canvas ref={$canvas} />
           </div>
 
           {/* {status === 'lobby' && (
