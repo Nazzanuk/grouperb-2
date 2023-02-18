@@ -1,5 +1,6 @@
-import type { PlayerBallBody } from 'Entities/BallRun.entities';
 import { Body, Composite } from 'matter-js';
+
+import type { PlayerBallBody } from 'Entities/BallRun.entities';
 import { Circle } from 'Utils/BallRun/Circle';
 import { Elastic } from 'Utils/BallRun/Elastic';
 
@@ -10,7 +11,7 @@ export const PlayerBall = (): PlayerBallBody => {
   const playerBall = Circle('player', 250, 500, 15, {
     isStatic: false,
     density: 0.004,
-    render: { fillStyle: '#1E90FF', lineWidth:5, strokeStyle: '#00BFFF' },
+    render: { fillStyle: '#1E90FF', lineWidth: 5, strokeStyle: '#00BFFF' },
     // @ts-expect-error
     isFree: false,
     onCollide: (self, otherBody, world): OnCollide => {
