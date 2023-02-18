@@ -1,9 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import { FC, Fragment, useEffect, useMemo, useRef, useState } from 'react';
 
-import Matter from 'matter-js';
-
 import { ballRunGameAtom } from 'Atoms/BallRunGame.atom';
+
 import { ballRunGameHelpersAtom } from 'Atoms/BallRunGameHelpers.atom';
 import { BallRunGame } from 'Entities/BallRunGame.entity';
 import { Block } from 'Entities/BallRunRound.entity';
@@ -14,11 +13,13 @@ import random from 'lodash/random';
 import startCase from 'lodash/startCase';
 
 import times from 'lodash/times';
+import Matter, { Composite, Engine, Events, Render, Runner } from 'matter-js';
 import Link from 'next/link';
 
 import { useRouter } from 'next/router';
 import { useLongPress } from 'use-long-press';
 
+import { currentGameAtom } from 'Atoms/CurrentGame.atom';
 import { userAtom } from 'Atoms/User.atom';
 
 import { showUserPopupAtom, userPopupAtom } from 'Atoms/UserPopup.atom';
@@ -31,19 +32,24 @@ import { LoadingGame } from 'Components/LoadingGame/LoadingGame';
 import { UserPopup } from 'Components/UserPopup/UserPopup';
 import { WinnerBroadcast } from 'Components/WinnerBroadcast/WinnerBroadcast';
 
+import { offX, offTop, WALL_WIDTH, WALL_LENGTH, offLeft, offY, offRight, offBottom } from 'Constants/BallRun.constants';
 import { User } from 'Entities/User.entity';
 import { UserId } from 'Entities/UserId.entity';
 
 import { useLoadGame } from 'Hooks/useLoadGame';
 import { useUpdateGame } from 'Hooks/useUpdateGame';
 
-import styles from './BallRunGame.screen.module.css';
-import { currentGameAtom } from 'Atoms/CurrentGame.atom';
+import { Circle } from 'Utils/BallRun/Circle';
+import { Elastic } from 'Utils/BallRun/Elastic';
+import { PlayerBall } from 'Utils/BallRun/PlayerBall';
+import { Rect } from 'Utils/BallRun/Rect';
+import { Scorer } from 'Utils/BallRun/Scorer';
 
-const mouseCategory = 0x0001,
-  defaultCategory = 0x0002,
-  greenCategory = 0x0004,
-  blueCategory = 0x0008;
+import styles from './BallRunGame.screen.module.css';
+import { BottomWall } from 'Utils/BallRun/BottomWall';
+import { CreateMouse } from 'Utils/BallRun/CreateMouse';
+import { CreateRender } from 'Utils/BallRun/CreateRender';
+import { EnableCollisionEvents } from 'Utils/BallRun/EnableCollisionEvents';
 
 export const BallRunGameScreen: FC = () => {
   const { query } = useRouter();
@@ -71,170 +77,72 @@ export const BallRunGameScreen: FC = () => {
 
   useEffect(() => {
     if (!$gameArea.current || !$canvas.current) return;
-    console.log('rendering game');
 
-    const { Mouse, MouseConstraint, Render, Engine, Runner, Body, Bodies, Composite, Constraint, Events } = Matter;
-
-    // create an engine
-    var engine = Engine.create();
+    const engine = Engine.create();
+    const render = CreateRender($gameArea.current, $canvas.current, engine);
     const world = engine.world;
 
-    // create a renderer
-    var render = Render.create({
-      element: $gameArea.current,
-      canvas: $canvas.current,
-      engine: engine,
-      options: {
-        width: 500,
-        height: 600,
-        wireframes: false,
-        background: 'black',
-      },
-    });
+    const player = PlayerBall();
 
-    // create two boxes and a ground
-    var boxA = Bodies.rectangle(400, 400, 80, 80, {
-      label: 'boxA',
-      collisionFilter: { category: mouseCategory },
-      render: { fillStyle: 'green' },
-    });
-    var boxB = Bodies.rectangle(450, 50, 80, 80, { collisionFilter: { mask: defaultCategory } });
-    var circleB = Bodies.circle(450, 50, 30, { collisionFilter: { mask: defaultCategory | mouseCategory } });
+    const walls = [
+      Rect('topWall', offX(), offTop(-20), WALL_WIDTH, WALL_LENGTH, Math.PI / 2, undefined, { fillStyle: '#00000000' }),
+      Rect('leftWall', offLeft(-20), offY(), WALL_WIDTH, WALL_LENGTH, 0, undefined, { fillStyle: '#00000000' }),
+      Rect('rightWall', offRight(-20), offY(), WALL_WIDTH, WALL_LENGTH, 0, undefined, { fillStyle: '#00000000' }),
+      BottomWall(),
+    ];
 
-    var ground = Bodies.rectangle(250, 600, 500, 10, { isStatic: true, render: { fillStyle: 'white' } });
-    var top = Bodies.rectangle(250, -45, 500, 100, { isStatic: true, render: { fillStyle: 'white' } });
-    var left = Bodies.rectangle(0, 300, 10, 600, { isStatic: true, render: { fillStyle: 'white' } });
-    var right = Bodies.rectangle(500, 300, 10, 600, { isStatic: true, render: { fillStyle: 'white' } });
+    const objects = [
+      Rect('', offX(80), offTop(30), 15, 200, Math.PI / 3, undefined, { fillStyle: 'gold' }),
+      Rect('', offX(-80), offTop(30), 15, 200, Math.PI / -3, undefined, { fillStyle: 'gold' }),
 
-    var block = Bodies.rectangle(325, 300, 10, 100, { isStatic: true, chamfer: { radius: 4 }, render: { fillStyle: 'white' } });
-    Body.rotate(block, Math.PI / 3);
-    block.restitution = 1.5;
+      Rect('', offX(-45), offY(90), 15, 150, Math.PI / -50, undefined, { fillStyle: '#8B0000' }),
+      Rect('', offX(45), offY(90), 15, 150, Math.PI / 50, undefined, { fillStyle: '#8B0000' }),
+    ];
 
-    let rock = Bodies.circle(250, 450, 20, { density: 0.004, render: { fillStyle: 'orange' } })
-    const elastic = Constraint.create({
-      pointA: { x: 250, y: 450 },
-      bodyB: rock,
-      length: 0.0001,
-      damping: 0.1,
-      stiffness: 0.1,
-    });
+    const bouncers = [
+      Scorer(offX(-60), offY(-100), 15),
+      Scorer(offX(60), offY(-100), 15),
+      Scorer(offX(150), offY(-30), 15),
+      Scorer(offX(-150), offY(-30), 15),
+    ];
 
-    // add mouse control
-    var mouse = Mouse.create(render.canvas),
-      mouseConstraint = MouseConstraint.create(engine, {
-        collisionFilter: { mask: mouseCategory },
-        mouse: mouse,
-        constraint: {
-          stiffness: 0.2,
-          render: { visible: false },
-        },
-      });
+    const allBodies = [player, Elastic(player), ...objects, ...bouncers, ...walls];
+    Composite.add(world, allBodies);
 
-    Events.on(engine, 'afterUpdate', function () {
-      if (rock.speed > 2) {
-        console.log({ rock }, rock.speed);
-      }
-      if (rock.velocity.y < -10 && rock.position.y > 451) {
-        // Limit maximum speed of current rock.
-        // if (rock.speed > 45) {
-        //   Body.setVelocity(rock, rock.velocity);
-        // }
-
-        // Release current rock and add a new one.
-        rock = Bodies.circle(250, 450, 20, { density: 0.004, velocity: rock.velocity });
-        const newRock = Bodies.circle(250, 450, 20, {
-          density: 0.004,
-          velocity: rock.velocity,
-          render: { fillStyle: 'orange' },
-        });
-        // const newRock = Bodies.polygon(250, 450, 7, 20, { density: 0.004 });
-        Composite.add(engine.world, newRock);
-        elastic.bodyB = newRock;
-        rock = newRock;
-      }
-    });
-
-    // Mouse.setElement(mouse, render.canvas);
-
-    // add all of the bodies to the world
-    Composite.add(engine.world, [top, left, right, rock, elastic, block]);
-
+    const [mouse, mouseConstraint] = CreateMouse(render.canvas, engine);
     Composite.add(world, mouseConstraint);
     render.mouse = mouse;
 
-    // mouseConstraint.collisionFilter.mask = mouseCategory;
-
-    console.log('boxA.collisionFilter', boxA.collisionFilter);
-    console.log('boxB.collisionFilter', boxB.collisionFilter);
-    console.log('mouseConstraint.collisionFilter', mouseConstraint.collisionFilter);
-
-    Matter.Events.on(engine, 'collisionStart', function (event) {
-      let a = event.pairs[0].bodyA;
-      let b = event.pairs[0].bodyB;
-
-      if (b.label === 'controlArea') {
-        console.log('controlArea', {
-          // mouseConstraint,
-          // mouse,
-          // a,
-          // b,
-          // event,
-          body: mouseConstraint.body,
-        });
-
-        console.log({ mouseConstraint, mouse });
-        // Matter.Mouse.clearSourceEvents(mouse);
-        // mouseConstraint.mouse?.mouseup?.()
-        // Matter.Events.trigger(mouseConstraint, 'enddrag', { mouse: mouse, body:a});
-        // Matter.Events.trigger(mouseConstraint, 'mouseup', { mouse: mouse, body:a});
-
-        // Matter.Events.trigger(mouseConstraint, 'mouseup', { mouse: mouse });
-        // mouseConstraint.mouse.mouseup({...event, body:a})
+    Events.on(engine, 'afterUpdate', function () {
+      const player = Composite.allBodies(engine.world).find((body) => body.label === 'player');
+      const elastic = Composite.allConstraints(engine.world).find((body) => body.label === 'elastic');
+  
+      if (!elastic || !player) return;
+  
+      // if (player.speed > 2) {
+      //   console.log({ player }, player.speed);
+      // }
+  
+      if (player.velocity.y < -10 && player.position.y > 451) {
+        Composite.remove(engine.world, elastic);
+        // @ts-expect-error
+        elastic.bodyB = null;
       }
     });
 
-    Matter.Events.on(engine, 'collisionStart', function (event) {
-      let a = event.pairs[0].bodyA;
-      let b = event.pairs[0].bodyB;
+    EnableCollisionEvents(engine, world);
 
-      if (b.label === 'controlArea') {
-        console.log('controlArea', {
-          // mouseConstraint,
-          // mouse,
-          // a,
-          // b,
-          // event,
-          body: mouseConstraint.body,
-        });
-
-        console.log({ mouseConstraint, mouse });
-        // Matter.Mouse.clearSourceEvents(mouse);
-        // mouseConstraint.mouse?.mouseup?.()
-        // Matter.Events.trigger(mouseConstraint, 'enddrag', { mouse: mouse, body:a});
-        // Matter.Events.trigger(mouseConstraint, 'mouseup', { mouse: mouse, body:a});
-
-        // Matter.Events.trigger(mouseConstraint, 'mouseup', { mouse: mouse });
-        // mouseConstraint.mouse.mouseup({...event, body:a})
-      }
-    });
-
+  
     // run the renderer
     Render.run(render);
+    Render.lookAt(render, { min: { x: 0, y: 0 }, max: { x: 500, y: 600 } });
 
-    Render.lookAt(render, {
-      min: { x: 0, y: 0 },
-      max: { x: 500, y: 600 },
-    });
-
-    // create runner
     var runner = Runner.create();
+    Runner.run(runner, engine);
 
     // Matter.Events.on(runner, "tick", event => {
     //   console.log('mc runner', mouseConstraint.body);
     // });
-
-    // run the engine
-    Runner.run(runner, engine);
 
     return () => {
       Render.stop(render);
