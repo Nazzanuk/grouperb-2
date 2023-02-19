@@ -1,17 +1,20 @@
 import { Body, Composite } from 'matter-js';
 
-import type { PlayerBallBody } from 'Entities/BallRun.entities';
+import type { OnCollide, PlayerBallBody } from 'Entities/BallRun.entities';
 import { Circle } from 'Utils/BallRun/Circle';
 import { Elastic } from 'Utils/BallRun/Elastic';
+import { offX, offBottom } from 'Constants/BallRun.constants';
 
 export const PlayerBall = (): PlayerBallBody => {
   let i: NodeJS.Timeout | null = null;
   const radius = 20;
 
-  const playerBall = Circle('player', 250, 500, 15, {
+  const playerBall = Circle('player', offX(), offBottom(200), 50, {
     isStatic: false,
     density: 0.004,
     render: { fillStyle: '#1E90FF', lineWidth: 5, strokeStyle: '#00BFFF' },
+    // frictionAir: 0.03,
+    
     // @ts-expect-error
     isFree: false,
     onCollide: (self, otherBody, world): OnCollide => {

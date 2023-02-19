@@ -1,8 +1,8 @@
-export const HEIGHT = 600;
-export const WIDTH = 500;
+export const HEIGHT = 1400;
+export const WIDTH = 1000;
 export const CENTER_X = WIDTH / 2;
 export const CENTER_Y = HEIGHT / 2;
-export const WALL_WIDTH = 50;
+export const WALL_WIDTH = 500;
 export const WALL_LENGTH = 4000;
 
 export const offX = (n: number = 0) => CENTER_X + n;

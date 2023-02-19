@@ -129,19 +129,23 @@ export const BallRunGameScreen: FC = () => {
     const player = PlayerBall();
 
     const walls = [
-      Rect('topWall', offX(), offTop(-20), WALL_WIDTH, WALL_LENGTH, Math.PI / 2, undefined, {
-        fillStyle: '#00000000',
+      Rect('bWall', offX(), offBottom(-WALL_WIDTH / 2), WALL_WIDTH, WALL_LENGTH, Math.PI / 2, undefined, {
+        // fillStyle: '#00000000',
         lineWidth: 0,
       }),
-      Rect('leftWall', offLeft(-20), offY(), WALL_WIDTH, WALL_LENGTH, 0, undefined, {
-        fillStyle: '#00000000',
+      Rect('topWall', offX(), offTop(-WALL_WIDTH / 2), WALL_WIDTH, WALL_LENGTH, Math.PI / 2, undefined, {
+        // fillStyle: '#00000000',
         lineWidth: 0,
       }),
-      Rect('rightWall', offRight(-20), offY(), WALL_WIDTH, WALL_LENGTH, 0, undefined, {
-        fillStyle: '#00000000',
+      Rect('leftWall', offLeft(-WALL_WIDTH / 2), offY(), WALL_WIDTH, WALL_LENGTH, 0, undefined, {
+        // fillStyle: '#00000000',
         lineWidth: 0,
       }),
-      BottomWall(),
+      Rect('rightWall', offRight(-WALL_WIDTH / 2), offY(), WALL_WIDTH, WALL_LENGTH, 0, undefined, {
+        // fillStyle: '#00000000',
+        lineWidth: 0,
+      }),
+      // BottomWall(),
     ];
 
     const objects = [
@@ -158,21 +162,21 @@ export const BallRunGameScreen: FC = () => {
         { fillStyle: 'transparent', lineWidth: 0, },
       ),
 
-      Rect('', offX(0), offTop(-30), 200, 200, Math.PI / 4, undefined, { fillStyle: 'gold' }),
-      Rect('', offX(200), offTop(-60), 200, 200, Math.PI / 4, undefined, { fillStyle: 'gold' }),
-      Rect('', offX(-200), offTop(-60), 200, 200, Math.PI / 4, undefined, { fillStyle: 'gold' }),
+      // Rect('', offX(0), offTop(-60), 400, 400, Math.PI / 4, undefined, { fillStyle: 'gold' }),
+      // Rect('', offX(400), offTop(-120), 400, 400, Math.PI / 4, undefined, { fillStyle: 'gold' }),
+      // Rect('', offX(-400), offTop(-120), 400, 400, Math.PI / 4, undefined, { fillStyle: 'gold' }),
 
-      Rect('', offX(-120), offY(120), 20, 100, Math.PI / 4, undefined, { fillStyle: 'grey' }),
-      Rect('', offX(120), offY(120), 20, 100, Math.PI / -4, undefined, { fillStyle: 'grey' }),
+      // Rect('', offX(-240), offY(240), 40, 200, Math.PI / 4, undefined, { fillStyle: 'grey' }),
+      // Rect('', offX(240), offY(240), 40, 200, Math.PI / -4, undefined, { fillStyle: 'grey' }),
 
-      Rect('', offX(90), offTop(250), 20, 50, Math.PI / 2.1, undefined, { fillStyle: 'grey' }),
-      Rect('', offX(-90), offTop(250), 20, 50, Math.PI / -2.1, undefined, { fillStyle: 'grey' }),
+      // Rect('', offX(180), offTop(500), 40, 100, Math.PI / 2.1, undefined, { fillStyle: 'grey' }),
+      // Rect('', offX(-180), offTop(500), 40, 100, Math.PI / -2.1, undefined, { fillStyle: 'grey' }),
 
-      Rect('', offX(250), offTop(250), 20, 50, Math.PI / 2.4, undefined, { fillStyle: 'grey' }),
-      Rect('', offX(-250), offTop(250), 20, 50, Math.PI / -2.4, undefined, { fillStyle: 'grey' }),
+      // Rect('', offX(500), offTop(500), 40, 100, Math.PI / 2.4, undefined, { fillStyle: 'grey' }),
+      // Rect('', offX(-500), offTop(500), 40, 100, Math.PI / -2.4, undefined, { fillStyle: 'grey' }),
 
-      Rect('', offX(-230), offTop(450), 20, 50, Math.PI / -2.6, undefined, { fillStyle: 'grey' }),
-      Rect('', offX(230), offTop(450), 20, 50, Math.PI / 2.6, undefined, { fillStyle: 'grey' }),
+      // Rect('', offX(-460), offTop(900), 40, 100, Math.PI / -2.6, undefined, { fillStyle: 'grey' }),
+      // Rect('', offX(460), offTop(900), 40, 100, Math.PI / 2.6, undefined, { fillStyle: 'grey' }),
       // Rect('', offX(-80), offTop(30), 15, 200, Math.PI / -3, undefined, { fillStyle: 'gold' }),
 
       // Rect('', offX(-45), offY(250), 15, 200, Math.PI / -50, undefined, { fillStyle: '#8B3333' }),
@@ -180,16 +184,16 @@ export const BallRunGameScreen: FC = () => {
     ];
 
     const bouncers = [
-      Scorer(offX(-90), offY(-100), 10, setPoints, 50),
-      Scorer(offX(90), offY(-100), 10, setPoints, 50),
-      Scorer(offX(150), offY(-30), 10, setPoints, 50),
-      Scorer(offX(-150), offY(-30), 10, setPoints, 50),
+      // Scorer(offX(-180), offY(-400), 50, setPoints, 50),
+      // Scorer(offX(180), offY(-400), 50, setPoints, 50),
+      // Scorer(offX(300), offY(-60), 50, setPoints, 50),
+      // Scorer(offX(-300), offY(-60), 50, setPoints, 50),
 
-      Scorer(offX(-200), offY(60), 5, setPoints, 100),
-      Scorer(offX(200), offY(60), 5, setPoints, 100),
+      // Scorer(offX(-400), offY(120), 50, setPoints, 100),
+      // Scorer(offX(400), offY(120), 50, setPoints, 100),
 
-      Scorer(offX(110), offY(60), 5, setPoints, 100),
-      Scorer(offX(-110), offY(60), 5, setPoints, 100),
+      // Scorer(offX(220), offY(120), 50, setPoints, 100),
+      // Scorer(offX(-220), offY(120), 50, setPoints, 100),
     ];
 
     const allBodies = [player, Elastic(player), ...objects, ...bouncers, ...walls];
@@ -221,7 +225,7 @@ export const BallRunGameScreen: FC = () => {
 
     // run the renderer
     Render.run(render);
-    Render.lookAt(render, { min: { x: 0, y: 0 }, max: { x: 500, y: 600 } });
+    // Render.lookAt(render, { min: { x: 0, y: 0 }, max: { x: 500, y: 600 } });
 
     var runner = Runner.create();
     Runner.run(runner, engine);
