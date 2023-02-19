@@ -36,6 +36,7 @@ import { useUpdateGame } from 'Hooks/useUpdateGame';
 
 import styles from './BlocksGame.screen.module.css';
 import { useBlocksTimer } from 'Hooks/Blocks/useBlocksTimer';
+import { DynamicBackground } from 'Components/DynamicBackground/DynamicBackground';
 
 export const BlocksGameScreen: FC = () => {
   const { query } = useRouter();
@@ -72,8 +73,9 @@ export const BlocksGameScreen: FC = () => {
   return (
     <>
       <InfoOverlay />
-      <div className="darkScreen" style={{ backgroundImage: `url('/img/backgrounds/b15.jpeg')` }}>
+      <div className="darkScreen">
         <div className="darkScreenOverlay" />
+        <DynamicBackground floaterCount={30} isDark />
         <div className="darkScreenContent">
           <UserPopup />
 

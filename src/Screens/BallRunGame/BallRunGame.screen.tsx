@@ -257,7 +257,7 @@ export const BallRunGameScreen: FC = () => {
       {/* <InfoOverlay /> */}
       <div className="darkScreen">
         <div className="darkScreenOverlay" />
-        <DynamicBackground floaterCount={100} isDark />
+        <DynamicBackground floaterCount={30} isDark />
 
         <div className="darkScreenContent">
           <UserPopup />
