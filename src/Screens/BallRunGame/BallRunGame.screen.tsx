@@ -159,7 +159,7 @@ export const BallRunGameScreen: FC = () => {
         {
           isSensor: true,
         },
-        { fillStyle: 'transparent', lineWidth: 0, },
+        { fillStyle: 'transparent', lineWidth: 0 },
       ),
 
       // Rect('', offX(0), offTop(-60), 400, 400, Math.PI / 4, undefined, { fillStyle: 'gold' }),
@@ -188,10 +188,8 @@ export const BallRunGameScreen: FC = () => {
       // Scorer(offX(180), offY(-400), 50, setPoints, 50),
       // Scorer(offX(300), offY(-60), 50, setPoints, 50),
       // Scorer(offX(-300), offY(-60), 50, setPoints, 50),
-
       // Scorer(offX(-400), offY(120), 50, setPoints, 100),
       // Scorer(offX(400), offY(120), 50, setPoints, 100),
-
       // Scorer(offX(220), offY(120), 50, setPoints, 100),
       // Scorer(offX(-220), offY(120), 50, setPoints, 100),
     ];
@@ -227,7 +225,7 @@ export const BallRunGameScreen: FC = () => {
     Render.run(render);
     // Render.lookAt(render, { min: { x: 0, y: 0 }, max: { x: 500, y: 600 } });
 
-    var runner = Runner.create();
+    const runner = Runner.create({ isFixed: true });
     Runner.run(runner, engine);
 
     // Matter.Events.on(runner, "tick", event => {
