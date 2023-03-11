@@ -5,6 +5,7 @@ import { CharlatanGame } from 'Entities/CharlatanGame.entity';
 import { UserId } from 'Entities/UserId.entity';
 import { sharedGameHelpersAtom } from 'Atoms/SharedGameHelpers.atom';
 import { User } from 'Entities/User.entity';
+import shuffle from 'lodash/shuffle';
 
 export const userPopupAtom = atom({
   title: '',
@@ -28,7 +29,7 @@ export const showUserPopupAtom = atom(null, (get, set, { userIds, title }: Props
     title,
     isActive: true,
     selectedUser: null,
-    userIds: userIds ?? userArray.map((user) => user.id),
+    userIds: shuffle([...(userIds ?? userArray.map((user) => user.id))]),
   });
 });
 

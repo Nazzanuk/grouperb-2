@@ -7,11 +7,14 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { userAtom } from 'Atoms/User.atom';
+import { showUserPopupAtom, userPopupAtom } from 'Atoms/UserPopup.atom';
 import { voteGameAtom } from 'Atoms/VoteGame.atom';
 import { voteGameHelpersAtom } from 'Atoms/VoteGameHelpers.atom';
 import { wsAtom } from 'Atoms/Ws.atom';
+import { DynamicBackground } from 'Components/DynamicBackground/DynamicBackground';
 import { InfoOverlay } from 'Components/InfoOverlay/InfoOverlay';
 import { LoadingGame } from 'Components/LoadingGame/LoadingGame';
+import { UserPopup } from 'Components/UserPopup/UserPopup';
 import { WinnerBroadcast } from 'Components/WinnerBroadcast/WinnerBroadcast';
 import { User } from 'Entities/User.entity';
 import { UserId } from 'Entities/UserId.entity';
@@ -21,9 +24,6 @@ import { useLoadGame } from 'Hooks/useLoadGame';
 import { useUpdateGame } from 'Hooks/useUpdateGame';
 
 import styles from './VoteGame.screen.module.css';
-import { DynamicBackground } from 'Components/DynamicBackground/DynamicBackground';
-import { UserPopup } from 'Components/UserPopup/UserPopup';
-import { showUserPopupAtom, userPopupAtom } from 'Atoms/UserPopup.atom';
 
 export const VoteGameScreen: FC = () => {
   const { query } = useRouter();
@@ -61,6 +61,7 @@ export const VoteGameScreen: FC = () => {
     mostSelfVotesUser,
     stalkers,
     didGuessCorrectly,
+    hasManyWinners,
   } = useAtomValue(voteGameHelpersAtom);
 
   useLoadGame(query.voteGameId as string | undefined);
@@ -102,11 +103,10 @@ export const VoteGameScreen: FC = () => {
     send({ action: 'castVote', gameId: game!.id, userId: user.id, vote: selectedUser.id });
   }, [selectedUser]);
 
-  if (!game) <LoadingGame />;
+  if (!game) return <LoadingGame />;
 
   return (
     <>
-      <InfoOverlay />
       <div className="darkScreen">
         <div className="darkScreenOverlay" />
         <DynamicBackground floaterCount={40} isDark />
@@ -115,6 +115,7 @@ export const VoteGameScreen: FC = () => {
 
           {status === 'lobby' && (
             <>
+              <InfoOverlay />
               <div className="label">Game code</div>
               <div className="textOutput">{game.id}</div>
 
@@ -137,23 +138,6 @@ export const VoteGameScreen: FC = () => {
 
               <div className="label">Still pondering</div>
               <PlayerList users={usersThatHaveNotVoted} game={game} />
-
-              {!IHaveVoted && !isObserver && (
-                <div className={styles.userButtons}>
-                  {userArray.map((user) => (
-                    <div
-                      className="button"
-                      data-variant="orange"
-                      data-size="s"
-                      key={user.id}
-                      onClick={() => castVote(user.id)}
-                      data-disabled={!isVoteButtonsEnabled}
-                    >
-                      {user.username}
-                    </div>
-                  ))}
-                </div>
-              )}
             </>
           )}
 
@@ -218,21 +202,42 @@ export const VoteGameScreen: FC = () => {
 
           {status === 'results' && (
             <>
+              <div className={styles.actionArea}>
+                {didGuessCorrectly && (
+                  <>
+                    <h3>+1</h3>
+                    <p>You were right!</p>
+                  </>
+                )}
+                {!didGuessCorrectly && (
+                  <>
+                    <h3>+0</h3>
+                    <p>You were wrong!</p>
+                  </>
+                )}
+              </div>
+
               <div className="label">Round {currentRoundIndex}</div>
               <div className="shout">Who {currentQuestion}?</div>
 
-              {!isWinner && (
-                <>
-                  <WinnerBroadcast user={winnersArray[0]} subText={`Who ${currentQuestion}?...`} />
-                  <div className={styles.singlePlayer} data-animate key="winner">
-                    <img className={styles.playerImage} src={`/img/avatars/${winnersArray[0].avatar}`} alt="avatar" />
+              <>
+                <WinnerBroadcast
+                  img={
+                    hasManyWinners
+                      ? `/img/trophies/trophy-${trophyIndex}.jpeg`
+                      : `/img/avatars/${winnersArray[0].avatar}`
+                  }
+                  subText={`Who ${currentQuestion}?...`}
+                  text={allAreWinners ? 'All of You!' : winnersString}
+                />
+                <div className={styles.singlePlayer} data-animate key="winner">
+                  <img className={styles.playerImage} src={`/img/avatars/${winnersArray[0].avatar}`} alt="avatar" />
 
-                    <div className={styles.playerName}>{winnersString}</div>
-                  </div>
-                </>
-              )}
+                  <div className={styles.playerName}>{winnersString}</div>
+                </div>
+              </>
 
-              {isWinner && (
+              {/* {isWinner && (
                 <>
                   <WinnerBroadcast
                     img={`/img/trophies/trophy-${trophyIndex}.jpeg`}
@@ -245,20 +250,7 @@ export const VoteGameScreen: FC = () => {
                     <div className={styles.playerName}>{allAreWinners ? 'All of You!' : winnersString}</div>
                   </div>
                 </>
-              )}
-
-              {didGuessCorrectly && (
-                <div className={styles.correct}>
-                  {' '}
-                  +1 <span>You were right!</span>
-                </div>
-              )}
-              {!didGuessCorrectly && (
-                <div className={styles.correct}>
-                  {' '}
-                  +0 <span>You were wrong!</span>
-                </div>
-              )}
+              )} */}
 
               <div className={styles.buttons}>
                 <>

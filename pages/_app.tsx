@@ -25,6 +25,7 @@ import 'swiper/css';
 import 'Global/normalize.css';
 import 'Global/app.css';
 import '../public/fontawesome/css/all.min.css';
+import { Toast } from 'Components/Toast/Toast';
 
 const shareTechMono = Share_Tech_Mono({
   weight: '400',
@@ -117,21 +118,8 @@ export default function App({ Component, pageProps }: AppProps) {
 
       <NoSSR>
         <main className={`app ${bebasNeue.variable} ${teko.variable} ${shareTechMono.variable}`}>
-          <ToastContainer
-            position="top-left"
-            autoClose={2000}
-            hideProgressBar={true}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="dark"
-            limit={4}
-            progressStyle={{ background: 'orange', color: 'orange' }}
-            closeButton={false}
-          />
+        <Toast />
+       
           <Sidebar />
           <TopBar />
           <Component {...pageProps} />

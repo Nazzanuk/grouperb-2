@@ -5,7 +5,7 @@ import ordinal from 'ordinal';
 import { DefuseRule } from 'Entities/DefuseRule.entity';
 import { DefuseWire } from 'Entities/DefuseWire.entity';
 
-export const defuseColors = ['red', 'blue', 'green', 'gold', 'orange', 'purple'] as const;
+export const defuseColors = ['red', 'blue', 'green', 'black', 'gold', 'purple'] as const;
 export const defuseLetters = ['A', 'B', 'C', 'D', 'E', 'F'] as const;
 export const defuseIndexes = ['1', '2', '3', '4', '5', '6'] as const;
 

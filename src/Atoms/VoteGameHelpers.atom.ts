@@ -50,6 +50,7 @@ export const voteGameHelpersAtom = atom((get) => {
   const mostSelfVotesUser = getUserWhoVotedForThemselvesMost(game);
   const stalkers = getStalkers(game);
   const didGuessCorrectly = !!currentRound?.votes[user.id] && !!currentRound?.winners[currentRound.votes[user.id]];
+  const hasManyWinners = winnersArray.length > 1;
 
   return {
     currentRound,
@@ -76,6 +77,7 @@ export const voteGameHelpersAtom = atom((get) => {
     mostSelfVotesUser,
     stalkers,
     didGuessCorrectly,
+    hasManyWinners
   };
 });
 

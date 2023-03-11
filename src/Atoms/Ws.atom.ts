@@ -5,8 +5,8 @@ import { routerAtom } from 'Atoms/Router.atom';
 import { userAtom } from 'Atoms/User.atom';
 import { Payload } from 'Entities/Payloads.entity';
 import { connectionStatusAtom } from 'Atoms/ConnectionStatus.atom';
-import { ToastContainer, toast } from 'react-toastify';
 import { User } from 'Entities/User.entity';
+import { toastsAtom } from 'Atoms/Toast.atom';
 
 type GameWs = { instance: WebSocket };
 
@@ -89,7 +89,6 @@ export const initWebSocketAtom = atom<GameWs, User>(
       gameWs.instance.send(JSON.stringify({ action: 'updateUser', user }));
     };
 
-    toast.clearWaitingQueue();
     gameWs.instance.onmessage = (event) => {
       const router = get(routerAtom);
       set(connectionStatusAtom, 'Connected');
@@ -107,7 +106,7 @@ export const initWebSocketAtom = atom<GameWs, User>(
       }
 
       if (data.alert) {
-        toast?.(data?.alert, { toastId: data?.alert });
+        set(toastsAtom, data?.alert);
         // alert(data.alert);
       }
     };

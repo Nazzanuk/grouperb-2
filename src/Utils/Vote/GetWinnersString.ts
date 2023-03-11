@@ -2,7 +2,7 @@ import { User } from 'Entities/User.entity';
 import { VoteGame } from 'Entities/VoteGame.entity';
 import values from 'lodash/values';
 
-export const getWinnersString = (game: VoteGame | null, user: User) => {
+export const getWinnersString = (game: VoteGame | null) => {
   const currentRound = game?.rounds[game?.rounds.length - 1];
   if (!currentRound) return '';
 
@@ -12,7 +12,7 @@ export const getWinnersString = (game: VoteGame | null, user: User) => {
     .map((winner) => winner.username)
     .reduce((acc, name, index, array) => {
       if (index === 0) {
-        return name === user.username ? 'You!' : name;
+        return name;
       } else if (index === array.length - 1) {
         return `${acc} and ${name}`;
       } else {

@@ -91,7 +91,6 @@ export const DefuseGameScreen: FC = () => {
 
   return (
     <div className={styles.votegame}>
-      <InfoOverlay />
       <div className="darkScreen">
         <div className="darkScreenOverlay" />
 
@@ -108,8 +107,9 @@ export const DefuseGameScreen: FC = () => {
           )}
 
           {status === 'lobby' && (
-            <div className={styles.buttons}>
-              <>
+            <>
+              <InfoOverlay />
+              <div className={styles.buttons}>
                 {!isHost && <div className={styles.blurb}>Waiting for host to start game...</div>}
 
                 {isHost && (
@@ -121,8 +121,8 @@ export const DefuseGameScreen: FC = () => {
                 <Link href="/home" className="button" onClick={leaveGame} data-variant="light">
                   Leave game
                 </Link>
-              </>
-            </div>
+              </div>
+            </>
           )}
 
           {status === 'playing' && (
@@ -137,7 +137,10 @@ export const DefuseGameScreen: FC = () => {
           )}
           {(status === 'playing' || status === 'defused' || status === 'failed') && (
             <>
-              <div className={styles.wireBox} style={{ '--shakeTime': status === 'playing' ? `${timeRemaining / 30}s` : '_' }}>
+              <div
+                className={styles.wireBox}
+                style={{ '--shakeTime': status === 'playing' ? `${timeRemaining / 30}s` : '_' }}
+              >
                 <div className={styles.bigBox}>
                   <div className={styles.armed} data-status={status}>
                     {status === 'playing' ? 'Bomb armed' : ''}

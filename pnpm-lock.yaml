@@ -27,6 +27,7 @@ specifiers:
   postcss-preset-env: ^7.8.3
   react: 18.2.0
   react-dom: 18.2.0
+  react-error-boundary: ^3.1.4
   react-no-ssr: ^1.1.0
   react-toastify: ^9.1.1
   swiper: ^9.0.3
@@ -58,6 +59,7 @@ dependencies:
   postcss-preset-env: 7.8.3_postcss@8.4.20
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
+  react-error-boundary: 3.1.4_react@18.2.0
   react-no-ssr: 1.1.0_react@18.2.0
   react-toastify: 9.1.1_biqbaboplfbrettd7655fr4n2y
   swiper: 9.0.3
@@ -2424,6 +2426,16 @@ packages:
       loose-envify: 1.4.0
       react: 18.2.0
       scheduler: 0.23.0
+    dev: false
+
+  /react-error-boundary/3.1.4_react@18.2.0:
+    resolution: {integrity: sha512-uM9uPzZJTF6wRQORmSrvOIgt4lJ9MC1sNgEOj2XGsDTRE4kmpWxg7ENK9EWNKJRMAOY9z0MuF4yIfl6gp4sotA==}
+    engines: {node: '>=10', npm: '>=6'}
+    peerDependencies:
+      react: '>=16.13.1 || 18'
+    dependencies:
+      '@babel/runtime': 7.20.7
+      react: 18.2.0
     dev: false
 
   /react-is/16.13.1:
