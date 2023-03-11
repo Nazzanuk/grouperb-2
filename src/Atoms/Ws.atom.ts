@@ -94,9 +94,14 @@ export const initWebSocketAtom = atom<GameWs, User>(
       set(connectionStatusAtom, 'Connected');
       const data = JSON.parse(event.data);
       console.log('CLIENT RECIEVED: ', data, router);
+      console.log(router);
 
       if (data.game) {
         set(currentGameAtom, data.game);
+
+        console.log('WHAT!!!', router?.asPath, data.game.type, router?.asPath.includes(data.game.type));
+
+        if (!['/choose-game', '/home'].includes(router?.asPath!)) return;
 
         if (data.game.type === 'vote') router?.push(`/vote-game/${data.game.id}`);
         if (data.game.type === 'defuse') router?.push(`/defuse-game/${data.game.id}`);
