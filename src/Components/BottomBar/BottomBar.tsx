@@ -38,7 +38,13 @@ export const BottomBar: FC = () => {
 
   const joinGame = () => {
     console.log({ query });
-    send({ action: 'joinGame', gameId: (query.voteGameId as string) ?? gameCode, user });
+
+    setTimeout(() => {
+      send({ action: 'joinGame', gameId: (query.voteGameId as string) ?? gameCode, user });
+    }, 100)
+    push(`/fetching`);
+
+    
   };
 
   if (isProfile) return null;
@@ -75,7 +81,6 @@ export const BottomBar: FC = () => {
               </Link>
             </>
           )}
-
 
           {isVoteGame && (
             <>

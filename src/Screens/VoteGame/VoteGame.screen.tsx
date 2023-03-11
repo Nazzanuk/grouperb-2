@@ -294,7 +294,7 @@ export const VoteGameScreen: FC = () => {
   );
 };
 
-export const PlayerList: FC<{ users: User[]; game: VoteGame }> = ({ users, game }) => {
+const PlayerList: FC<{ users: User[]; game: VoteGame }> = ({ users, game }) => {
   return (
     <div className={styles.playerList}>
       {users.map((user) => (

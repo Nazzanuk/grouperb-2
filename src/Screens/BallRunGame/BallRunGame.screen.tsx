@@ -314,7 +314,7 @@ export const BallRunGameScreen: FC = () => {
   );
 };
 
-export const PlayerList: FC<{ users: User[]; game: BallRunGame }> = ({ users, game }) => {
+const PlayerList: FC<{ users: User[]; game: BallRunGame }> = ({ users, game }) => {
   return (
     <div className={styles.playerList}>
       {users.map((user) => (

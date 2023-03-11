@@ -20,6 +20,7 @@ import { userAtom } from 'Atoms/User.atom';
 import { showUserPopupAtom, userPopupAtom } from 'Atoms/UserPopup.atom';
 import { wsAtom } from 'Atoms/Ws.atom';
 import { BombBroadcast } from 'Components/BombBroadcast/BombBroadcast';
+import { DynamicBackground } from 'Components/DynamicBackground/DynamicBackground';
 import { InfoOverlay } from 'Components/InfoOverlay/InfoOverlay';
 
 import { LoadingGame } from 'Components/LoadingGame/LoadingGame';
@@ -31,12 +32,11 @@ import { Block } from 'Entities/BlocksRound.entity';
 import { User } from 'Entities/User.entity';
 import { UserId } from 'Entities/UserId.entity';
 
+import { useBlocksTimer } from 'Hooks/Blocks/useBlocksTimer';
 import { useLoadGame } from 'Hooks/useLoadGame';
 import { useUpdateGame } from 'Hooks/useUpdateGame';
 
 import styles from './BlocksGame.screen.module.css';
-import { useBlocksTimer } from 'Hooks/Blocks/useBlocksTimer';
-import { DynamicBackground } from 'Components/DynamicBackground/DynamicBackground';
 
 export const BlocksGameScreen: FC = () => {
   const { query } = useRouter();
@@ -216,7 +216,7 @@ export const BlockEl: FC<{ block?: Block }> = ({ block, star }) => {
   );
 };
 
-export const PlayerList: FC<{ users: User[]; game: BlocksGame }> = ({ users, game }) => {
+const PlayerList: FC<{ users: User[]; game: BlocksGame }> = ({ users, game }) => {
   return (
     <div className={styles.playerList}>
       {users.map((user) => (

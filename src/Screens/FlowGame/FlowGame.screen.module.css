@@ -1,0 +1,83 @@
+.boops {
+  width: 100%;
+  margin-top: auto;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.boopBox {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  /* background: rgba(255, 255, 255, 0.2); */
+  height: 70px;
+  align-items: center;
+  justify-content: center;
+  /* border-radius: 5px; */
+  position: relative;
+  margin-bottom: 60px;
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.boop {
+  --delay: 0s;
+  --speed: 0s;
+  --color: pink;
+
+  position: absolute;
+  width: 100%;
+  height:100%;
+  top: 0;
+  left: 0;
+
+  opacity: 0;
+  z-index: 2;
+
+  background: var(--color);
+
+  border-radius: 5px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  animation: boop calc(var(--speed) * 2) linear normal forwards;
+  animation-delay: var(--delay);
+  pointer-events: none;
+
+  &[data-tapped="true"] {
+    background: white;
+    pointer-events: none;
+  }
+
+  &[data-fail="true"] {
+    background: #333;
+  }
+}
+
+@keyframes boop {
+  0% {
+    pointer-events: all;
+    opacity: 0;
+    transform: translateY(-400px);
+  }
+  45% {
+    opacity: 1;
+    pointer-events: all;
+  }
+  50% {
+    transform: translateY(0px);
+    /* transform: scale(1) translateY(0px); */
+  }
+  100% {
+    transform: translateY(400px);
+    /* opacity: 0; */
+  }
+}
+

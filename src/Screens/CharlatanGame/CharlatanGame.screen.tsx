@@ -14,6 +14,7 @@ import { userAtom } from 'Atoms/User.atom';
 import { showUserPopupAtom, userPopupAtom } from 'Atoms/UserPopup.atom';
 import { wsAtom } from 'Atoms/Ws.atom';
 import { BombBroadcast } from 'Components/BombBroadcast/BombBroadcast';
+import { DynamicBackground } from 'Components/DynamicBackground/DynamicBackground';
 import { InfoOverlay } from 'Components/InfoOverlay/InfoOverlay';
 
 import { LoadingGame } from 'Components/LoadingGame/LoadingGame';
@@ -29,7 +30,6 @@ import { useLoadGame } from 'Hooks/useLoadGame';
 import { useUpdateGame } from 'Hooks/useUpdateGame';
 
 import styles from './CharlatanGame.screen.module.css';
-import { DynamicBackground } from 'Components/DynamicBackground/DynamicBackground';
 
 export const CharlatanGameScreen: FC = () => {
   const { query } = useRouter();
@@ -68,7 +68,7 @@ export const CharlatanGameScreen: FC = () => {
   return (
     <>
       <InfoOverlay />
-      <div className="darkScreen" >
+      <div className="darkScreen">
         <div className="darkScreenOverlay" />
         <DynamicBackground floaterCount={20} />
         <div className="darkScreenContent">
@@ -121,26 +121,21 @@ export const CharlatanGameScreen: FC = () => {
               <div className="label">Answers</div>
               <div className={styles.answers}>
                 {currentRound.answers.map((answer) => (
-                  <div
-                    className={styles.answer}
-                    key={answer}
-                    data-is-answer={currentRound.answer === answer}
-                  >
+                  <div className={styles.answer} key={answer} data-is-answer={currentRound.answer === answer}>
                     {answer}
                   </div>
                 ))}
               </div>
-              
 
-            <div className={styles.buttons}>
-              {!isHost && <div className={styles.blurb}>Waiting for host to start the next round...</div>}
+              <div className={styles.buttons}>
+                {!isHost && <div className={styles.blurb}>Waiting for host to start the next round...</div>}
 
-              {isHost && (
-                <div className="button" data-variant="orange" onClick={startGame}>
-                  Next round
-                </div>
-              )}
-            </div>
+                {isHost && (
+                  <div className="button" data-variant="orange" onClick={startGame}>
+                    Next round
+                  </div>
+                )}
+              </div>
             </>
           )}
 
@@ -226,7 +221,7 @@ export const CharlatanGameScreen: FC = () => {
   );
 };
 
-export const PlayerList: FC<{ users: User[]; game: CharlatanGame }> = ({ users, game }) => {
+const PlayerList: FC<{ users: User[]; game: CharlatanGame }> = ({ users, game }) => {
   return (
     <div className={styles.playerList}>
       {users.map((user) => (

@@ -13,19 +13,19 @@ import { userAtom } from 'Atoms/User.atom';
 
 import { wsAtom } from 'Atoms/Ws.atom';
 import { BombBroadcast } from 'Components/BombBroadcast/BombBroadcast';
+import { DynamicBackground } from 'Components/DynamicBackground/DynamicBackground';
 import { InfoOverlay } from 'Components/InfoOverlay/InfoOverlay';
+import { LoadingGame } from 'Components/LoadingGame/LoadingGame';
 import { WinnerBroadcast } from 'Components/WinnerBroadcast/WinnerBroadcast';
 import { DefuseGame } from 'Entities/DefuseGame.entity';
 import { User } from 'Entities/User.entity';
 import { UserId } from 'Entities/UserId.entity';
 
+import { useLoadGame } from 'Hooks/useLoadGame';
+import { useUpdateGame } from 'Hooks/useUpdateGame';
 import { checkDefuseRule, generateRule } from 'Utils/Defuse/Defuse.utils';
 
 import styles from './DefuseGame.screen.module.css';
-import { useLoadGame } from 'Hooks/useLoadGame';
-import { useUpdateGame } from 'Hooks/useUpdateGame';
-import { LoadingGame } from 'Components/LoadingGame/LoadingGame';
-import { DynamicBackground } from 'Components/DynamicBackground/DynamicBackground';
 
 export const DefuseGameScreen: FC = () => {
   const { query } = useRouter();
@@ -247,7 +247,7 @@ export const DefuseGameScreen: FC = () => {
   );
 };
 
-export const PlayerList: FC<{ users: User[]; game: DefuseGame }> = ({ users, game }) => {
+const PlayerList: FC<{ users: User[]; game: DefuseGame }> = ({ users, game }) => {
   return (
     <div className={styles.playerList}>
       {users.map((user) => (

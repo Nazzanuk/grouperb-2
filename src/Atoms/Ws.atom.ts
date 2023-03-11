@@ -99,14 +99,14 @@ export const initWebSocketAtom = atom<GameWs, User>(
       if (data.game) {
         set(currentGameAtom, data.game);
 
-        console.log('WHAT!!!', router?.asPath, data.game.type, router?.asPath.includes(data.game.type));
+        console.log('WHAT!!!', router?.asPath, data.game.type);
 
-        if (!['/choose-game', '/home'].includes(router?.asPath!)) return;
+        if (!['/fetching'].includes(router?.asPath!)) return;
 
-        if (data.game.type === 'vote') router?.push(`/vote-game/${data.game.id}`);
-        if (data.game.type === 'defuse') router?.push(`/defuse-game/${data.game.id}`);
-        if (data.game.type === 'charlatan') router?.push(`/charlatan-game/${data.game.id}`);
-        if (data.game.type === 'blocks') router?.push(`/blocks-game/${data.game.id}`);
+        if (data.game.type === 'vote') router?.replace(`/vote-game/${data.game.id}`);
+        if (data.game.type === 'defuse') router?.replace(`/defuse-game/${data.game.id}`);
+        if (data.game.type === 'charlatan') router?.replace(`/charlatan-game/${data.game.id}`);
+        if (data.game.type === 'blocks') router?.replace(`/blocks-game/${data.game.id}`);
         console.log('game', data.game.id);
       }
 
