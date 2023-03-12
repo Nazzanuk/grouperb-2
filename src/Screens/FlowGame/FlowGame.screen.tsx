@@ -41,10 +41,10 @@ export function FlowGameScreen() {
 
         <div className="darkScreenContent" style={{ overflow: 'hidden' }}>
           <div className={styles.boops}>
-            {[0, 1, 2, 3].map((i) => (
+            {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
               <div className={styles.boopBox} key={i}>
                 {sequence
-                  .filter((s) => s.index % 4 === i)
+                  .filter((s) => s.index % 8 === i)
                   .map(({ speed, delay, index, color }) => (
                     <Boop delay={delay} speed={speed} key={index} color={color} />
                   ))}
@@ -96,13 +96,10 @@ const Boop = ({ delay = 0, speed = 5, color }) => {
   };
 
   return (
-    <div
-      className={styles.boop}
-      onMouseDown={tap}
-      onTouchStart={tap}
-      style={{ '--delay': `${delay}s`, '--speed': `${speed}s`, '--color': color }}
-      data-tapped={wasTapped}
-      data-fail={points < 0}
-    />
+    <div className={styles.boopMove} style={{ '--delay': `${delay}s`, '--speed': `${speed}s`, '--color': color }}>
+      <div className={styles.boop} onMouseDown={tap} onTouchStart={tap} data-tapped={wasTapped} data-fail={points < 0}>
+        <div className={styles.inside}></div>
+      </div>
+    </div>
   );
 };

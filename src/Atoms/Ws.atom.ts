@@ -96,6 +96,11 @@ export const initWebSocketAtom = atom<GameWs, User>(
       console.log('CLIENT RECIEVED: ', data, router);
       console.log(router);
 
+      if (data.alert) {
+        set(toastsAtom, data?.alert);
+        // alert(data.alert);
+      }
+
       if (data.game) {
         set(currentGameAtom, data.game);
 
@@ -108,11 +113,6 @@ export const initWebSocketAtom = atom<GameWs, User>(
         if (data.game.type === 'charlatan') router?.replace(`/charlatan-game/${data.game.id}`);
         if (data.game.type === 'blocks') router?.replace(`/blocks-game/${data.game.id}`);
         console.log('game', data.game.id);
-      }
-
-      if (data.alert) {
-        set(toastsAtom, data?.alert);
-        // alert(data.alert);
       }
     };
 
