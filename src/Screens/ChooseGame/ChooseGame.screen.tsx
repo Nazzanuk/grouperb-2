@@ -22,7 +22,7 @@ export const ChooseGameScreen: FC = () => {
   const hostGame = (type: Game['type']) => () => {
     setTimeout(() => {
       send({ action: 'hostGame', type, user });
-    }, 100);
+    }, 1000);
     push(`/fetching`);
   };
 
@@ -55,6 +55,12 @@ export const ChooseGameScreen: FC = () => {
             <div className={styles.background} style={{ backgroundImage: `url('/img/blocks-1.png')` }} />
             <div className={styles.title}>Blocks</div>
             <div className={styles.subtitle}>A shape-shifting team game</div>
+          </div>
+
+          <div className={styles.game} onClick={hostGame('flow')}>
+            <div className={styles.background} style={{ backgroundImage: `url('/img/blocks-1.png')` }} />
+            <div className={styles.title}>Flow</div>
+            <div className={styles.subtitle}>A game of timing</div>
           </div>
         </div>
       </div>

@@ -41,7 +41,7 @@ export const BottomBar: FC = () => {
 
     setTimeout(() => {
       send({ action: 'joinGame', gameId: (query.voteGameId as string) ?? gameCode, user });
-    }, 100)
+    }, 1000)
     push(`/fetching`);
 
     

@@ -11,6 +11,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { register } from 'swiper/element/bundle';
+import { Toasts } from 'Components/Toast/Toast';
 
 import { routerAtom } from 'Atoms/Router.atom';
 import { userAtom } from 'Atoms/User.atom';
@@ -25,7 +26,6 @@ import 'swiper/css';
 import 'Global/normalize.css';
 import 'Global/app.css';
 import '../public/fontawesome/css/all.min.css';
-import { Toasts } from 'Components/Toast/Toast';
 
 const shareTechMono = Share_Tech_Mono({
   weight: '400',
@@ -55,6 +55,7 @@ export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
     send({ action: 'updateUser', user });
     connect(user);
+    screen.orientation.lock('portrait');
   }, []);
 
   useEffect(() => {

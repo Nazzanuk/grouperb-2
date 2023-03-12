@@ -115,6 +115,25 @@ export type StartCharlatanAnsweringPayload = {
   userId: UserId;
 };
 
+export type StartFlowRoundPayload = {
+  action: 'startFlowRound';
+  gameId: string;
+  userId: UserId;
+};
+
+export type UpdateFlowPointsPayload = {
+  action: 'updateFlowPoints';
+  gameId: string;
+  userId: UserId;
+  points: number;
+};
+
+export type EndFlowRoundPayload = {
+  action: 'endFlowRound';
+  gameId: string;
+  userId: UserId;
+};
+
 export type DefuseTimeUp = {
   action: 'defuseTimeUp';
   gameId: string;
@@ -141,4 +160,7 @@ export type Payload =
   | StartCharlatanAnsweringPayload
   | VoteCharlatanPayload
   | StartCharlatanVotingPayload
+  | StartFlowRoundPayload
+  | EndFlowRoundPayload
+  | UpdateFlowPointsPayload
   | LeaveGamePayload;

@@ -27,6 +27,7 @@
   ],
   "dependencies": {
     "@next/font": "13.1.1",
+    "@react-spring/web": "^9.7.1",
     "@types/lodash": "^4.14.191",
     "@types/matter-js": "^0.18.2",
     "@types/node": "18.11.18",
@@ -49,6 +50,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-error-boundary": "^3.1.4",
+    "react-move": "^6.5.0",
     "react-no-ssr": "^1.1.0",
     "react-toastify": "^9.1.1",
     "swiper": "^9.0.3",

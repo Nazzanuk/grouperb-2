@@ -24,6 +24,7 @@ import { leaveGame } from 'Utils/Vote/LeaveGame';
 import { startVoteGame } from 'Utils/Vote/StartVoteGame';
 import { startVoteRound } from 'Utils/Vote/StartVoteRound';
 import { blocksActions } from 'Server/BlocksActions';
+import { flowActions } from 'Server/FlowActions';
 
 function heartbeat() {
   this.isAlive = true;
@@ -93,6 +94,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
 
         blocksActions({ client, data, wss });
         charlatanActions({ client, data, wss });
+        flowActions({ client, data, wss });
 
         if (data.action === 'hostGame') {
           const game = addServerGame(data);

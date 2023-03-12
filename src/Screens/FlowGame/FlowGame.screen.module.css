@@ -1,3 +1,19 @@
+.total {
+  font-size: 60px;
+  text-align: center;
+  color: white;
+  font-weight: 500;
+
+}
+
+.buttons {
+  margin-top: auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .boops {
   width: 100%;
   margin-top: auto;
@@ -20,7 +36,7 @@
   justify-content: center;
   /* border-radius: 5px; */
   position: relative;
-  margin-bottom: 200px;
+  margin-bottom: 50px;
   border-top: 1px solid rgba(255, 255, 255, 0.4);
   border-bottom: 1px solid rgba(255, 255, 255, 0.4);
 }
@@ -28,51 +44,64 @@
 .boopMove {
   position: absolute;
   width: 100%;
-  height:100%;
+  height: 100%;
   top: 0;
   left: 0;
 
   --delay: 0s;
   --speed: 0s;
   --color: pink;
-  opacity: 0;
-  animation: boop calc(var(--speed) * 2) linear normal forwards;
-  animation-delay: var(--delay);
-  pointer-events: none;
+  --y:0;
+  opacity: 1;
+  /* animation: boop calc(var(--speed) * 2) linear normal forwards;
+  animation-delay: var(--delay); */
+  /* pointer-events: none; */
 
+  transform: translateY(calc(var(--y) * -1px));
+
+  &[data-tapped='true'] {
+    pointer-events: none !important;
+    z-index: -1;
+  }
 }
 
 .boop {
   width: 100%;
-  height:100%;
+  height: 100%;
 
   z-index: 2;
 
   background: white;
 
-  border-radius: 5px;
+  /* border-radius: 5px; */
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
 
   overflow: hidden;
-  animation: 0.2s ease-in-out shake infinite;
+  /* animation: 0.3s ease-in-out shake infinite; */
+  transition:4s all;
 
-  &[data-tapped="true"] {
-    background: white;
+  &[data-tapped='true'] {
     pointer-events: none;
-    animation: none;
 
     & .inside {
-      transform: scale(10.5);
+      transform: scale(20.5);
     }
   }
 
-  &[data-fail="true"] {
-    animation: 0.2s ease-in-out shake infinite;
+  &[data-fail='true'] {
     & .inside {
       background: #333;
+    }
+  }
+
+  &[data-success='true'] {
+    animation: none;
+
+    & .points {
+      opacity: 1;
     }
   }
 }
@@ -81,9 +110,18 @@
   background: var(--color);
 
   transition: transform 0.2s ease-in-out;
-  height:20px;
+  height: 20px;
   width: 20px;
   border-radius: 50%;
+}
+
+.points {
+  color: white;
+  display: flex;
+  position: absolute;
+  font-size: 20px;
+  opacity: 0;
+  transition: transform 0.2s ease-in-out;
 }
 
 @keyframes boop {
@@ -91,16 +129,19 @@
     pointer-events: all;
     opacity: 0;
     transform: translateY(-300px);
+    z-index: 1;
   }
   45% {
     opacity: 1;
-    pointer-events: all;
   }
   50% {
+    opacity: 1;
     transform: translateY(0px);
     /* transform: scale(1) translateY(0px); */
   }
   100% {
+    opacity: 1;
+    pointer-events: all;
     transform: translateY(300px);
     /* opacity: 0; */
   }

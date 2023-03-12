@@ -6,8 +6,9 @@ import { BlocksGame } from 'Entities/BlocksGame.entity';
 import { User } from 'Entities/User.entity';
 
 import styles from './PlayerList.module.css';
+import { Game } from 'Entities/Game.entity';
 
-export const PlayerList: FC<{ users: User[]; game: BlocksGame }> = ({ users, game }) => {
+export const PlayerList: FC<{ users: User[]; game: Game }> = ({ users, game }) => {
   return (
     <div className={styles.playerList}>
       {users.map((user) => (
