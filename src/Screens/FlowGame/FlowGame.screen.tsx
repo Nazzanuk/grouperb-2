@@ -34,22 +34,27 @@ export function FlowGameScreen() {
   const { query } = useRouter();
   const { startGame, leaveGame, updatePoints } = useFlowGame();
 
-  const [animations, setAnimated] = useSpring(() => ({ total: 0 }));
+  const [animations, setAnimated] = useSpring(() => ({ myTotal: 0, totalTeamScore: 0 }));
 
   const game = useAtomValue(flowGameAtom);
   const { currentRound, currentRoundIndex, isHost, isObserver, status, userArray } = useAtomValue(flowGameHelpersAtom);
-  const { usersWithoutMe, sequence, lanes } = useAtomValue(flowGameHelpersAtom);
+  const { usersWithoutMe, sequence, lanes, target, totalTeamScore } = useAtomValue(flowGameHelpersAtom);
 
   console.log({ game, status });
 
   const user = useAtomValue(userAtom);
-  const total = useAtomValue(totalPointsAtom);
+  const myTotal = useAtomValue(totalPointsAtom);
 
   useEffect(() => {
     if (status !== 'playing') return;
-    setAnimated.start({ total });
-    updatePoints(total);
-  }, [total]);
+    setAnimated.start({ myTotal });
+    updatePoints(myTotal);
+  }, [myTotal]);
+
+  useEffect(() => {
+    if (status !== 'playing') return;
+    setAnimated.start({ totalTeamScore });
+  }, [totalTeamScore]);
 
   if (!game) return <LoadingGame />;
 
@@ -76,9 +81,23 @@ export function FlowGameScreen() {
           {status === 'playing' && (
             <>
               <div className="label">Round {currentRoundIndex}</div>
-              <div className="label">Sequence {sequence.length}</div>
+              {/* <div className="label">Sequence {sequence.length}</div> */}
 
-              <animated.div className={styles.total}>{to(animations.total, (value) => Math.round(value))}</animated.div>
+              <div className={styles.scoreGrid}>
+                <div className={styles.scoreLabel}>My score</div>
+                <div className={styles.scoreLabel}>Team score</div>
+                <div className={styles.scoreLabel}>Target</div>
+
+                <animated.div className={styles.myScore}>
+                  {to(animations.myTotal, (value) => Math.round(value))}
+                </animated.div>
+
+                <animated.div className={styles.total}>
+                  {to(animations.totalTeamScore, (value) => Math.round(value))}
+                </animated.div>
+
+                <div className={styles.target}>{target}</div>
+              </div>
 
               <div className={styles.boops} key={currentRoundIndex}>
                 {times(lanes).map((i) => (
@@ -86,7 +105,13 @@ export function FlowGameScreen() {
                     {sequence
                       .filter((s) => s.index % lanes === i)
                       .map(({ speed, delay, index, color }) => (
-                        <Boop delay={delay} speed={speed} key={index} color={color} startTime={currentRound?.startTime} />
+                        <Boop
+                          delay={delay}
+                          speed={speed}
+                          key={index}
+                          color={color}
+                          startTime={currentRound?.startTime}
+                        />
                       ))}
                   </div>
                 ))}
@@ -142,7 +167,7 @@ const Boop = ({ delay = 0, speed = 5, color = '', startTime }) => {
     if (wasTapped) return;
 
     setWasTapped(true);
-    setPoints(Math.round(400 - Math.abs(hitTime * 30)));
+    setPoints(Math.round(400 - Math.abs(hitTime * 15)));
   };
 
   useEffect(() => {

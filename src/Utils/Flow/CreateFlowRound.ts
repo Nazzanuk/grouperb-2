@@ -18,11 +18,12 @@ export const createFlowRound = (payload: StartFlowRoundPayload): FlowGame => {
   const currentRoundIndex = game.rounds.length;
 
   const newRound: FlowRound = {
-    sequence: genSequence((currentRoundIndex + 1) * 10),
+    sequence: genSequence((currentRoundIndex + 1) * 5),
     lanes: currentRoundIndex + 1,
     scores: {},
     startTime: new Date().getTime(),
     totalScore: 0,
+    target: 1500 * (currentRoundIndex + 1) * Object.values(game.users).length,
   };
 
   game.status = 'playing';
@@ -32,8 +33,8 @@ export const createFlowRound = (payload: StartFlowRoundPayload): FlowGame => {
 
 const genSequence = (amount: number) =>
   times(amount, (i) => ({
-    delay: i - (0.1 * i),
+    delay: i - (0.2 * i),
     index: i,
-    speed: random(2, 3 + i),
+    speed: random(2, 3 + i/3),
     color: sample(['orange']),
   })) as Boop[];

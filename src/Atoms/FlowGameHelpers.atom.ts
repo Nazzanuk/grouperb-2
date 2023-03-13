@@ -19,6 +19,8 @@ export const flowGameHelpersAtom = atom((get) => {
   const usersWithoutMe = userArray.filter((u) => u.id !== user.id);
   const sequence = currentRound?.sequence ?? [];
   const lanes = currentRound?.lanes ?? 1;
+  const target = currentRound?.target ?? 0;
+  const totalTeamScore = currentRound?.totalScore ?? 0;
 
   return {
     currentRound,
@@ -30,5 +32,7 @@ export const flowGameHelpersAtom = atom((get) => {
     isObserver,
     sequence,
     lanes,
+    target,
+    totalTeamScore,
   };
 });

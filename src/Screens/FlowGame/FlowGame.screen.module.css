@@ -6,6 +6,40 @@
 
 }
 
+.target {
+  font-size: 20px;
+  text-align: center;
+  color: white;
+  font-weight: 500;
+}
+
+.blurb {
+  color: #bbb;
+  padding: 20px 0;
+  text-align: center;
+}
+
+.myScore {
+  font-size: 20px;
+  text-align: center;
+  color: white;
+  font-weight: 500;
+}
+
+.scoreGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  text-align: center;
+  align-items: center;
+  text-transform: uppercase;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 10px 0 0;
+  border-radius: 5px;
+  position: relative;
+  z-index: 10;
+  backdrop-filter: blur(5px);
+}
+
 .buttons {
   margin-top: auto;
 
@@ -36,7 +70,7 @@
   justify-content: center;
   /* border-radius: 5px; */
   position: relative;
-  margin-bottom: 50px;
+  margin-bottom: 30px;
   border-top: 1px solid rgba(255, 255, 255, 0.4);
   border-bottom: 1px solid rgba(255, 255, 255, 0.4);
 }
