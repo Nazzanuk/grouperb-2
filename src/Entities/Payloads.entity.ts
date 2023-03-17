@@ -140,6 +140,25 @@ export type DefuseTimeUp = {
   userId: UserId;
 };
 
+export type EndBlocksRoundPayload = {
+  action: 'endBlocksRound';
+  gameId: string;
+  userId: UserId;
+};
+
+export type AddBlocksScorePayload = {
+  action: 'addBlocksScore';
+  gameId: string;
+  userId: UserId;
+  score: number;
+};
+
+export type NewBlocksGamePayload = {
+  action: 'newBlocksGame';
+  gameId: string;
+  userId: UserId;
+};
+
 export type Payload =
   | HostGamePayload
   | StartDefuseGamePayload
@@ -163,4 +182,7 @@ export type Payload =
   | StartFlowRoundPayload
   | EndFlowRoundPayload
   | UpdateFlowPointsPayload
+  | EndBlocksRoundPayload
+  | NewBlocksGamePayload
+  | AddBlocksScorePayload
   | LeaveGamePayload;

@@ -1,10 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import { FC, Fragment, useEffect, useMemo, useRef, useState } from 'react';
 
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
 import random from 'lodash/random';
-import startCase from 'lodash/startCase';
 
 import times from 'lodash/times';
 import Link from 'next/link';
@@ -15,28 +14,26 @@ import { useLongPress } from 'use-long-press';
 import { blocksGameAtom } from 'Atoms/BlocksGame.atom';
 import { blocksGameHelpersAtom } from 'Atoms/BlocksGameHelpers.atom';
 
+import { showScoreAtom } from 'Atoms/ShowScore.atom';
 import { userAtom } from 'Atoms/User.atom';
 
-import { showUserPopupAtom, userPopupAtom } from 'Atoms/UserPopup.atom';
 import { wsAtom } from 'Atoms/Ws.atom';
-import { BombBroadcast } from 'Components/BombBroadcast/BombBroadcast';
 import { DynamicBackground } from 'Components/DynamicBackground/DynamicBackground';
 import { InfoOverlay } from 'Components/InfoOverlay/InfoOverlay';
 
 import { LoadingGame } from 'Components/LoadingGame/LoadingGame';
-import { UserPopup } from 'Components/UserPopup/UserPopup';
+import { PlayerList } from 'Components/PlayerList/PlayerList';
+import { ShowScore } from 'Components/ShowScore/ShowScore';
 import { WinnerBroadcast } from 'Components/WinnerBroadcast/WinnerBroadcast';
-import { BlocksGame } from 'Entities/BlocksGame.entity';
 
 import { Block } from 'Entities/BlocksRound.entity';
-import { User } from 'Entities/User.entity';
-import { UserId } from 'Entities/UserId.entity';
 
 import { useBlocksTimer } from 'Hooks/Blocks/useBlocksTimer';
 import { useLoadGame } from 'Hooks/useLoadGame';
 import { useUpdateGame } from 'Hooks/useUpdateGame';
 
 import styles from './BlocksGame.screen.module.css';
+import { animated, to, useSpring } from '@react-spring/web';
 
 export const BlocksGameScreen: FC = () => {
   const { query } = useRouter();
@@ -44,9 +41,13 @@ export const BlocksGameScreen: FC = () => {
   const game = useAtomValue(blocksGameAtom);
   const send = useSetAtom(wsAtom);
   const user = useAtomValue(userAtom);
-  const { selectedUser } = useAtomValue(userPopupAtom);
-  const { status, currentRound, currentRoundIndex, isHost, userArray } = useAtomValue(blocksGameHelpersAtom);
+  const { status, currentRound, currentRoundIndex, isHost, userArray, totalScore } =
+    useAtomValue(blocksGameHelpersAtom);
+  const { correctAnswers } = useAtomValue(blocksGameHelpersAtom);
   const { isGuesser, myAnswer } = useAtomValue(blocksGameHelpersAtom);
+  const setScore = useSetAtom(showScoreAtom);
+
+  const [animations, setAnimated] = useSpring(() => ({ score: 0 }));
 
   const removeBlock = useLongPress((event, { context }) => {
     console.log('long press', context);
@@ -57,28 +58,49 @@ export const BlocksGameScreen: FC = () => {
   useUpdateGame(query.blocksGameId as string | undefined);
   const { playingTime } = useBlocksTimer();
 
-  console.log({ game, status });
+  console.log({ game, status, playingTime });
 
   const leaveGame = () => send({ action: 'leaveGame', gameId: game!.id, userId: user.id });
   const startGame = () => send({ action: 'createBlocksRound', gameId: game!.id, userId: user.id });
   const addBlock = ({ x, y }: any) => send({ action: 'addBlock', gameId: game!.id, userId: user.id, x, y });
   const clearBlocks = ({ x, y }: any) => send({ action: 'clearBlocks', gameId: game!.id, userId: user.id, x, y });
+  const newBlocksGame = () => send({ action: 'newBlocksGame', gameId: game!.id, userId: user.id });
+  const addBlocksScore = (score: number) =>
+    send({ action: 'addBlocksScore', gameId: game!.id, userId: user.id, score });
 
-  // const restartGame = () => send({ action: 'restartBlocksGame', gameId: game!.id, userId: user.id });
-  // const startRound = () => send({ action: 'startBlocksRound', gameId: game!.id, userId: user.id });
-  // const timeUp = () => send({ action: 'blocksTimeUp', gameId: game!.id, userId: user.id });
+  const addScore = (score: number) => {
+    setScore(score);
+
+    if (isGuesser) addBlocksScore(score);
+  };
+
+  useEffect(() => {
+    setAnimated({ score: totalScore });
+  }, [totalScore]);
+
+  useEffect(() => {
+    if (playingTime === 0) {
+      send({ action: 'endBlocksRound', gameId: game!.id, userId: user.id });
+    }
+  }, [playingTime]);
+
+  useEffect(() => {
+    if (correctAnswers <= 1) return;
+    if (status !== 'playing') return;
+
+    addScore(playingTime);
+  }, [correctAnswers]);
 
   if (!game) return <LoadingGame />;
 
   return (
     <>
       <InfoOverlay />
+      <ShowScore />
       <div className="darkScreen">
         <div className="darkScreenOverlay" />
         <DynamicBackground floaterCount={30} isDark />
         <div className="darkScreenContent">
-          <UserPopup />
-
           {status === 'lobby' && (
             <>
               <div className="label">Game code</div>
@@ -101,6 +123,45 @@ export const BlocksGameScreen: FC = () => {
             </>
           )}
 
+          {status === 'results' && (
+            <>
+              {/* <WinnerBroadcast text={`Game over!`} subText={`You ran out of time`} duration={'6s'} bits={50} /> */}
+
+              <div className="shout">Game over</div>
+
+              <div className={styles.completedText}>
+                {currentRoundIndex} rounds completed
+                <animated.div className={styles.total}>
+                  {to(animations.score, (value) => Math.round(value))}
+                </animated.div>
+                Points
+              </div>
+              {/* <div className="label">leaderboard</div> */}
+
+              <div className={styles.grid}>
+                {times(9).map((x) =>
+                  times(9).map((y) => (
+                    <Fragment key={'' + x + y}>
+                      <div className={styles.gridItem} {...removeBlock({ x, y })}>
+                        {!isGuesser && !myAnswer?.[x]?.[y]?.color && <div className={styles.dot} />}
+
+                        {!isGuesser && myAnswer?.[x]?.[y]?.color && (
+                          <BlockEl block={myAnswer?.[x]?.[y]} star={currentRound?.guess?.[x]?.[y]} />
+                        )}
+
+                        {isGuesser && !currentRound?.guess?.[x]?.[y]?.color && <div className={styles.dot} />}
+
+                        {isGuesser && currentRound?.guess?.[x]?.[y]?.color && (
+                          <BlockEl block={currentRound?.guess?.[x]?.[y]} />
+                        )}
+                      </div>
+                    </Fragment>
+                  )),
+                )}
+              </div>
+            </>
+          )}
+
           {(status === 'playing' || status === 'complete') && (
             <>
               <div className={styles.actionArea}>
@@ -108,8 +169,12 @@ export const BlocksGameScreen: FC = () => {
                 <p>Help {game.users[currentRound.guesser].username} match all the squares</p>
               </div>
 
-              <div className="label" style={{ textAlign: 'center' }}>
+              <div className={styles.completedText}>
                 Round {currentRoundIndex}
+                <animated.div className={styles.total}>
+                  {to(animations.score, (value) => Math.round(value))}
+                </animated.div>
+                Points
               </div>
 
               <div className={styles.grid}>
@@ -136,6 +201,16 @@ export const BlocksGameScreen: FC = () => {
                     </Fragment>
                   )),
                 )}
+              </div>
+            </>
+          )}
+
+          {status === 'results' && (
+            <>
+              <div className={styles.buttons}>
+                <div className="button" data-variant="orange" onClick={newBlocksGame}>
+                  Start again
+                </div>
               </div>
             </>
           )}
@@ -212,21 +287,6 @@ export const BlockEl: FC<{ block?: Block }> = ({ block, star }) => {
       style={{ '--color': block?.color, '--angle': `${angle}deg` }}
     >
       {star && <i className="fas fa-star" data-is-active={block?.color === star?.color} />}
-    </div>
-  );
-};
-
-const PlayerList: FC<{ users: User[]; game: BlocksGame }> = ({ users, game }) => {
-  return (
-    <div className={styles.playerList}>
-      {users.map((user) => (
-        <div className={styles.player} key={user.id}>
-          <img className={styles.playerImage} src={`/img/avatars/${user.avatar}`} alt="avatar" />
-          <div className={styles.playerName}>
-            {game.hostId === user.id && <i className="fas fa-star" />} {user.username}
-          </div>
-        </div>
-      ))}
     </div>
   );
 };

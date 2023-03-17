@@ -1,13 +1,16 @@
 import WebSocket, { WebSocketServer } from 'ws';
 
 import { BlocksGame } from 'Entities/BlocksGame.entity';
-import {Payload
+import {AddBlocksScorePayload, EndBlocksRoundPayload, NewBlocksGamePayload, Payload
 } from 'Entities/Payloads.entity';
 import { updateClientGames } from 'Server/UpdateClientGames';
 import { createBlocksRound } from 'Utils/Blocks/CreateBlocksRound';
 import { addBlock } from 'Utils/Blocks/AddBlock';
 import { removeBlock } from 'Utils/Blocks/RemoveBlock';
 import { clearBlocks } from 'Utils/Blocks/ClearBlocks';
+import { endBlocksRound } from 'Utils/Blocks/EndBlocksRound';
+import { newBlocksGame } from 'Utils/Blocks/NewBlocksGame';
+import { addBlocksScore } from 'Utils/Blocks/AddBlocksScore';
 
 type Actions = Payload['action'];
 
@@ -25,6 +28,11 @@ type UpdateProps = {
 };
 
 const actions: Partial<Record<Actions, (props: ActionProps) => BlocksGame | undefined>> = {
+  newBlocksGame: ({ client, data, wss }) => {
+    const game = newBlocksGame(data as NewBlocksGamePayload);
+    update({ game, client, wss });
+    return game;
+  },
   createBlocksRound: ({ client, data, wss }) => {
     const game = createBlocksRound(data as CastBlocksVotePayload);
     update({ game, client, wss, alert: 'New round!' });
@@ -42,6 +50,16 @@ const actions: Partial<Record<Actions, (props: ActionProps) => BlocksGame | unde
   },
   clearBlocks: ({ client, data, wss }) => {
     const game = clearBlocks(data as CastBlocksVotePayload);
+    update({ game, client, wss });
+    return game;
+  },
+  endBlocksRound: ({ client, data, wss }) => {
+    const game = endBlocksRound(data as EndBlocksRoundPayload);
+    update({ game, client, wss });
+    return game;
+  },
+  addBlocksScore: ({ client, data, wss }) => {
+    const game = addBlocksScore(data as AddBlocksScorePayload);
     update({ game, client, wss });
     return game;
   },

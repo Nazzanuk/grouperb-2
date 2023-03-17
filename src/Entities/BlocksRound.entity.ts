@@ -12,6 +12,7 @@ export type BlocksRound = {
   answer: Block[][];
   guess: Block[][];
   startTime: string;
-  endTime: string;
+  endTime?: string;
   guesser: UserId;
+  score: number;
 };

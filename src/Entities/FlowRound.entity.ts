@@ -14,4 +14,5 @@ export type FlowRound = {
   scores: Record<UserId, number>;
   totalScore: number;
   startTime: number;
+  target: number;
 };

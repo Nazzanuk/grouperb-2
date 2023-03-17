@@ -20,12 +20,14 @@ export const createBlocksRound = (payload: CreateBlocksRoundPayload): BlocksGame
   console.log('createBlocksRound', payload);
   const game = ServerGames[payload.gameId] as BlocksGame;
   const userIds = Object.keys(game.users);
+  const currentRoundIndex = game.rounds.length;
 
   const newRound: BlocksRound = {
     startTime: new Date().toISOString(),
     answer: generateAnswer(game.rounds.length + 1),
     guess: [],
-    guesser: sample(userIds),
+    guesser: userIds[currentRoundIndex % userIds.length] as UserId,
+    score: 0,
   };
 
   const gridSize = 9;

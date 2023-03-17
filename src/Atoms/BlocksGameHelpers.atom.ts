@@ -1,24 +1,14 @@
 import { atom } from 'jotai';
-import keys from 'lodash/keys';
-import values from 'lodash/values';
-import toPairs from 'lodash/toPairs';
+import { set } from 'lodash';
+import mapValues from 'lodash/mapValues';
+import omit from 'lodash/omit';
 
-import { charlatanGameAtom } from 'Atoms/CharlatanGame.atom';
-import { defuseGameAtom } from 'Atoms/DefuseGame.atom';
+import { blocksGameAtom } from 'Atoms/BlocksGame.atom';
 
 import { sharedGameHelpersAtom } from 'Atoms/SharedGameHelpers.atom';
 import { userAtom } from 'Atoms/User.atom';
-import { CharlatanRound } from 'Entities/CharlatanRound.entity';
-import { User } from 'Entities/User.entity';
-import { UserId } from 'Entities/UserId.entity';
-import mapValues from 'lodash/mapValues';
-import omitBy from 'lodash/omitBy';
-import omit from 'lodash/omit';
-import every from 'lodash/every';
-import { BlocksRound } from 'Entities/BlocksRound.entity';
-import { blocksGameAtom } from 'Atoms/BlocksGame.atom';
 import { BlocksGame } from 'Entities/BlocksGame.entity';
-import { set } from 'lodash';
+import { BlocksRound } from 'Entities/BlocksRound.entity';
 
 export const blocksGameHelpersAtom = atom((get) => {
   const game = get(blocksGameAtom) as BlocksGame;
@@ -33,28 +23,34 @@ export const blocksGameHelpersAtom = atom((get) => {
   const usersWithoutGuesser = omit(game?.users, currentRound.guesser);
 
   const splitAnswer = mapValues(usersWithoutGuesser, () => []);
-  console.log({ splitAnswers: splitAnswer });
 
-  let n = 0;
-  answer?.forEach((xAxis, x) =>
-    xAxis?.forEach((yAxis, y) => {
-      const index = n % userArrayWithoutGuesser.length;
-      console.log('answerindex', index);
+  const linearblocks = answer?.flat(2).filter(Boolean);
+  console.log({ linearblocks });
+  linearblocks?.forEach((answer, n) => {
+    const { x, y } = answer;
+    const index = n % userArrayWithoutGuesser.length;
 
-      const selectedUser = userArrayWithoutGuesser[index];
-      set(splitAnswer, [selectedUser.id, x, y], answer?.[x]?.[y]);
+    const selectedUser = userArrayWithoutGuesser[index];
+    set(splitAnswer, [selectedUser.id, x, y], answer);
 
-      if (answer?.[x]?.[y]?.color === 'white') {
-        userArrayWithoutGuesser.forEach((u) => set(splitAnswer, [u.id, x, y], answer?.[x]?.[y]));
-      }
+    console.log('answerindex', { n, index, selectedUser, splitAnswer });
 
-      n++;
-    }),
-  );
+    if (answer?.color === 'white') {
+      userArrayWithoutGuesser.forEach((u) => set(splitAnswer, [u.id, x, y], answer));
+    }
+
+    n++;
+  });
 
   const myAnswer = splitAnswer[user.id];
 
-  console.log({ answers: answer, splitAnswers: splitAnswer, userArrayWithoutGuesser, usersWithoutGuesser });
+  const correctAnswers = linearblocks?.filter(
+    (block) => currentRound.guess?.[block.x]?.[block.y]?.color === block.color,
+  ).length;
+
+  const totalScore = game.rounds.reduce((acc, round) => acc + round.score, 0);
+
+  console.log({ answers: answer, splitAnswers: splitAnswer, userArrayWithoutGuesser, usersWithoutGuesser, correctAnswers });
 
   return {
     ...sharedHelpers,
@@ -62,5 +58,8 @@ export const blocksGameHelpersAtom = atom((get) => {
     isGuesser,
     splitAnswer,
     myAnswer,
+    linearblocks,
+    correctAnswers,
+    totalScore
   };
 });

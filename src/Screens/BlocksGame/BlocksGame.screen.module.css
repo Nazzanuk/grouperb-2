@@ -320,6 +320,19 @@
   }
 }
 
+.completedText {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
+  text-transform: uppercase;
+
+  & div {
+    margin-left: auto;
+  }
+}
+
 @keyframes slideUp {
   0% {
     opacity: 0;

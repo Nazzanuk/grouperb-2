@@ -4,6 +4,6 @@ import { Game } from "Entities/Game.entity";
 export type BlocksGame = Game & {
   type: 'blocks';
   rounds: BlocksRound[];
-  status: 'lobby' | 'playing';
+  status: 'lobby' | 'playing'| 'results';
 };
 
