@@ -121,6 +121,12 @@ export type StartFlowRoundPayload = {
   userId: UserId;
 };
 
+export type RestartFlowGamePayload = {
+  action: 'restartFlowGame';
+  gameId: string;
+  userId: UserId;
+};
+
 export type UpdateFlowPointsPayload = {
   action: 'updateFlowPoints';
   gameId: string;
@@ -182,6 +188,7 @@ export type Payload =
   | StartFlowRoundPayload
   | EndFlowRoundPayload
   | UpdateFlowPointsPayload
+  | RestartFlowGamePayload
   | EndBlocksRoundPayload
   | NewBlocksGamePayload
   | AddBlocksScorePayload

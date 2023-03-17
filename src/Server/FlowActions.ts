@@ -5,6 +5,7 @@ import { FlowGame } from 'Entities/FlowGame.entity';
 import {
   EndFlowRoundPayload,
   Payload,
+  RestartFlowGamePayload,
   StartFlowRoundPayload,
   UpdateFlowPointsPayload,
 } from 'Entities/Payloads.entity';
@@ -12,6 +13,7 @@ import { addServerGame } from 'Server/AddServerGame';
 import { updateClientGames } from 'Server/UpdateClientGames';
 import { createFlowRound } from 'Utils/Flow/CreateFlowRound';
 import { endFlowRound } from 'Utils/Flow/EndFlowRound';
+import { restartFlowGame } from 'Utils/Flow/RestartFlowGame';
 import { updateFlowPoints } from 'Utils/Flow/UpdateFlowPoints';
 
 type Actions = Payload['action'];
@@ -47,6 +49,13 @@ const actions: Partial<Record<Actions, (props: ActionProps) => FlowGame | undefi
     update({ game, client, wss });
     return game;
   },
+
+  restartFlowGame: ({ client, data, wss }) => {
+    const game = restartFlowGame(data as RestartFlowGamePayload);
+    update({ game, client, wss, alert: 'New game started' });
+    return game;
+  },
+  
 };
 
 const update = ({ game, client, wss, alert }: UpdateProps) => {

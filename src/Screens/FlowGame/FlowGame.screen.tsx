@@ -29,16 +29,17 @@ import { useFlowGame } from 'Screens/FlowGame/useFlowGame';
 import { useOnce } from 'Utils/UseOnce';
 
 import styles from './FlowGame.screen.module.css';
+import { WinnerBroadcast } from 'Components/WinnerBroadcast/WinnerBroadcast';
 
 export function FlowGameScreen() {
   const { query } = useRouter();
-  const { startGame, leaveGame, updatePoints, timeRemaining } = useFlowGame();
+  const { startRound, leaveGame, updatePoints, timeRemaining, restartFlowGame } = useFlowGame();
 
   const [animations, setAnimated] = useSpring(() => ({ myTotal: 0, totalTeamScore: 0 }));
 
   const game = useAtomValue(flowGameAtom);
-  const { currentRound, currentRoundIndex, isHost, isObserver, status, userArray } = useAtomValue(flowGameHelpersAtom);
-  const { usersWithoutMe, sequence, lanes, target, totalTeamScore, startTime } = useAtomValue(flowGameHelpersAtom);
+  const { currentRound, currentRoundIndex, isHost, isGameOver, status, userArray } = useAtomValue(flowGameHelpersAtom);
+  const { usersWithoutMe, sequence, lanes, target, totalTeamScore, sortedScorers } = useAtomValue(flowGameHelpersAtom);
 
   console.log({ game, status });
 
@@ -80,6 +81,14 @@ export function FlowGameScreen() {
 
           {status === 'results' && (
             <>
+              {isGameOver && (
+                <WinnerBroadcast text={`Game over!`} subText={`Not enough points`} duration={'6s'} bits={50} />
+              )}
+
+              {!isGameOver && (
+                <WinnerBroadcast text={`Complete!`} subText={`${totalTeamScore} points!`} duration={'6s'} bits={50} />
+              )}
+
               <div className="label">Round {currentRoundIndex}</div>
               {/* <div className="label">Sequence {sequence.length}</div> */}
 
@@ -97,6 +106,17 @@ export function FlowGameScreen() {
                 </animated.div>
 
                 <div className={styles.target}>{target}</div>
+              </div>
+
+              <div className="table">
+                <div className="cell w50 heading">Player</div>
+                <div className="cell heading">Points</div>
+                {sortedScorers.map(([scorerId, score]) => (
+                  <>
+                    <div className="cell w50">{game.users[scorerId].username}</div>
+                    <div className="cell big">{score}</div>
+                  </>
+                ))}
               </div>
             </>
           )}
@@ -145,9 +165,12 @@ export function FlowGameScreen() {
 
           {status === 'results' && (
             <div className={styles.buttons}>
-              <div className="button" data-variant="orange" onClick={startGame}>
+              {isGameOver && (<div className="button" data-variant="orange" onClick={restartFlowGame}>
+                Restart game
+              </div>)}
+              {!isGameOver && (<div className="button" data-variant="orange" onClick={startRound}>
                 Next round
-              </div>
+              </div>)}
             </div>
           )}
 
@@ -160,7 +183,7 @@ export function FlowGameScreen() {
               )}
 
               {isHost && (
-                <div className="button" data-variant="orange" onClick={startGame}>
+                <div className="button" data-variant="orange" onClick={startRound}>
                   Start game
                 </div>
               )}

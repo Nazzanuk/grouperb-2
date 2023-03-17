@@ -52,14 +52,16 @@ export const useFlowGame = () => {
   }, [timeRemaining]);
 
   const leaveGame = () => send({ action: 'leaveGame', gameId: game!.id, userId: user.id });
-  const startGame = () => send({ action: 'startFlowRound', gameId: game!.id, userId: user.id });
+  const restartFlowGame = () => send({ action: 'restartFlowGame', gameId: game!.id, userId: user.id });
+  const startRound = () => send({ action: 'startFlowRound', gameId: game!.id, userId: user.id });
   const endRound = () => send({ action: 'endFlowRound', gameId: game!.id, userId: user.id });
   const updatePoints = (points: number) =>
     send({ action: 'updateFlowPoints', gameId: game!.id, userId: user.id, points });
 
   return {
     leaveGame,
-    startGame,
+    restartFlowGame,
+    startRound,
     endRound,
     updatePoints,
     timeRemaining

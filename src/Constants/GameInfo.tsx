@@ -78,4 +78,51 @@ export const GAME_INFO = {
       </p>
     </>
   ),
+
+  flow: (
+    <>
+      <h3>Flow: The Rules</h3>
+      <p>Introducing Flow, a delightful game that will engage you and your friends in a fun, interactive challenge.</p>
+      <p>
+        The objective is clear: you have these charming blocks cascading down your screen, and it's your task to tap
+        them precisely when they reach the two horizontal lines. Your accuracy and timing are crucial, as they'll earn
+        you more points.
+      </p>
+      <p>
+        While you'll be racking up points individually, it's the combined team score that really matters. And don't get
+        too comfortable, because with each round, the game becomes slightly more demanding as the blocks fall at a
+        faster pace.
+      </p>
+      <p>Get ready for some team based button bashing!</p>
+    </>
+  ),
+
+  blocks: (
+    <>
+      <h3>Blocks: The Rules</h3>
+      <p>
+        Presenting Blocks, a delightful and engaging game that brings friends together in a colourful test of intellect
+        and teamwork.
+      </p>
+      <p>
+        At its core, it's a simple concept: there's a grid with a specific arrangement of coloured blocks that form the
+        solution.
+      </p>
+
+      <p>
+        In each round, one player is designated as the Solver, and the catch is, they can't see the solution. The answer
+        is distributed among the other players, and it's up to the team to collaborate, communicate, and guide the
+        Solver towards success.
+      </p>
+      <p>
+        But don't dilly-dally! You're racing against the clock, so make the most of your time while keeping a keen eye
+        on the ticking seconds.
+      </p>
+
+      <p>
+        Blocks demands sharp wits, excellent communication, and the ability to work together harmoniously. Gather your
+        comrades and prepare to tackle this vibrant challenge that's sure to provide hours of entertainment!
+      </p>
+    </>
+  ),
 };

@@ -1,10 +1,11 @@
 import { atom } from 'jotai';
+import max from 'lodash/max';
+import sortBy from 'lodash/sortBy';
+import toPairs from 'lodash/toPairs';
 import values from 'lodash/values';
 
-import { currentGameAtom } from 'Atoms/CurrentGame.atom';
-import { userAtom } from 'Atoms/User.atom';
-import { VoteGame } from 'Entities/VoteGame.entity';
 import { flowGameAtom } from 'Atoms/FlowGame.atom';
+import { userAtom } from 'Atoms/User.atom';
 import { UserId } from 'Entities/UserId.entity';
 
 export const flowGameHelpersAtom = atom((get) => {
@@ -24,17 +25,13 @@ export const flowGameHelpersAtom = atom((get) => {
   const totalTeamScore = currentRound?.totalScore ?? 0;
   const scores: Record<UserId, number> = currentRound?.scores ?? {};
   const startTime = currentRound?.startTime ?? 0;
-  // const topScorerId: UserId = (Object.keys(scores) as UserId[]).reduce((a, b) => (scores[a] > scores[b] ? a : b));
-  // const topScorer = game?.users[topScorerId];
-  // const topScore = scores[topScorerId];
+  const topScorerId = max(toPairs(scores)) as UserId | undefined;
 
-  // const orderedScorers: Record<User, number> = Object.keys(scores).reduce((acc, userId) => {
-  //   const user = game?.users[userId as UserId];
-  //   if (!user) return acc;
-  //   return { ...acc, [user]: scores[userId as UserId] };
-  // }, {});
+  const topScorer = topScorerId ? game?.users[topScorerId] : undefined;
+  const topScore = topScorerId ? scores[topScorerId] : 0;
+  const sortedScorers = sortBy(toPairs(scores), ([, score]) => score).reverse();
 
-
+  const isGameOver = totalTeamScore < target;
 
   return {
     currentRound,
@@ -50,8 +47,9 @@ export const flowGameHelpersAtom = atom((get) => {
     totalTeamScore,
     scores,
     startTime,
-    // topScorer,
-    // topScore,
-    // orderedScorers
+    topScorer,
+    topScore,
+    sortedScorers,
+    isGameOver,
   };
 });
