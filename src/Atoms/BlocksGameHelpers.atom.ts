@@ -48,7 +48,7 @@ export const blocksGameHelpersAtom = atom((get) => {
     (block) => currentRound.guess?.[block.x]?.[block.y]?.color === block.color,
   ).length;
 
-  const totalScore = game.rounds.reduce((acc, round) => acc + round.score, 0);
+  const totalScore = game?.rounds.reduce((acc, round) => acc + round.score, 0);
 
   console.log({ answers: answer, splitAnswers: splitAnswer, userArrayWithoutGuesser, usersWithoutGuesser, correctAnswers });
 
