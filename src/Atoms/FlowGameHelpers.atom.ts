@@ -23,6 +23,7 @@ export const flowGameHelpersAtom = atom((get) => {
   const target = currentRound?.target ?? 0;
   const totalTeamScore = currentRound?.totalScore ?? 0;
   const scores: Record<UserId, number> = currentRound?.scores ?? {};
+  const startTime = currentRound?.startTime ?? 0;
   // const topScorerId: UserId = (Object.keys(scores) as UserId[]).reduce((a, b) => (scores[a] > scores[b] ? a : b));
   // const topScorer = game?.users[topScorerId];
   // const topScore = scores[topScorerId];
@@ -48,6 +49,7 @@ export const flowGameHelpersAtom = atom((get) => {
     target,
     totalTeamScore,
     scores,
+    startTime,
     // topScorer,
     // topScore,
     // orderedScorers

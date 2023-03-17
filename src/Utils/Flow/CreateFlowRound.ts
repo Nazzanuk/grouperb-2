@@ -33,8 +33,8 @@ export const createFlowRound = (payload: StartFlowRoundPayload): FlowGame => {
 
 const genSequence = (amount: number) =>
   times(amount, (i) => ({
-    delay: i - (0.2 * i),
+    delay: random(i - 1, i) + 1 - random(0, 0.2 * i),
     index: i,
-    speed: random(2, 3 + i/3),
+    speed: random(2, 3 + i / 3),
     color: sample(['orange']),
   })) as Boop[];

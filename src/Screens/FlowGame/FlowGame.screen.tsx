@@ -32,13 +32,13 @@ import styles from './FlowGame.screen.module.css';
 
 export function FlowGameScreen() {
   const { query } = useRouter();
-  const { startGame, leaveGame, updatePoints } = useFlowGame();
+  const { startGame, leaveGame, updatePoints, timeRemaining } = useFlowGame();
 
   const [animations, setAnimated] = useSpring(() => ({ myTotal: 0, totalTeamScore: 0 }));
 
   const game = useAtomValue(flowGameAtom);
   const { currentRound, currentRoundIndex, isHost, isObserver, status, userArray } = useAtomValue(flowGameHelpersAtom);
-  const { usersWithoutMe, sequence, lanes, target, totalTeamScore } = useAtomValue(flowGameHelpersAtom);
+  const { usersWithoutMe, sequence, lanes, target, totalTeamScore, startTime } = useAtomValue(flowGameHelpersAtom);
 
   console.log({ game, status });
 
@@ -78,9 +78,33 @@ export function FlowGameScreen() {
             </>
           )}
 
+          {status === 'results' && (
+            <>
+              <div className="label">Round {currentRoundIndex}</div>
+              {/* <div className="label">Sequence {sequence.length}</div> */}
+
+              <div className={styles.scoreGrid}>
+                <div className={styles.scoreLabel}>My score</div>
+                <div className={styles.scoreLabel}>Team score</div>
+                <div className={styles.scoreLabel}>Target</div>
+
+                <animated.div className={styles.myScore}>
+                  {to(animations.myTotal, (value) => Math.round(value))}
+                </animated.div>
+
+                <animated.div className={styles.total}>
+                  {to(animations.totalTeamScore, (value) => Math.round(value))}
+                </animated.div>
+
+                <div className={styles.target}>{target}</div>
+              </div>
+            </>
+          )}
+
           {status === 'playing' && (
             <>
               <div className="label">Round {currentRoundIndex}</div>
+              <div className="label">Time remaining {timeRemaining}s</div>
               {/* <div className="label">Sequence {sequence.length}</div> */}
 
               <div className={styles.scoreGrid}>
@@ -116,11 +140,15 @@ export function FlowGameScreen() {
                   </div>
                 ))}
               </div>
-
-              <div className="button" data-variant="orange" onClick={startGame}>
-                Start round
-              </div>
             </>
+          )}
+
+          {status === 'results' && (
+            <div className={styles.buttons}>
+              <div className="button" data-variant="orange" onClick={startGame}>
+                Next round
+              </div>
+            </div>
           )}
 
           {status === 'lobby' && (

@@ -6,6 +6,6 @@ type Override<What, With> = Omit<What, keyof With> & With
 export type FlowGame = Override<Game,{
   type: 'flow';
   rounds: FlowRound[];
-  status: 'lobby' | 'playing' | 'results';
+  status: 'lobby' | 'playing' | 'results' ;
 }>;
 

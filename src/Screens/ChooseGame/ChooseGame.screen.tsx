@@ -51,16 +51,16 @@ export const ChooseGameScreen: FC = () => {
             <div className={styles.subtitle}>A shape-shifting team game</div>
           </div>
 
-          <div className={styles.game} onClick={hostGame('charlatan')}>
-            <div className={styles.background} style={{ backgroundImage: `url('/img/charlatan-1.png')` }} />
-            <div className={styles.title}>Charlatan (Alpha)</div>
-            <div className={styles.subtitle}>A game of big bluffing</div>
-          </div>
-
           <div className={styles.game} onClick={hostGame('flow')}>
             <div className={styles.background} style={{ backgroundImage: `url('/img/blocks-1.png')` }} />
             <div className={styles.title}>Flow (Alpha)</div>
             <div className={styles.subtitle}>A game of timing</div>
+          </div>
+
+          <div className={styles.game} onClick={hostGame('charlatan')}>
+            <div className={styles.background} style={{ backgroundImage: `url('/img/charlatan-1.png')` }} />
+            <div className={styles.title}>Charlatan (Alpha)</div>
+            <div className={styles.subtitle}>A game of big bluffing</div>
           </div>
         </div>
       </div>
