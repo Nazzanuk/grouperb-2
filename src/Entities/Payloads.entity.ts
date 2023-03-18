@@ -1,3 +1,4 @@
+import { Gem, GemCard } from 'Entities/GemRushRound.entity';
 import { User } from 'Entities/User.entity';
 import { UserId } from 'Entities/UserId.entity';
 
@@ -165,6 +166,26 @@ export type NewBlocksGamePayload = {
   userId: UserId;
 };
 
+export type CreateGemRushRoundPayload = {
+  action: 'createGemRushRound';
+  gameId: string;
+  userId: UserId;
+};
+
+export type SelectGemRushCardPayload = {
+  action: 'selectGemRushCard';
+  gameId: string;
+  userId: UserId;
+  card: GemCard;
+};
+
+export type SelectGemRushGemPayload = {
+  action: 'selectGemRushGem';
+  gameId: string;
+  userId: UserId;
+  gem: Gem;
+};
+
 export type Payload =
   | HostGamePayload
   | StartDefuseGamePayload
@@ -192,4 +213,7 @@ export type Payload =
   | EndBlocksRoundPayload
   | NewBlocksGamePayload
   | AddBlocksScorePayload
+  | CreateGemRushRoundPayload
+  | SelectGemRushCardPayload
+  | SelectGemRushGemPayload
   | LeaveGamePayload;

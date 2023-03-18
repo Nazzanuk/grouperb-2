@@ -5,6 +5,7 @@ import { createBlocksGame } from 'Utils/Blocks/CreateBlocksGame';
 import { createCharlatanGame } from 'Utils/Charlatan/CreateCharlatanGame';
 import { createDefuseGame } from 'Utils/Defuse/CreateDefuseGame';
 import { createFlowGame } from 'Utils/Flow/CreateFlowGame';
+import { createGemRushGame } from 'Utils/GemRush/CreateGemRushGame';
 import { createVoteGame } from 'Utils/Vote/CreateVoteGame';
 
 export const addServerGame = (hostGamePayload: HostGamePayload) => {
@@ -38,6 +39,13 @@ export const addServerGame = (hostGamePayload: HostGamePayload) => {
 
   if (hostGamePayload.type === 'flow') {
     const blocksGame = createFlowGame({ host: hostGamePayload.user });
+    ServerGames[blocksGame.id] = blocksGame;
+
+    return blocksGame;
+  }
+
+  if (hostGamePayload.type === 'gemRush') {
+    const blocksGame = createGemRushGame({ host: hostGamePayload.user });
     ServerGames[blocksGame.id] = blocksGame;
 
     return blocksGame;

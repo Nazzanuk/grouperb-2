@@ -117,6 +117,7 @@ export const initWebSocketAtom = atom<GameWs, User>(
         if (data.game.type === 'charlatan') router?.replace(`/charlatan-game/${data.game.id}`);
         if (data.game.type === 'blocks') router?.replace(`/blocks-game/${data.game.id}`);
         if (data.game.type === 'flow') router?.replace(`/flow-game/${data.game.id}`);
+        if (data.game.type === 'gemRush') router?.replace(`/gem-rush-game/${data.game.id}`);
         console.log('game', data.game.id);
       }
     };
