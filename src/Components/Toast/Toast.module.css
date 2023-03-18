@@ -49,5 +49,6 @@
     /* transform: translateY(calc(50px)); */
     /* margin-top: -500px; */
     opacity: 0;
+    pointer-events: none;
   }
 }

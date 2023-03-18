@@ -18,7 +18,7 @@ const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 export const HomeScreen: FC = () => {
   const user = useAtomValue(userAtom);
-  const { push } = useRouter();
+  const { push, asPath } = useRouter();
   const [code, setCode] = useAtom(gameCodeAtom);
 
   const handleKeyPress = (number: number | 'delete' | 'clear') => {
@@ -30,6 +30,10 @@ export const HomeScreen: FC = () => {
     if (!user.username) push('/select-user');
   }, []);
 
+  useEffect(() => {
+    setCode('');
+  }, [asPath]);
+
   // Define an array of numbers for the keys
 
   return (
@@ -38,7 +42,7 @@ export const HomeScreen: FC = () => {
         <div className="darkScreenOverlay" />
 
         <DynamicBackground floaterCount={20} />
-        
+
         <div className="darkScreenContent">
           <div className="label">Enter game code</div>
 

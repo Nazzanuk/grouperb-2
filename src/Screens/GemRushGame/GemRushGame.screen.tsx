@@ -1,10 +1,12 @@
-import { useAtomValue } from 'jotai';
+import { useEffect } from 'react';
+
+import { useAtomValue, useSetAtom } from 'jotai';
 import capitalize from 'lodash/capitalize';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 
 import { gemRushGameAtom } from 'Atoms/GemRushGame.atom';
 import { gemRushGameHelpersAtom } from 'Atoms/GemRushGameHelpers.atom';
+import { showScoreAtom } from 'Atoms/ShowScore.atom';
 import { DynamicBackground } from 'Components/DynamicBackground/DynamicBackground';
 import { InfoOverlay } from 'Components/InfoOverlay/InfoOverlay';
 import { LoadingGame } from 'Components/LoadingGame/LoadingGame';
@@ -15,13 +17,25 @@ import { WinnerBroadcast } from 'Components/WinnerBroadcast/WinnerBroadcast';
 import { useGemRushActions } from 'Screens/GemRushGame/useGemRushActions';
 
 import styles from './GemRushGame.screen.module.css';
+import mapValues from 'lodash/mapValues';
+import map from 'lodash/map';
+import { UserId } from 'Entities/UserId.entity';
 
 export function GemRushGameScreen() {
   const game = useAtomValue(gemRushGameAtom);
   const { status, userArray, isHost, myCards, mySelectedCard, isMySelectedCard } = useAtomValue(gemRushGameHelpersAtom);
   const { gems, allMyCardsMatch, somebodyHasGem, isGemSelected, myGem } = useAtomValue(gemRushGameHelpersAtom);
-  const { myRoundPoints, currentRoundIndex, canChooseGem } = useAtomValue(gemRushGameHelpersAtom);
+  const { myRoundPoints, currentRoundIndex, canChooseGem, currentRound } = useAtomValue(gemRushGameHelpersAtom);
   const { leaveGame, startRound, selectCard, selectGem } = useGemRushActions();
+
+  const setScore = useSetAtom(showScoreAtom);
+
+  useEffect(() => {
+    if (status !== 'playing') return;
+    if (!myGem?.points) return;
+
+    setScore(myGem?.points);
+  }, [myGem?.points]);
 
   if (!game) return <LoadingGame />;
 
@@ -45,17 +59,17 @@ export function GemRushGameScreen() {
             </>
           )}
 
-          {(status === 'playing' || status === 'results') && (
+          {status === 'playing' && (
             <>
+              <WinnerBroadcast text={`Round ${currentRoundIndex}`} duration={'2s'} bits={10} />
+
               <div className="label">Round {currentRoundIndex}</div>
               <div className={styles.displayArea} data-alert={canChooseGem}>
                 <div className={styles.displayText}>
                   {!canChooseGem && (
                     <>{mySelectedCard ? `${capitalize(mySelectedCard.color)} card selected` : 'Select a card'}</>
                   )}
-                  {canChooseGem && (
-                    <>Grab a gem!</>
-                  )}
+                  {canChooseGem && <>Grab a gem!</>}
                 </div>
               </div>
 
@@ -73,12 +87,7 @@ export function GemRushGameScreen() {
                   </div>
                 ))}
               </div>
-            </>
-          )}
 
-          {status === 'playing' && (
-            <>
-              <WinnerBroadcast text={`Round ${currentRoundIndex}`} duration={'3s'} bits={10} />
               <div className={styles.cards}>
                 {myCards.map((card, index) => (
                   <div
@@ -95,7 +104,20 @@ export function GemRushGameScreen() {
 
           {status === 'results' && (
             <>
-              <WinnerBroadcast text={`Round over!`} subText={`+${myRoundPoints} points!`} duration={'4s'} bits={10} />
+            <WinnerBroadcast text={`Round over!`} subText={`+${myRoundPoints} points!`} duration={'4s'} bits={10} />
+              <div className="label">Round {currentRoundIndex} results</div>
+              
+              <div className="table">
+                <div className="cell w50 heading">Player</div>
+                <div className="cell heading">Total points</div>
+                {map(game.points, (points: number, userId: UserId) => (
+                  <>
+                    <div className="cell w50">{game.users[userId].username}</div>
+                    <div className="cell big">{points}</div>
+                  </>
+                ))}
+              </div>
+
               <div className={styles.buttons}>
                 <div className="button" data-variant="orange" onClick={startRound}>
                   Next round

@@ -59,7 +59,8 @@ export const ChooseGameScreen: FC = () => {
 
           <div className={styles.game} onClick={hostGame('gemRush')}>
             <div className={styles.background} style={{ backgroundImage: `url('/img/gems-1.jpeg')` }} />
-            <div className={styles.title}>Gem Rush (Alpha)</div>
+            <div className={styles.title}>Gem Rush
+            </div>
             <div className={styles.subtitle}>The great gem scramble</div>
           </div>
 

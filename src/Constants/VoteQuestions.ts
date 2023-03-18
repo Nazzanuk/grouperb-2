@@ -247,7 +247,7 @@ const VOTE_QUESTIONS = [
   'has a secret ritual before every performance',
 
   'would happily attend their own funeral',
-  'believes they were a villain in a past life',
+  'believes they are the villain',
   'considers a Ouija board a party game',
   'could survive a horror movie with their sarcasm alone',
 
@@ -262,10 +262,8 @@ const VOTE_QUESTIONS = [
   'would use a time machine to procrastinate more efficiently',
   'considers their morning coffee as a personality trait',
 
-  'has a hidden talent for underwater basket weaving',
   'thinks sarcasm should be an Olympic sport',
-  'considers their life a series of unfortunate naps',
-  'believes they were a cat in a past life, hence the attitude',
+  'believes was a cat in a past life',
   'thinks Mondays should be considered a crime against humanity',
 
   'would want the ability to teleport, but only to avoid small talk',
@@ -290,7 +288,6 @@ const VOTE_QUESTIONS = [
   'believes they could create a new language using only emojis',
 
   `thinks they have a superpower but won't tell anyone what it is`,
-  `always breaks into spontaneous dance in public`,
   `creates elaborate sandcastles in their living room`,
   `writes love letters to their favorite food`,
   `thinks they are a long-lost member of royalty`,
