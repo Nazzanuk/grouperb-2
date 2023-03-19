@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { Bebas_Neue, Teko, Share_Tech_Mono } from '@next/font/google';
+import { Bebas_Neue, Teko, Share_Tech_Mono, Noto_Color_Emoji, Noto_Emoji } from '@next/font/google';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
@@ -43,6 +43,16 @@ const teko = Teko({
   weight: ['300', '400'],
   variable: '--teko',
   subsets: ['latin'],
+});
+
+const notoEmoji = Noto_Emoji({
+  weight: ['300', '400'],
+  variable: '--notoEmoji',
+});
+
+const notoColorEmoji = Noto_Color_Emoji({
+  weight: ['400'],
+  variable: '--notoColorEmoji',
 });
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -118,7 +128,7 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
 
       <NoSSR>
-        <main className={`app ${bebasNeue.variable} ${teko.variable} ${shareTechMono.variable}`}>
+        <main className={`app ${bebasNeue.variable} ${teko.variable} ${shareTechMono.variable} ${notoEmoji.variable} ${notoColorEmoji.variable}`}>
           <Toasts />
 
           <Sidebar />

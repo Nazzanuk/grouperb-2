@@ -26,6 +26,7 @@ import { startVoteRound } from 'Utils/Vote/StartVoteRound';
 import { blocksActions } from 'Server/BlocksActions';
 import { flowActions } from 'Server/FlowActions';
 import { gemRushActions } from 'Server/GemRushActions';
+import { emojiTaleActions } from 'Server/EmojiTaleActions';
 
 function heartbeat() {
   this.isAlive = true;
@@ -97,6 +98,7 @@ const SocketHandler = (req: NextApiRequest, res: NextApiResponse<any>) => {
         charlatanActions({ client, data, wss });
         flowActions({ client, data, wss });
         gemRushActions({ client, data, wss });
+        emojiTaleActions({ client, data, wss });
 
         if (data.action === 'hostGame') {
           const game = addServerGame(data);

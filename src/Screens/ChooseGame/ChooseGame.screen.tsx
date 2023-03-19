@@ -69,6 +69,12 @@ export const ChooseGameScreen: FC = () => {
             <div className={styles.title}>Charlatan (Alpha)</div>
             <div className={styles.subtitle}>A game of big bluffing</div>
           </div>
+
+          <div className={styles.game} onClick={hostGame('emojiTale')}>
+            <div className={styles.background} style={{ backgroundImage: `url('/img/charlatan-1.png')` }} />
+            <div className={styles.title}>Emoji Tale (Alpha)</div>
+            <div className={styles.subtitle}>Test your storytelling skills</div>
+          </div>
         </div>
       </div>
     </>

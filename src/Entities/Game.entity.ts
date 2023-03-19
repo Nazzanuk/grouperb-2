@@ -2,7 +2,7 @@ import { User } from 'Entities/User.entity';
 import { UserId } from 'Entities/UserId.entity';
 
 export type Game = {
-  type: 'vote' | 'defuse' | 'charlatan' | 'blocks' | 'flow' | 'gemRush';
+  type: 'vote' | 'defuse' | 'charlatan' | 'blocks' | 'flow' | 'gemRush' | 'emojiTale';
   id: string;
   users: { [key: UserId]: User };
   hostId: UserId;

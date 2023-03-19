@@ -186,7 +186,15 @@ export type SelectGemRushGemPayload = {
   gem: Gem;
 };
 
+export type CreateEmojiTaleRoundPayload = {
+  action: 'createEmojiTaleRound';
+  gameId: string;
+  userId: UserId;
+  gem: Gem;
+};
+
 export type Payload =
+  | CreateEmojiTaleRoundPayload
   | HostGamePayload
   | StartDefuseGamePayload
   | StartDefuseRoundPayload

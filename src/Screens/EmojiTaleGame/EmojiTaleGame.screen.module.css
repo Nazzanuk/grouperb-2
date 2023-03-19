@@ -1,0 +1,102 @@
+.gap {
+  margin: auto;
+}
+
+.answer {
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 10px;
+
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  
+  justify-content: center;
+  align-items: center;
+  font-size: 7vw;
+  height: 13vw;
+  gap:1vw;
+}
+
+.answerEmoji {
+  font-family: var(--notoColorEmoji);
+  font-size: 6vw;
+  text-align: center;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.1s;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0);
+
+  &:active {
+    transform: scale(0.9);
+    background-color: rgba(255, 255, 255, 0.4);
+  }
+}
+
+.emojiGridBox {
+  padding: 10px;
+  margin: 0 -20px -20px;
+  width:100vw;
+  background-color: rgba(0, 0, 0, 0.6);
+
+}
+
+.emojiGrid {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+
+  max-height: 25vh;
+
+  /* border-radius: 10px; */
+  backdrop-filter: blur(10px);
+  overflow: scroll;
+  scroll-behavior: smooth;
+
+
+
+  &::-webkit-scrollbar {
+    width: 2px;
+    /* background-color: #ffffff; */
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background-color: #fff;
+    border-radius: 10px;
+  }
+}
+
+.gridEmoji {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  width: 30px;
+  font-family: var(--notoColorEmoji);
+  text-align: center;
+  transition: 0.1s;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0);
+
+  &:active {
+    transform: scale(0.9);
+    background-color: rgba(255, 255, 255, 0.4);
+  }
+}
+
+.story {
+  font-size: 15px;
+  font-weight: 100;
+  text-transform: none;
+  line-height: 1.1;
+
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 10px 15px;
+}
