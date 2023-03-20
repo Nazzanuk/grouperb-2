@@ -66,7 +66,7 @@ export function EmojiTaleGameScreen() {
 
           {status === 'playing' && (
             <>
-              {/* <div className="label">Round {currentRoundIndex}</div> */}
+              <div className="label">Round {currentRoundIndex}</div>
 
               <div className="label">Story</div>
               {/* <div className="label">Match: {compareEmojis(toArray(tale?.solution), answer)}</div> */}

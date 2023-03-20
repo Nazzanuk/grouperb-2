@@ -11,12 +11,12 @@
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-  
+
   justify-content: center;
   align-items: center;
   font-size: 7vw;
   height: 13vw;
-  gap:1vw;
+  gap: 1vw;
 }
 
 .answerEmoji {
@@ -40,9 +40,8 @@
 .emojiGridBox {
   padding: 10px;
   margin: 0 -20px -20px;
-  width:100vw;
+  width: 100vw;
   background-color: rgba(0, 0, 0, 0.6);
-
 }
 
 .emojiGrid {
@@ -58,13 +57,11 @@
   overflow: scroll;
   scroll-behavior: smooth;
 
-
-
   &::-webkit-scrollbar {
     width: 2px;
     /* background-color: #ffffff; */
   }
-  
+
   &::-webkit-scrollbar-thumb {
     background-color: #fff;
     border-radius: 10px;
@@ -75,13 +72,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 30px;
-  width: 30px;
+  height: 33px;
+  width: 33px;
   font-family: var(--notoColorEmoji);
   text-align: center;
   transition: 0.1s;
   border-radius: 5px;
   background-color: rgba(255, 255, 255, 0);
+
+  font-size: 30px;
 
   &:active {
     transform: scale(0.9);
@@ -90,7 +89,7 @@
 }
 
 .story {
-  font-size: 15px;
+  font-size: 20px;
   font-weight: 100;
   text-transform: none;
   line-height: 1.1;
