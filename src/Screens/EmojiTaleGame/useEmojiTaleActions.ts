@@ -12,6 +12,7 @@ import { wsAtom } from 'Atoms/Ws.atom';
 import { useLoadGame } from 'Hooks/useLoadGame';
 import { useUpdateGame } from 'Hooks/useUpdateGame';
 import { Gem, GemCard } from 'Entities/EmojiTaleRound.entity';
+import { UserId } from 'Entities/UserId.entity';
 
 let i: string | number | NodeJS.Timeout | undefined;
 
@@ -36,13 +37,15 @@ export const useEmojiTaleActions = () => {
   const leaveGame = () => send({ action: 'leaveGame', ...baseActionProps });
   const restartGame = () => send({ action: 'restartEmojiTaleGame', ...baseActionProps });
   const startRound = () => send({ action: 'createEmojiTaleRound', ...baseActionProps });
-  const selectCard = (card: GemCard) => send({ action: 'selectEmojiTaleCard', card, ...baseActionProps });
-  const selectGem = (gem: Gem) => send({ action: 'selectEmojiTaleGem', gem, ...baseActionProps });
+  const updateAnswer = (answer: string[]) => send({ action: 'updateEmojiTaleAnswer', ...baseActionProps, answer });
+  const vote = (voteId: UserId) => send({ action: 'voteEmojiTaleAnswer', ...baseActionProps, voteId });
+  const timeUp = () => send({ action: 'endEmojiTaleGuessing', ...baseActionProps });
 
   return {
     leaveGame,
     startRound,
-    selectCard,
-    selectGem,
+    updateAnswer,
+    vote,
+    timeUp,
   };
 };

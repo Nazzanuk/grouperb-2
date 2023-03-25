@@ -23,6 +23,7 @@ export const emojiTaleGameHelpersAtom = atom((get) => {
   const usersWithoutMe = userArray.filter((u) => u.id !== user.id);
   const story = currentRound?.tale.story;
   const tale = currentRound?.tale;
+  const myAnswer = currentRound?.userSolutions[user.id] ?? [];
 
   return {
     currentRound,
@@ -34,5 +35,7 @@ export const emojiTaleGameHelpersAtom = atom((get) => {
     isObserver,
     story,
     tale,
+    myAnswer,
+    user,
   };
 });

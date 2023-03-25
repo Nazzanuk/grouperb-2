@@ -277,8 +277,18 @@ particle {
   overflow: hidden;
 }
 
+.row {
+  display: flex;
+  flex-direction: row;
+  /* gap: 10px; */
+  width: 100%;
+}
+
 .cell {
   padding: 10px 20px;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
 
   &.heading {
     background: rgba(0, 0, 0, 0.2);
@@ -288,7 +298,16 @@ particle {
     font-size: 30px;
   }
 
+  &.small {
+    font-size: 16px;
+  }
+
   &.w50 {
     flex: 1 1 50%;
+  }
+
+
+  &.squashed {
+    padding: 5px 20px;
   }
 }

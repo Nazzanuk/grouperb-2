@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { useAtomValue, useSetAtom } from 'jotai';
 import capitalize from 'lodash/capitalize';
@@ -21,23 +21,44 @@ import styles from './EmojiTaleGame.screen.module.css';
 import toArray from 'lodash/toArray';
 import { compareEmojis } from 'Utils/EmojiTale/CompareEmojis';
 
+const useTimeSince = (startTime = 0) => {
+  const interval = useRef<any>(null);
+  const [time, setTime] = useState(0);
+
+  useEffect(() => {
+    interval.current = setInterval(() => {
+      setTime(new Date().getTime() - startTime);
+    }, 1000);
+
+    return () => clearInterval(interval.current);
+  }, [startTime]);
+
+  return { ms: time, s: Math.floor(time / 1000), m: Math.floor(time / 1000 / 60) };
+};
+
 export function EmojiTaleGameScreen() {
   const game = useAtomValue(emojiTaleGameAtom);
-  const { status, userArray, isHost, currentRoundIndex, story, tale } = useAtomValue(emojiTaleGameHelpersAtom);
-  const { leaveGame, startRound, selectCard, selectGem } = useEmojiTaleActions();
+  const { status, userArray, isHost, currentRoundIndex, story } = useAtomValue(emojiTaleGameHelpersAtom);
+  const { myAnswer, currentRound, user } = useAtomValue(emojiTaleGameHelpersAtom);
+  const { leaveGame, startRound, updateAnswer, timeUp } = useEmojiTaleActions();
 
-  const [answer, setAnswer] = useState<string[]>([]);
+  const { s: timeSince } = useTimeSince(currentRound?.startTime);
+  const timeRemaining = 30 - timeSince;
+
+  useEffect(() => {
+    if (game?.status !== 'playing') return;
+    if (timeRemaining <= 0) timeUp();
+  }, [timeRemaining > 0]);
 
   const addToAnswer = (emoji: string) => {
-    if (answer.length < 10) {
-      setAnswer([...answer, emoji]);
-    }
+    if (myAnswer.includes(emoji)) return;
+    if (myAnswer.length < 10) updateAnswer([...myAnswer, emoji]);
   };
 
   const removeFromAnswer = (emojiIndex: number) => {
-    const newAnswer = [...answer];
+    const newAnswer = [...myAnswer];
     newAnswer.splice(emojiIndex, 1);
-    setAnswer(newAnswer);
+    updateAnswer(newAnswer);
   };
 
   const setScore = useSetAtom(showScoreAtom);
@@ -64,8 +85,64 @@ export function EmojiTaleGameScreen() {
             </>
           )}
 
+          {status === 'results' && (
+            <>
+              <div className="label">Round {currentRoundIndex}</div>
+
+              <div className="label">Story</div>
+              <div className={styles.story}>{story!.replace(/\n/g, '<br />')}</div>
+
+              {currentRound?.winnerId && (
+                <>
+                  <div className="label">
+                    Winning answer ({game.users[currentRound?.winnerId].username}: {' '}
+                    +{currentRound.userPoints[currentRound?.winnerId]} points)
+                  </div>
+                  <div className={styles.answer}>
+                    {currentRound?.userSolutions[currentRound.winnerId].map((emoji, i) => (
+                      <div key={emoji + i} data-key={emoji} className={styles.answerEmoji}>
+                        {emoji}
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+
+              <div className="label">Your answer</div>
+              <div className={styles.answer}>
+                {myAnswer.map((emoji, i) => (
+                  <div key={emoji + i} data-key={emoji} className={styles.answerEmoji}>
+                    {emoji}
+                  </div>
+                ))}
+              </div>
+              <div className="label">Your points</div>
+              <div className="table">
+                <div className="cell squashed w50 small">Accuracy</div>
+                <div className="cell squashed">
+                  +{compareEmojis(toArray(currentRound?.tale.solution), currentRound?.userSolutions[user.id] ?? [])}
+                </div>
+                <div className="cell squashed w50 small">Votes</div>
+                <div className="cell squashed">
+                  +{Object.values(currentRound?.userVotes ?? {}).filter((v) => v === user.id).length * 10}
+                </div>
+              </div>
+
+              {/* <div className="label">Leaderboard</div>
+              <div className="table">
+                {userArray.map((user) => (
+                  <div className="row" key={user.id}>
+                    <div className="cell  w50">{user.username}</div>
+                    <div className="cell big">{currentRound?.userPoints[user.id]}</div>
+                  </div>
+                ))}
+              </div> */}
+            </>
+          )}
+
           {status === 'playing' && (
             <>
+              <div className="label">Time left: {timeRemaining}</div>
               <div className="label">Round {currentRoundIndex}</div>
 
               <div className="label">Story</div>
@@ -74,8 +151,8 @@ export function EmojiTaleGameScreen() {
 
               <div className={styles.gap} />
               <div className="label">Your answer</div>
-              <div className={styles.answer}>
-                {answer.map((emoji, i) => (
+              <div className={styles.answer} data-is-complete={myAnswer.length === 10}>
+                {myAnswer.map((emoji, i) => (
                   <div
                     key={emoji + i}
                     data-key={emoji}
@@ -90,9 +167,21 @@ export function EmojiTaleGameScreen() {
               <div className={styles.gap} />
               <div className="label">Emojis</div>
               <div className={styles.emojiGridBox}>
-                <div className={styles.emojiGrid}>
+                {/* <div className={styles.emojiDoneBox} data-is-complete={myAnswer.length === 10}>
+                  <div className="buttons">
+                    <div className="button" data-variant="orange" onClick={startRound}>
+                      Submit
+                    </div>
+                  </div>
+                </div> */}
+                <div className={styles.emojiGrid} data-is-complete={myAnswer.length === 10}>
                   {[...orderedEmojis].reverse().map((emoji, i) => (
-                    <div key={emoji + i} data-key={emoji} className={styles.gridEmoji} onClick={() => addToAnswer(emoji)}>
+                    <div
+                      key={emoji + i}
+                      data-key={emoji}
+                      className={styles.gridEmoji}
+                      onClick={() => addToAnswer(emoji)}
+                    >
                       {emoji}
                     </div>
                   ))}
@@ -118,6 +207,14 @@ export function EmojiTaleGameScreen() {
               <Link href="/home" className="button" onClick={leaveGame} data-variant="light">
                 Leave game
               </Link>
+            </div>
+          )}
+
+          {status === 'results' && (
+            <div className="buttons">
+              <div className="button" data-variant="orange" onClick={startRound}>
+                Next round
+              </div>
             </div>
           )}
         </div>

@@ -190,10 +190,32 @@ export type CreateEmojiTaleRoundPayload = {
   action: 'createEmojiTaleRound';
   gameId: string;
   userId: UserId;
-  gem: Gem;
+};
+
+export type VoteEmojiTaleAnswerPayload = {
+  action: 'voteEmojiTaleAnswer';
+  gameId: string;
+  userId: UserId;
+  voteId: string;
+};
+
+export type UpdateEmojiTaleAnswerPayload = {
+  action: 'updateEmojiTaleAnswer';
+  gameId: string;
+  userId: UserId;
+  answer: string[];
+};
+
+export type EndEmojiTaleGuessingPayload = {
+  action: 'endEmojiTaleGuessing';
+  gameId: string;
+  userId: UserId;
 };
 
 export type Payload =
+  | EndEmojiTaleGuessingPayload
+  | VoteEmojiTaleAnswerPayload
+  | UpdateEmojiTaleAnswerPayload
   | CreateEmojiTaleRoundPayload
   | HostGamePayload
   | StartDefuseGamePayload

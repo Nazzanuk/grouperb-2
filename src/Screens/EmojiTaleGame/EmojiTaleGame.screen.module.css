@@ -17,6 +17,11 @@
   font-size: 7vw;
   height: 13vw;
   gap: 1vw;
+  transition: 0.4s;
+
+  &[data-is-complete='true'] {
+    background: rgba(255, 255, 255, 0.9);
+  }
 }
 
 .answerEmoji {
@@ -44,11 +49,28 @@
   background-color: rgba(0, 0, 0, 0.6);
 }
 
+.emojiDoneBox {
+  position:absolute;
+  z-index: 10;
+  width: 100%;
+  opacity: 0;
+  transition: .4s;
+  pointer-events: none;
+
+
+  &[data-is-complete='true'] {
+    opacity: 1;
+    pointer-events: all;
+  }
+}
+
 .emojiGrid {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: center;
+  z-index: 9;
+  position: relative;
 
   max-height: 25vh;
 
@@ -56,6 +78,7 @@
   backdrop-filter: blur(10px);
   overflow: scroll;
   scroll-behavior: smooth;
+  transition: .4s;
 
   &::-webkit-scrollbar {
     width: 2px;
@@ -65,6 +88,10 @@
   &::-webkit-scrollbar-thumb {
     background-color: #fff;
     border-radius: 10px;
+  }
+
+  &[data-is-complete='true'] {
+    opacity: 0;
   }
 }
 

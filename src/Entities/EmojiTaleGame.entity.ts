@@ -8,7 +8,7 @@ type Override<What, With> = Omit<What, keyof With> & With
 export type EmojiTaleGame = Override<Game,{
   type: 'emojiTale';
   rounds: EmojiTaleRound[];
-  status: 'lobby' | 'playing'| 'results';
+  status: 'lobby' | 'playing'| 'voting' | 'results';
   points?: Record<UserId, number>;
 }>;
 

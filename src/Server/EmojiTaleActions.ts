@@ -1,16 +1,19 @@
-
 import WebSocket, { WebSocketServer } from 'ws';
 
+import { EmojiTaleGame } from 'Entities/EmojiTaleGame.entity';
 import {
   CreateEmojiTaleRoundPayload,
+  EndEmojiTaleGuessingPayload,
   Payload,
-  SelectEmojiTaleCardPayload,
-  SelectEmojiTaleGemPayload,
+  UpdateEmojiTaleAnswerPayload,
+  VoteEmojiTaleAnswerPayload,
 } from 'Entities/Payloads.entity';
 
 import { updateClientGames } from 'Server/UpdateClientGames';
-import { EmojiTaleGame } from 'Entities/EmojiTaleGame.entity';
 import { createEmojiTaleRound } from 'Utils/EmojiTale/CreateEmojiTaleRound';
+import { endEmojiTaleGuessing } from 'Utils/EmojiTale/EndEmojiTaleGuessing';
+import { updateEmojiTaleAnswer } from 'Utils/EmojiTale/UpdateEmojiTaleAnswer';
+import { voteEmojiTaleAnswer } from 'Utils/EmojiTale/VoteEmojiTaleAnswer';
 
 type Actions = Payload['action'];
 
@@ -31,6 +34,21 @@ const actions: Partial<Record<Actions, (props: ActionProps) => EmojiTaleGame | u
   createEmojiTaleRound: ({ client, data, wss }) => {
     const game = createEmojiTaleRound(data as CreateEmojiTaleRoundPayload);
     update({ game, client, wss, alert: 'New round' });
+    return game;
+  },
+  updateEmojiTaleAnswer: ({ client, data, wss }) => {
+    const game = updateEmojiTaleAnswer(data as UpdateEmojiTaleAnswerPayload);
+    update({ game, client, wss });
+    return game;
+  },
+  voteEmojiTaleAnswer: ({ client, data, wss }) => {
+    const game = voteEmojiTaleAnswer(data as VoteEmojiTaleAnswerPayload);
+    update({ game, client, wss, alert: `${game.users[(data as VoteEmojiTaleAnswerPayload).userId]} voted` });
+    return game;
+  },
+  endEmojiTaleGuessing: ({ client, data, wss }) => {
+    const game = endEmojiTaleGuessing(data as EndEmojiTaleGuessingPayload);
+    update({ game, client, wss });
     return game;
   },
 };
