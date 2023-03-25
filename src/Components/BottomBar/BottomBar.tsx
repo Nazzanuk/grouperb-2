@@ -29,6 +29,7 @@ export const BottomBar: FC = () => {
   const isDefuseGame = asPath.includes('/defuse-game');
   const isChooseGame = asPath.includes('/choose-game');
   const isCharlatanGame = asPath.includes('/charlatan-game');
+  const isEmojiTaleGame = asPath.includes('/emoji-tale-game');
 
   const hostGame = () => {
     // send({ action: 'hostGame', type: 'vote', user });
@@ -116,6 +117,25 @@ export const BottomBar: FC = () => {
                 <div className={styles.icon} onClick={() => setShowBottomOverlay('charlatanGameOptions')}>
                   <i className="fas fa-cog"></i>
                 </div>
+              </div>
+            </>
+          )}
+
+          {isEmojiTaleGame && (
+            <>
+              <div className={styles.icons}>
+                <div className={styles.icon} onClick={() => setShowBottomOverlay('emojiTaleGameLeaderboard')}>
+                  <i className="fas fa-trophy"></i>
+                </div>
+                {/* <div className={styles.icon} onClick={() => setShowBottomOverlay('charlatanGameFavs')}>
+                  <i className="fas fa-star"></i>
+                </div> */}
+                <div className={styles.icon} onClick={() => setShowBottomOverlay('emojiTaleGameInfo')}>
+                  <i className="fas fa-info"></i>
+                </div>
+                {/* <div className={styles.icon} onClick={() => setShowBottomOverlay('charlatanGameOptions')}>
+                  <i className="fas fa-cog"></i>
+                </div> */}
               </div>
             </>
           )}

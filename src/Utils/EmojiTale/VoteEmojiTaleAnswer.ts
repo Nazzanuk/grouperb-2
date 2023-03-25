@@ -34,5 +34,8 @@ export const voteEmojiTaleAnswer = (payload: VoteEmojiTaleAnswerPayload): EmojiT
     return acc;
   }, userIds[0]) as UserId;
 
+
+  if (Object.values(currentRound.userVotes).length === userIds.length) game.status = 'results';
+
   return game;
 };

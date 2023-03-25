@@ -1,6 +1,6 @@
 type Emoji = string;
 
-export function compareEmojis(originalSet: Emoji[], userSet: Emoji[]): number {
+export function compareEmojis(originalSet: Emoji[] = [], userSet: Emoji[] = []): number {
   const maxLength = Math.max(originalSet.length, userSet.length);
   const minLength = Math.min(originalSet.length, userSet.length);
 

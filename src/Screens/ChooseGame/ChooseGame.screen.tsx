@@ -39,10 +39,10 @@ export const ChooseGameScreen: FC = () => {
             <div className={styles.subtitle}>What do they really think about you?</div>
           </div>
 
-          <div className={styles.game} onClick={hostGame('flow')}>
-            <div className={styles.background} style={{ backgroundImage: `url('/img/flow-2.jpg')` }} />
-            <div className={styles.title}>Flow</div>
-            <div className={styles.subtitle}>A game of timing</div>
+          <div className={styles.game} onClick={hostGame('emojiTale')}>
+            <div className={styles.background} style={{ backgroundImage: `url('/img/emoji.jpg')` }} />
+            <div className={styles.title}>Emoji Tale</div>
+            <div className={styles.subtitle}>Test your storytelling skills</div>
           </div>
 
           <div className={styles.game} onClick={hostGame('defuse')}>
@@ -59,21 +59,20 @@ export const ChooseGameScreen: FC = () => {
 
           <div className={styles.game} onClick={hostGame('gemRush')}>
             <div className={styles.background} style={{ backgroundImage: `url('/img/gems-1.jpeg')` }} />
-            <div className={styles.title}>Gem Rush
-            </div>
+            <div className={styles.title}>Gem Rush</div>
             <div className={styles.subtitle}>The great gem scramble</div>
+          </div>
+
+          <div className={styles.game} onClick={hostGame('flow')}>
+            <div className={styles.background} style={{ backgroundImage: `url('/img/flow-2.jpg')` }} />
+            <div className={styles.title}>Flow</div>
+            <div className={styles.subtitle}>A game of timing</div>
           </div>
 
           <div className={styles.game} onClick={hostGame('charlatan')}>
             <div className={styles.background} style={{ backgroundImage: `url('/img/charlatan-1.png')` }} />
             <div className={styles.title}>Charlatan (Alpha)</div>
             <div className={styles.subtitle}>A game of big bluffing</div>
-          </div>
-
-          <div className={styles.game} onClick={hostGame('emojiTale')}>
-            <div className={styles.background} style={{ backgroundImage: `url('/img/charlatan-1.png')` }} />
-            <div className={styles.title}>Emoji Tale (Alpha)</div>
-            <div className={styles.subtitle}>Test your storytelling skills</div>
           </div>
         </div>
       </div>

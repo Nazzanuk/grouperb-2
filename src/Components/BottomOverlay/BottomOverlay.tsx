@@ -9,6 +9,7 @@ import { CharlatanBottomOverlay } from 'Components/BottomOverlay/views/Charlatan
 import { VoteBottomOverlay } from 'Components/BottomOverlay/views/VoteBottomOverlay';
 
 import styles from './BottomOverlay.module.css';
+import { EmojiTaleBottomOverlay } from 'Components/BottomOverlay/views/EmojiTaleBottomOverlay';
 
 export const BottomOverlay: FC = () => {
   const { asPath } = useRouter();
@@ -32,6 +33,7 @@ export const BottomOverlay: FC = () => {
       <div className={styles.bottomOverlay} data-is-open={!!showBottomOverlay}>
         {game?.type === 'charlatan' && <CharlatanBottomOverlay />}
         {game?.type === 'vote' && <VoteBottomOverlay />}
+        {game?.type === 'emojiTale' && <EmojiTaleBottomOverlay />}
       </div>
     </>
   );

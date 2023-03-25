@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { useAtomValue, useSetAtom } from 'jotai';
 import capitalize from 'lodash/capitalize';
+import toArray from 'lodash/toArray';
 import Link from 'next/link';
 
 import { emojiTaleGameAtom } from 'Atoms/EmojiTaleGame.atom';
@@ -17,9 +18,9 @@ import { WinnerBroadcast } from 'Components/WinnerBroadcast/WinnerBroadcast';
 import { orderedEmojis } from 'Constants/EmojiTale.constants';
 import { useEmojiTaleActions } from 'Screens/EmojiTaleGame/useEmojiTaleActions';
 
-import styles from './EmojiTaleGame.screen.module.css';
-import toArray from 'lodash/toArray';
 import { compareEmojis } from 'Utils/EmojiTale/CompareEmojis';
+
+import styles from './EmojiTaleGame.screen.module.css';
 
 const useTimeSince = (startTime = 0) => {
   const interval = useRef<any>(null);
@@ -39,16 +40,18 @@ const useTimeSince = (startTime = 0) => {
 export function EmojiTaleGameScreen() {
   const game = useAtomValue(emojiTaleGameAtom);
   const { status, userArray, isHost, currentRoundIndex, story } = useAtomValue(emojiTaleGameHelpersAtom);
-  const { myAnswer, currentRound, user } = useAtomValue(emojiTaleGameHelpersAtom);
-  const { leaveGame, startRound, updateAnswer, timeUp } = useEmojiTaleActions();
+  const { myAnswer, currentRound, user, usersWithoutMe } = useAtomValue(emojiTaleGameHelpersAtom);
+  const { leaveGame, startRound, updateAnswer, timeUp, vote } = useEmojiTaleActions();
 
   const { s: timeSince } = useTimeSince(currentRound?.startTime);
-  const timeRemaining = 30 - timeSince;
+  const timeRemaining = 60 - timeSince;
+
+  console.log('emojiTaleGame', { game });
 
   useEffect(() => {
     if (game?.status !== 'playing') return;
     if (timeRemaining <= 0) timeUp();
-  }, [timeRemaining > 0]);
+  }, [timeRemaining < 0]);
 
   const addToAnswer = (emoji: string) => {
     if (myAnswer.includes(emoji)) return;
@@ -85,6 +88,32 @@ export function EmojiTaleGameScreen() {
             </>
           )}
 
+          {status === 'voting' && (
+            <>
+              <div className="label">Round {currentRoundIndex}</div>
+
+              <div className="label">Story</div>
+              <div className={styles.story}>{story!.replace(/\n/g, '<br />')}</div>
+
+              <div className="label">Select the best emoji rendition!</div>
+              {usersWithoutMe.map((mappedUser) => (
+                <>
+                  <div
+                    className={styles.answer}
+                    onClick={() => vote(mappedUser.id)}
+                    data-is-selected={mappedUser.id === currentRound?.userVotes[user.id]}
+                  >
+                    {currentRound?.userSolutions[mappedUser.id].map((emoji, i) => (
+                      <div key={emoji + i} data-key={emoji} className={styles.answerEmoji}>
+                        {emoji}
+                      </div>
+                    ))}
+                  </div>
+                </>
+              ))}
+            </>
+          )}
+
           {status === 'results' && (
             <>
               <div className="label">Round {currentRoundIndex}</div>
@@ -94,11 +123,19 @@ export function EmojiTaleGameScreen() {
 
               {currentRound?.winnerId && (
                 <>
+                  <WinnerBroadcast
+                    user={game.users[currentRound?.winnerId]}
+                    text={`${game.users[currentRound?.winnerId].username} wins!`}
+                    subText={`with ${currentRound.userPoints[currentRound?.winnerId]} points`}
+                    duration={'5s'}
+                    bits={50}
+                  />
+
                   <div className="label">
-                    Winning answer ({game.users[currentRound?.winnerId].username}: {' '}
-                    +{currentRound.userPoints[currentRound?.winnerId]} points)
+                    Winning answer ({game.users[currentRound?.winnerId].username}: +
+                    {currentRound.userPoints[currentRound?.winnerId]} points)
                   </div>
-                  <div className={styles.answer}>
+                  <div className={styles.answer} data-is-selected>
                     {currentRound?.userSolutions[currentRound.winnerId].map((emoji, i) => (
                       <div key={emoji + i} data-key={emoji} className={styles.answerEmoji}>
                         {emoji}
@@ -127,26 +164,16 @@ export function EmojiTaleGameScreen() {
                   +{Object.values(currentRound?.userVotes ?? {}).filter((v) => v === user.id).length * 10}
                 </div>
               </div>
-
-              {/* <div className="label">Leaderboard</div>
-              <div className="table">
-                {userArray.map((user) => (
-                  <div className="row" key={user.id}>
-                    <div className="cell  w50">{user.username}</div>
-                    <div className="cell big">{currentRound?.userPoints[user.id]}</div>
-                  </div>
-                ))}
-              </div> */}
             </>
           )}
 
           {status === 'playing' && (
             <>
+              <WinnerBroadcast text={`Round ${currentRoundIndex}`} duration={'1.5s'} bits={5} />
               <div className="label">Time left: {timeRemaining}</div>
               <div className="label">Round {currentRoundIndex}</div>
 
               <div className="label">Story</div>
-              {/* <div className="label">Match: {compareEmojis(toArray(tale?.solution), answer)}</div> */}
               <div className={styles.story}>{story!.replace(/\n/g, '<br />')}</div>
 
               <div className={styles.gap} />
@@ -193,10 +220,6 @@ export function EmojiTaleGameScreen() {
           {status === 'lobby' && (
             <div className="buttons">
               {!isHost && <div className={styles.blurb}>Waiting for host to start game...</div>}
-
-              {/* {!(userArray.length >= 2) && ( */}
-              <div className={styles.blurb}>At least 2 players are needed to start the game</div>
-              {/* )} */}
 
               {isHost && (
                 <div className="button" data-variant="orange" onClick={startRound}>

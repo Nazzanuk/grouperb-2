@@ -1,7 +1,8 @@
 import { atom } from 'jotai';
-import { times } from 'lodash';
+import mapValues from 'lodash/mapValues';
 import max from 'lodash/max';
 import sortBy from 'lodash/sortBy';
+import times from 'lodash/times';
 import toPairs from 'lodash/toPairs';
 import values from 'lodash/values';
 
@@ -24,6 +25,14 @@ export const emojiTaleGameHelpersAtom = atom((get) => {
   const story = currentRound?.tale.story;
   const tale = currentRound?.tale;
   const myAnswer = currentRound?.userSolutions[user.id] ?? [];
+  const userGameScores: Record<UserId, number> = {};
+  game?.rounds.forEach((round) => {
+    toPairs(round.userPoints).forEach(([userId, points]) => {
+      userGameScores[userId as UserId] = (userGameScores[userId as UserId] ?? 0) + points;
+    });
+  });
+
+  const usersSortedByScore = sortBy(userArray, (u) => userGameScores[u.id] ?? 0).reverse();
 
   return {
     currentRound,
@@ -37,5 +46,7 @@ export const emojiTaleGameHelpersAtom = atom((get) => {
     tale,
     myAnswer,
     user,
+    usersSortedByScore,
+    userGameScores,
   };
 });
