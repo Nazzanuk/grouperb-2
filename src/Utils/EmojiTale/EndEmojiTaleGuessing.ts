@@ -36,8 +36,9 @@ export const endEmojiTaleGuessing = (payload: EndEmojiTaleGuessingPayload): Emoj
   }, userIds[0]) as UserId;
 
   game.status = 'voting';
+  game.status = 'results'; //temp
 
-  // if (userIds.length < 3) game.status = 'results';
+  if (userIds.length < 3) game.status = 'results';
 
   return game;
 };
