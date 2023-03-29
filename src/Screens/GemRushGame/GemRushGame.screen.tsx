@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 
 import { useAtomValue, useSetAtom } from 'jotai';
 import capitalize from 'lodash/capitalize';
+import map from 'lodash/map';
 import Link from 'next/link';
 
 import { gemRushGameAtom } from 'Atoms/GemRushGame.atom';
@@ -14,12 +15,10 @@ import { PlayerList } from 'Components/PlayerList/PlayerList';
 import { ShowScore } from 'Components/ShowScore/ShowScore';
 import { WinnerBroadcast } from 'Components/WinnerBroadcast/WinnerBroadcast';
 
+import { UserId } from 'Entities/UserId.entity';
 import { useGemRushActions } from 'Screens/GemRushGame/useGemRushActions';
 
 import styles from './GemRushGame.screen.module.css';
-import mapValues from 'lodash/mapValues';
-import map from 'lodash/map';
-import { UserId } from 'Entities/UserId.entity';
 
 export function GemRushGameScreen() {
   const game = useAtomValue(gemRushGameAtom);

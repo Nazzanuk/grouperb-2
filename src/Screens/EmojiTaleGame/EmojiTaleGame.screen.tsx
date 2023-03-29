@@ -44,7 +44,7 @@ export function EmojiTaleGameScreen() {
   const { leaveGame, startRound, updateAnswer, timeUp, vote } = useEmojiTaleActions();
 
   const { s: timeSince } = useTimeSince(currentRound?.startTime);
-  const timeRemaining = 60 - timeSince;
+  const timeRemaining = 90 - timeSince;
 
   console.log('emojiTaleGame', { game });
 

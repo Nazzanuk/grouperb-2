@@ -23,7 +23,7 @@ export const createFlowRound = (payload: StartFlowRoundPayload): FlowGame => {
     scores: {},
     startTime: new Date().getTime(),
     totalScore: 0,
-    target: 1500 * (currentRoundIndex + 1) * Object.values(game.users).length,
+    target: 1200 * (currentRoundIndex + 1) * Object.values(game.users).length,
   };
 
   game.status = 'playing';
