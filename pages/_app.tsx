@@ -114,6 +114,9 @@ export default function App({ Component, pageProps }: AppProps) {
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="manifest" href="/site.webmanifest"></link>
 
+        <link rel="preconnect" href="/api/socket"/>
+        <link rel="preload" href="/api/socket" as='fetch' />
+
         <link
           rel="preload"
           as="image"
@@ -128,7 +131,9 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
 
       <NoSSR>
-        <main className={`app ${bebasNeue.variable} ${teko.variable} ${shareTechMono.variable} ${notoEmoji.variable} ${notoColorEmoji.variable}`}>
+        <main
+          className={`app ${bebasNeue.variable} ${teko.variable} ${shareTechMono.variable} ${notoEmoji.variable} ${notoColorEmoji.variable}`}
+        >
           <Toasts />
 
           <Sidebar />
