@@ -3,7 +3,6 @@ import { Server } from 'http';
 import { send } from 'process';
 
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { v4 as uuidv4 } from 'uuid';
 
 import WebSocket, { WebSocketServer } from 'ws';
 
@@ -27,6 +26,7 @@ import { blocksActions } from 'Server/BlocksActions';
 import { flowActions } from 'Server/FlowActions';
 import { gemRushActions } from 'Server/GemRushActions';
 import { emojiTaleActions } from 'Server/EmojiTaleActions';
+import { Circles3dGame } from 'Entities/Circles3d.class';
 
 type Client = WebSocket & { id?: string; isAlive?: boolean };
 
@@ -43,7 +43,7 @@ const safeJSONParse = <T>(json: string): { data?: T; error?: Error } => {
   }
 };
 
-const handleWebSocketEvents = (client: Client, wss:WebSocket.Server) => {
+const handleWebSocketEvents = (client: Client, wss: WebSocket.Server) => {
   client.on('pong', () => {
     client.isAlive = true;
   });
@@ -61,15 +61,12 @@ const handleWebSocketEvents = (client: Client, wss:WebSocket.Server) => {
       ServerUsers[data.user.id] = data.user;
       client.id = data.user.id;
     }
-    
 
     blocksActions({ client, data, wss });
     charlatanActions({ client, data, wss });
     flowActions({ client, data, wss });
     gemRushActions({ client, data, wss });
     emojiTaleActions({ client, data, wss });
-
-
 
     if (data.action === 'hostGame') {
       const game = addServerGame(data);
@@ -114,6 +111,17 @@ const handleWebSocketEvents = (client: Client, wss:WebSocket.Server) => {
 
       // console.log({ data, game });
     }
+
+    if (data.gameType === 'circles3d') {
+      const game = ServerGames[data.gameId] as Circles3dGame;
+
+      game[data.action](...data.params);
+
+      updateClientGames(JSON.parse(JSON.stringify(game)), wss.clients);
+      return;
+    }
+
+    // NEEDS REFACTORING
 
     if (data.action === 'startVoteGame') {
       const game = startVoteGame(data);

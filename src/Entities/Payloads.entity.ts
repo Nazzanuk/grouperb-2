@@ -212,6 +212,14 @@ export type EndEmojiTaleGuessingPayload = {
   userId: UserId;
 };
 
+export type Circles3dPayload = {
+  action: string;
+  gameId: string;
+  gameType: 'circles3d';
+  userId: UserId;
+  params?: any[];
+};
+
 export type Payload =
   | EndEmojiTaleGuessingPayload
   | VoteEmojiTaleAnswerPayload
@@ -246,4 +254,5 @@ export type Payload =
   | CreateGemRushRoundPayload
   | SelectGemRushCardPayload
   | SelectGemRushGemPayload
-  | LeaveGamePayload;
+  | LeaveGamePayload
+  | Circles3dPayload;

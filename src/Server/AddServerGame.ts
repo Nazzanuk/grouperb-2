@@ -1,4 +1,5 @@
 
+import { Circles3dGame } from 'Entities/Circles3d.class';
 import { HostGamePayload } from 'Entities/Payloads.entity';
 import { ServerGames } from 'Server/ServerGames';
 import { createBlocksGame } from 'Utils/Blocks/CreateBlocksGame';
@@ -54,6 +55,13 @@ export const addServerGame = (hostGamePayload: HostGamePayload) => {
 
   if (hostGamePayload.type === 'emojiTale') {
     const game = createEmojiTaleGame({ host: hostGamePayload.user });
+    ServerGames[game.id] = game;
+
+    return game;
+  }
+
+  if (hostGamePayload.type === 'circles3d') {
+    const game = new Circles3dGame(hostGamePayload.user);
     ServerGames[game.id] = game;
 
     return game;

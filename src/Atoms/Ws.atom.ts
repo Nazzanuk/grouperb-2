@@ -20,7 +20,7 @@ const reconnect = (get: any, set: any, user: User) => {
 };
 
 const gameTypeToRoute = (gameType: string, gameId: string): string | null => {
-  if (gameType) return `/${kebabCase(gameType)}-game/${gameId}`;
+  if (gameType) return `/${kebabCase(gameType)}-game/${gameId}`.replace(/3-d/g, '3d');
   return null;
 };
 

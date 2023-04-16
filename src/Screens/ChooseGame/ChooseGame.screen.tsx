@@ -69,6 +69,12 @@ export const ChooseGameScreen: FC = () => {
             <div className={styles.subtitle}>A game of timing</div>
           </div>
 
+          <div className={styles.game} onClick={hostGame('circles3d')}>
+            <div className={styles.background} style={{ backgroundImage: `url('/img/question-2.png')` }} />
+            <div className={styles.title}>Circles 3D (Alpha)</div>
+            <div className={styles.subtitle}>Multiplayer Tic Tac Oval</div>
+          </div>
+
           <div className={styles.game} onClick={hostGame('charlatan')}>
             <div className={styles.background} style={{ backgroundImage: `url('/img/charlatan-1.png')` }} />
             <div className={styles.title}>Charlatan (Alpha)</div>
