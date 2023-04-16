@@ -136,7 +136,7 @@ export function EmojiTaleGameScreen() {
                     {currentRound.userPoints[currentRound?.winnerId]} points)
                   </div>
                   <div className={styles.answer} data-is-selected>
-                    {currentRound?.userSolutions[currentRound.winnerId].map((emoji, i) => (
+                    {currentRound?.userSolutions[currentRound.winnerId]?.map((emoji, i) => (
                       <div key={emoji + i} data-key={emoji} className={styles.answerEmoji}>
                         {emoji}
                       </div>
