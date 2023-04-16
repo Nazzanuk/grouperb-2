@@ -1,5 +1,4 @@
 import { atom } from 'jotai';
-
 import { currentGameAtom } from 'Atoms/CurrentGame.atom';
 import { routerAtom } from 'Atoms/Router.atom';
 import { userAtom } from 'Atoms/User.atom';
@@ -7,85 +6,47 @@ import { Payload } from 'Entities/Payloads.entity';
 import { connectionStatusAtom } from 'Atoms/ConnectionStatus.atom';
 import { User } from 'Entities/User.entity';
 import { toastsAtom } from 'Atoms/Toast.atom';
+import { createWebSocket, sendWithReconnect } from 'Utils/WebsocketUtils';
+import { kebabCase } from 'lodash';
 
 type GameWs = { instance: WebSocket };
 
 const gameWs: GameWs = { instance: null as any };
 
-console.log('wsAtom');
+if (typeof window !== 'undefined') createWebSocket();
 
-if (typeof window !== 'undefined') {
-  var url = new URL('/api/socket', window.location.href);
-  url.protocol = url.protocol.replace('http', 'ws');
-  fetch('/api/socket');
-}
+const reconnect = (get: any, set: any, user: User) => {
+  set(initWebSocketAtom, user);
+};
+
+const gameTypeToRoute = (gameType: string, gameId: string): string | null => {
+  if (gameType) return `/${kebabCase(gameType)}-game/${gameId}`;
+  return null;
+};
 
 export const wsAtom = atom<WebSocket, Payload>(
   (get) => get(initWebSocketAtom).instance,
   (get, set, payload: Payload) => {
     const user = get(userAtom);
 
-    console.log('gameWs?.instance?.readyState', gameWs?.instance?.readyState);
-    console.log('gameWs?.instance?', gameWs?.instance);
     if (!gameWs.instance) {
       set(initWebSocketAtom, user);
-
-      const i = setInterval(() => {
-        if (gameWs.instance?.readyState === WebSocket.OPEN) {
-          set(connectionStatusAtom, 'Connected');
-          gameWs.instance?.send?.(JSON.stringify(payload));
-          clearInterval(i);
-        }
-      }, 1000);
-
-      return;
     }
 
-    if (gameWs.instance?.readyState === WebSocket.OPEN) {
-      gameWs.instance.send(JSON.stringify(payload));
-      console.log('sending: ', { payload });
-    } else {
-      set(connectionStatusAtom, 'Connecting');
-      console.log('waiting', gameWs.instance.readyState);
-
-      gameWs.instance.addEventListener('open', () => {
-        set(connectionStatusAtom, 'Connected');
-
-        setTimeout(() => {
-          gameWs.instance.send(JSON.stringify({ action: 'updateUser', user }));
-        }, 500);
-
-        setTimeout(() => {
-          gameWs.instance.send(JSON.stringify(payload));
-          console.log('delayed sending: ', { payload });
-        }, 1000);
-      });
-    }
+    sendWithReconnect(gameWs.instance, payload, get, set);
   },
 );
 
 export const initWebSocketAtom = atom<GameWs, User>(
   () => gameWs,
   (get, set, user) => {
-    console.log('gameWs?.instance?.readyState', gameWs?.instance?.readyState);
     if ([WebSocket.OPEN, WebSocket.CONNECTING].includes(gameWs?.instance?.readyState)) return;
     set(connectionStatusAtom, 'Connecting');
     gameWs.instance?.close?.();
 
-    setTimeout(() => {
-      if (gameWs.instance?.readyState !== WebSocket.OPEN) {
-        window.location.reload();
-      }
-    }, 5000);
-
-    console.log('connecting');
-    var url = new URL('/api/socket', window.location.href);
-    url.protocol = url.protocol.replace('http', 'ws');
-    const serverUrl = url.href;
-    gameWs.instance = new WebSocket(serverUrl);
+    gameWs.instance = createWebSocket();
 
     gameWs.instance.onopen = () => {
-      console.log('connected');
       gameWs.instance.send(JSON.stringify({ action: 'updateUser', user }));
     };
 
@@ -93,14 +54,11 @@ export const initWebSocketAtom = atom<GameWs, User>(
       const router = get(routerAtom);
       set(connectionStatusAtom, 'Connected');
       const data = JSON.parse(event.data);
-      console.log('CLIENT RECIEVED: ', data, router);
-      console.log(router);
 
       if (data.alert) {
         set(toastsAtom, data?.alert);
-        // alert(data.alert);
 
-        if (['Error joining game', 'Error getting game'].includes(data?.alert) ) {
+        if (['Error joining game', 'Error getting game'].includes(data?.alert)) {
           router?.replace(`/home`);
         }
       }
@@ -108,149 +66,25 @@ export const initWebSocketAtom = atom<GameWs, User>(
       if (data.game) {
         set(currentGameAtom, data.game);
 
-        console.log('WHAT!!!', router?.asPath, data.game.type);
-
         if (!['/fetching'].includes(router?.asPath!)) return;
 
-        if (data.game.type === 'vote') router?.replace(`/vote-game/${data.game.id}`);
-        if (data.game.type === 'defuse') router?.replace(`/defuse-game/${data.game.id}`);
-        if (data.game.type === 'charlatan') router?.replace(`/charlatan-game/${data.game.id}`);
-        if (data.game.type === 'blocks') router?.replace(`/blocks-game/${data.game.id}`);
-        if (data.game.type === 'flow') router?.replace(`/flow-game/${data.game.id}`);
-        if (data.game.type === 'gemRush') router?.replace(`/gem-rush-game/${data.game.id}`);
-        if (data.game.type === 'emojiTale') router?.replace(`/emoji-tale-game/${data.game.id}`);
-        console.log('game', data.game.id);
+        const route = gameTypeToRoute(data.game.type, data.game.id);
+        if (route) {
+          router?.replace(route);
+        }
       }
     };
 
     gameWs.instance.onclose = function () {
-      console.log('disconnected', gameWs.instance.readyState, WebSocket.CLOSED);
       set(connectionStatusAtom, 'Disconnected');
+      const user = get(userAtom);
+      reconnect(get, set, user);
+    };
+
+    return () => {
+      gameWs.instance.onopen = null;
+      gameWs.instance.onmessage = null;
+      gameWs.instance.onclose = null;
     };
   },
 );
-
-// import WebSocket from 'isomorphic-ws';
-
-// let ws: WebSocket;
-// let t;
-
-// console.log('wsAtom');
-
-// if (typeof window !== 'undefined') {
-//   var url = new URL('/api/socket', window.location.href);
-//   url.protocol = url.protocol.replace('http', 'ws');
-//   fetch('/api/socket');
-// }
-
-// export const wsAtom = atom<WebSocket, Payload>(
-//   () => ws,
-//   (get, set, payload: Payload) => {
-//     const router = get(routerAtom);
-//     const user = get(userAtom);
-
-//     if (payload.action === 'reconnect' && ws.readyState === WebSocket.OPEN) {
-//       set(connectionStatusAtom, 'Connected');
-//     }
-
-//     if (payload.action === 'reconnect' && ws.readyState === WebSocket.CLOSED) {
-//       set(connectionStatusAtom, 'Reconnecting (socket currently closed)');
-//       console.log('reconnecting');
-//       connect();
-
-//       ws.onopen = () => {
-//         console.log('REconnected');
-//         set(connectionStatusAtom, 'Connected');
-
-//         setTimeout(() => {
-//           console.log('updating user??');
-//           ws.send(JSON.stringify({ action: 'updateUser', user }));
-
-//           ws.onmessage = (event) => {
-//             set(connectionStatusAtom, 'Connected');
-//             const data = JSON.parse(event.data);
-//             console.log('CLIENT RECIEVED: ', data, router);
-
-//             if (data.game) {
-//               set(currentGameAtom, data.game);
-//               router?.push(`/vote-game/${data.game.id}`);
-//             }
-//           };
-//         }, 500);
-//       };
-
-//       // return;
-//     }
-
-//     console.log({ payload });
-
-//     ws.onmessage = (event) => {
-//       set(connectionStatusAtom, 'Connected');
-
-//       const data = JSON.parse(event.data);
-//       console.log('CLIENT RECIEVED: ', data, router);
-
-//       if (data.game) {
-//         set(currentGameAtom, data.game);
-//         router?.push(`/vote-game/${data.game.id}`);
-//       }
-//     };
-
-//     ws.onclose = function () {
-//       console.log('disconnected', ws.readyState, WebSocket.CLOSED);
-//       set(connectionStatusAtom, 'Disconnected');
-
-//       // if (ws.readyState === WebSocket.CLOSED) {
-//       //   connect();
-
-//       //   ws.onmessage = (event) => {
-//       //     const data = JSON.parse(event.data);
-//       //     console.log('CLIENT RECIEVED: ', data, router);
-
-//       //     if (data.game) {
-//       //       set(currentGameAtom, data.game);
-//       //       router?.push(`/vote-game/${data.game.id}`);
-//       //     }
-//       //   };
-//       // }
-//     };
-
-//     if (ws.readyState === WebSocket.OPEN) {
-//       if (payload.action === 'reconnect') return;
-//       ws.send(JSON.stringify(payload));
-//       console.log('sending: ', { payload });
-//     } else {
-//       set(connectionStatusAtom, 'Connecting');
-//       console.log('waiting', ws.readyState);
-//       if (payload.action === 'reconnect') return;
-
-//       ws.addEventListener('open', () => {
-//         set(connectionStatusAtom, 'Connected');
-
-//         setTimeout(() => {
-//           ws.send(JSON.stringify({ action: 'updateUser', user }));
-//           ws.send(JSON.stringify(payload));
-//           console.log('delayed sending: ', { payload });
-//         }, 1000);
-//       });
-//     }
-//   },
-// );
-
-// wsAtom.onMount = (setAtom) => {
-//   console.log('mounting');
-//   connect();
-// };
-
-// const connect = () => {
-//   console.log('connecting');
-//   var url = new URL('/api/socket', window.location.href);
-
-//   url.protocol = url.protocol.replace('http', 'ws');
-
-//   ws = new WebSocket(url.href);
-
-//   ws.onopen = () => {
-//     console.log('connected');
-//   };
-// };
