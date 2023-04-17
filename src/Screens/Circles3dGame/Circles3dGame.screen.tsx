@@ -78,8 +78,15 @@ export function Circles3dGameScreen() {
           {status === 'playing' && (
             <>
               <div className="actionArea">
-                <h3>{users[game.getCurrentPlayer()]?.username} to play!</h3>
-                {game.isPlayerTurn(user.id) && <p>Select a circle</p>}
+                <h3>
+                  <img
+                    className="profile"
+                    src={`/img/avatars/${users[game.getCurrentPlayer()]?.avatar}`}
+                    alt="avatar"
+                  />
+                  {users[game.getCurrentPlayer()]?.username} to play!
+                </h3>
+                {game.isPlayerTurn(user.id) && <p>Pick a circle!</p>}
                 {!game.isPlayerTurn(user.id) && <p>Waiting...</p>}
               </div>
             </>
@@ -99,7 +106,16 @@ export function Circles3dGameScreen() {
 
           {(status === 'playing' || status === 'finished') && (
             <>
-              {/* <div className="label">users: {users[game.getCurrentPlayer()]?.username}</div> */}
+              <div className="label">
+                Order:{' '}
+                {userArray.map((user) => (
+                  <span className={styles.dot} style={{ '--color': game.getUserColor(user.id) }} />
+                ))}
+              </div>
+
+              <div className="label">
+                You are <span className={styles.dot} style={{ '--color': game.getUserColor(user.id) }} />
+              </div>
 
               <div className={styles.grid}>
                 <div className={styles.grid}>
@@ -136,19 +152,25 @@ export function Circles3dGameScreen() {
                 </div>
               </div>
 
-              <div
-                className="button"
-                data-variant="orange"
-                data-disabled={!game.isPlayerTurn(user.id)}
-                onClick={() => (selectedCircle ? makeMove(selectedCircle) : null)}
-              >
-                Play
-              </div>
+              {game.isPlayerTurn(user.id) && (
+                <div
+                  className="button"
+                  data-variant="orange"
+                  data-disabled={!selectedCircle}
+                  onClick={() => (selectedCircle ? makeMove(selectedCircle) : null)}
+                >
+                  Play
+                </div>
+              )}
+            </>
+          )}
 
+          {status === 'finished' && (
+            <div className="buttons">
               <div className="button" data-variant="orange" onClick={() => resetGame()}>
                 Reset game
               </div>
-            </>
+            </div>
           )}
 
           {status === 'lobby' && (

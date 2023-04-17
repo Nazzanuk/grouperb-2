@@ -60,6 +60,20 @@
   }
 }
 
+.dot {
+  --diameter: 10px;
+  --color: white;
+
+  position: relative;
+  width: var(--diameter);
+  height: var(--diameter);
+  border-radius: 50%;
+  background: var(--color);
+  z-index: 2;
+display:inline-block;
+margin:0 5px; 
+}
+
 @keyframes flashing {
   0% {
     /* background: rgba(0, 0, 0, 0.4); */

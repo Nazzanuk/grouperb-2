@@ -130,7 +130,16 @@ export class Circles3dGame {
   }
 
   startGame(): void {
-    if (this.status === 'lobby' && Object.keys(this.users).length >= 2) this.status = 'playing';
+    if (this.status === 'lobby' && Object.keys(this.users).length >= 2) {
+      const shuffledUsersObject: { [key: UserId]: User } = {};
+      const shuffledUsersrray = shuffle(Object.values(this.users));
+      for (const user of shuffledUsersrray) {
+        shuffledUsersObject[user.id] = user;
+      }
+      this.colors = shuffle(this.colors);
+      this.users = shuffledUsersObject;
+      this.status = 'playing';
+    }
   }
 
   resetGame(): void {
