@@ -1,5 +1,7 @@
 
 import { Circles3dGame } from 'Entities/Circles3d.class';
+import { CodenamesGame } from 'Entities/CodenamesGame.class';
+import { LigrettoGame } from 'Entities/LigrettoGame.class';
 import { HostGamePayload } from 'Entities/Payloads.entity';
 import { ServerGames } from 'Server/ServerGames';
 import { createBlocksGame } from 'Utils/Blocks/CreateBlocksGame';
@@ -62,6 +64,20 @@ export const addServerGame = (hostGamePayload: HostGamePayload) => {
 
   if (hostGamePayload.type === 'circles3d') {
     const game = new Circles3dGame(hostGamePayload.user);
+    ServerGames[game.id] = game;
+
+    return game;
+  }
+
+  if (hostGamePayload.type === 'ligretto') {
+    const game = new LigrettoGame(hostGamePayload.user);
+    ServerGames[game.id] = game;
+
+    return game;
+  }
+
+  if (hostGamePayload.type === 'codenames') {
+    const game = new CodenamesGame(hostGamePayload.user);
     ServerGames[game.id] = game;
 
     return game;

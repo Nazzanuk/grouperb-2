@@ -48,10 +48,6 @@ export class Circles3dGame {
     return circles3dGame;
   }
 
-  exportGame(): Game {
-    return JSON.parse(JSON.stringify(this));
-  }
-
   makeMove(userId: UserId, coordinate: Coordinate): boolean {
     const [x, y, z] = coordinate;
     if (this.board[x][y][z] === null && this.status === 'playing' && this.users[userId] !== undefined) {
@@ -121,14 +117,6 @@ export class Circles3dGame {
     return null;
   }
 
-  addPlayer(user: User): void {
-    if (this.status === 'lobby') this.users[user.id] = user;
-  }
-
-  removePlayer(userId: UserId): void {
-    if (this.status === 'lobby' && this.users[userId] !== undefined) delete this.users[userId];
-  }
-
   startGame(): void {
     if (this.status === 'lobby' && Object.keys(this.users).length >= 2) {
       const shuffledUsersObject: { [key: UserId]: User } = {};
@@ -164,10 +152,6 @@ export class Circles3dGame {
     return userId === this.getCurrentPlayer();
   }
 
-  getBoardSize(): number {
-    return this.board.length;
-  }
-
   getUserList(): User[] {
     return Object.values(this.users);
   }
@@ -190,10 +174,6 @@ export class Circles3dGame {
 
   getWinner(): UserId | null {
     return this.winner;
-  }
-
-  getStatus(): 'lobby' | 'playing' | 'finished' {
-    return this.status;
   }
 
   getMoveCount(): number {

@@ -27,6 +27,7 @@ import { flowActions } from 'Server/FlowActions';
 import { gemRushActions } from 'Server/GemRushActions';
 import { emojiTaleActions } from 'Server/EmojiTaleActions';
 import { Circles3dGame } from 'Entities/Circles3d.class';
+import { LigrettoGame } from 'Entities/LigrettoGame.class';
 
 type Client = WebSocket & { id?: string; isAlive?: boolean };
 
@@ -114,6 +115,24 @@ const handleWebSocketEvents = (client: Client, wss: WebSocket.Server) => {
 
     if (data.gameType === 'circles3d') {
       const game = ServerGames[data.gameId] as Circles3dGame;
+
+      game[data.action](...data.params);
+
+      updateClientGames(JSON.parse(JSON.stringify(game)), wss.clients);
+      return;
+    }
+
+    if (data.gameType === 'ligretto') {
+      const game = ServerGames[data.gameId] as LigrettoGame;
+
+      game[data.action](...data.params);
+
+      updateClientGames(JSON.parse(JSON.stringify(game)), wss.clients);
+      return;
+    }
+
+    if (data.gameType === 'codenames') {
+      const game = ServerGames[data.gameId] as LigrettoGame;
 
       game[data.action](...data.params);
 

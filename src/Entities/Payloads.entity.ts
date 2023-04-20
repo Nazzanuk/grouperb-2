@@ -4,7 +4,17 @@ import { UserId } from 'Entities/UserId.entity';
 
 export type HostGamePayload = {
   action: 'hostGame';
-  type: 'vote' | 'defuse' | 'charlatan' | 'blocks';
+  type:
+    | 'vote'
+    | 'defuse'
+    | 'charlatan'
+    | 'blocks'
+    | 'ligretto'
+    | 'codenames'
+    | 'gemRush'
+    | 'flow'
+    | 'circles3d'
+    | 'emojiTale';
   user: User;
 };
 
@@ -220,7 +230,25 @@ export type Circles3dPayload = {
   params?: any[];
 };
 
+export type LigrettoPayload = {
+  action: string;
+  gameId: string;
+  gameType: 'ligretto';
+  userId: UserId;
+  params?: any[];
+};
+
+export type CodenamesPayload = {
+  action: string;
+  gameId: string;
+  gameType: 'codenames';
+  userId: UserId;
+  params?: any[];
+};
+
 export type Payload =
+  | CodenamesPayload
+  | LigrettoPayload
   | EndEmojiTaleGuessingPayload
   | VoteEmojiTaleAnswerPayload
   | UpdateEmojiTaleAnswerPayload

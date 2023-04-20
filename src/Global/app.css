@@ -321,6 +321,14 @@ particle {
   /* background: radial-gradient(#ff8900, #e85d11); */
   background: radial-gradient(#ffad0f, #d46c33);
 
+  &[data-background='red'] {
+    background: radial-gradient(#cf3838, #d40000);
+  }
+
+  &[data-background='blue'] {
+    background: radial-gradient(#387acf, #1e90ff);
+  }
+
   & * {
     line-height: 1;
     padding: 0;
@@ -345,6 +353,10 @@ particle {
   & p {
     font-size: 18px;
     font-weight: 400;
+  }
+
+  &[data-is-flashing='true'] {
+    animation: actionAreaFlash 1s infinite;
   }
 }
 
@@ -378,4 +390,16 @@ particle {
   border-radius: 100px;
   /* flex: 0 1 50px; */
   border: 1px solid black;
+}
+
+@keyframes actionAreaFlash {
+  0% {
+    filter: brightness(0.6);
+  }
+  50% {
+    filter: brightness(1.5);
+  }
+  100% {
+    filter: brightness(0.6);
+  }
 }

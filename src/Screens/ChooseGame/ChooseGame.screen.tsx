@@ -57,6 +57,24 @@ export const ChooseGameScreen: FC = () => {
             <div className={styles.subtitle}>A shape-shifting team game</div>
           </div>
 
+          <div className={styles.game} onClick={hostGame('circles3d')}>
+            <div className={styles.background} style={{ backgroundImage: `url('/img/circles-1.jpeg')` }} />
+            <div className={styles.title}>Circles 3D</div>
+            <div className={styles.subtitle}>Multiplayer Tic Tac Oval</div>
+          </div>
+
+          <div className={styles.game} onClick={hostGame('ligretto')}>
+            <div className={styles.background} style={{ backgroundImage: `url('/img/ligretto-2.jpeg')` }} />
+            <div className={styles.title}>Ligretto (Beta)</div>
+            <div className={styles.subtitle}>The card number stacking game</div>
+          </div>
+
+          <div className={styles.game} onClick={hostGame('codenames')}>
+            <div className={styles.background} style={{ backgroundImage: `url('/img/codenames-2.jpeg')` }} />
+            <div className={styles.title}>Codenames (Beta)</div>
+            <div className={styles.subtitle}>Codenames</div>
+          </div>
+
           <div className={styles.game} onClick={hostGame('gemRush')}>
             <div className={styles.background} style={{ backgroundImage: `url('/img/gems-1.jpeg')` }} />
             <div className={styles.title}>Gem Rush</div>
@@ -67,12 +85,6 @@ export const ChooseGameScreen: FC = () => {
             <div className={styles.background} style={{ backgroundImage: `url('/img/flow-2.jpg')` }} />
             <div className={styles.title}>Flow</div>
             <div className={styles.subtitle}>A game of timing</div>
-          </div>
-
-          <div className={styles.game} onClick={hostGame('circles3d')}>
-            <div className={styles.background} style={{ backgroundImage: `url('/img/question-2.png')` }} />
-            <div className={styles.title}>Circles 3D (Alpha)</div>
-            <div className={styles.subtitle}>Multiplayer Tic Tac Oval</div>
           </div>
 
           <div className={styles.game} onClick={hostGame('charlatan')}>

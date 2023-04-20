@@ -65,7 +65,12 @@ export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
     send({ action: 'updateUser', user });
     connect(user);
-    screen?.orientation?.lock?.('portrait');
+    // try {
+    //   var myScreenOrientation = window.screen.orientation;
+
+    //   myScreenOrientation?.lock?.('portrait');
+    // } catch (e) {
+    // }
   }, []);
 
   useEffect(() => {
