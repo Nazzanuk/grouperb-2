@@ -38,10 +38,23 @@ export const useCodenamesActions = () => {
 
   const leaveGame = () => send({ action: 'leaveGame', ...baseActionProps });
   // const restartGame = () => send({ action: 'restartEmojiTaleGame', ...baseActionProps });
-  const startGame = () => send({ action: 'startGame', ...baseActionProps });
-  const revealCard = (cardId: string) => send({ action: 'revealCard', ...baseActionProps, params: [user.id, cardId] });
-  const resetGame = () => send({ action: 'resetGame', ...baseActionProps });
-  const setMaxGuessesForTurn = (guesses:number) => send({ action: 'setMaxGuessesForTurn', ...baseActionProps, params: [user.id, guesses] });
+  const startGame = () => send({ action: 'startGame', ...baseActionProps, alert: `${user.username} started the game` });
+  const revealCard = (card: Card) =>
+    send({
+      action: 'revealCard',
+      ...baseActionProps,
+      params: [user.id, card.id],
+      alert: `${user.username} revealed the card ${card.word}`,
+    });
+  const resetGame = () => send({ action: 'resetGame', ...baseActionProps, alert: `${user.username} reset the game` });
+  const setMaxGuessesForTurn = (guesses: number) =>
+    send({
+      action: 'setMaxGuessesForTurn',
+      ...baseActionProps,
+      params: [user.id, guesses],
+      alert: `${user.username} set the guesses`,
+    });
+
   // const drawPileCard = () => send({ action: 'drawPileCard', ...baseActionProps, params: [user.id] });
   // const startRound = () => send({ action: 'createEmojiTaleRound', ...baseActionProps });
   // const updateAnswer = (answer: string[]) => send({ action: 'updateEmojiTaleAnswer', ...baseActionProps, answer });

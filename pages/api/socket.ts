@@ -28,6 +28,7 @@ import { gemRushActions } from 'Server/GemRushActions';
 import { emojiTaleActions } from 'Server/EmojiTaleActions';
 import { Circles3dGame } from 'Entities/Circles3d.class';
 import { LigrettoGame } from 'Entities/LigrettoGame.class';
+import { CodenamesGame } from 'Entities/CodenamesGame.class';
 
 type Client = WebSocket & { id?: string; isAlive?: boolean };
 
@@ -118,7 +119,7 @@ const handleWebSocketEvents = (client: Client, wss: WebSocket.Server) => {
 
       game[data.action](...data.params);
 
-      updateClientGames(JSON.parse(JSON.stringify(game)), wss.clients);
+      updateClientGames(JSON.parse(JSON.stringify(game)), wss.clients, { alert: data.alert });
       return;
     }
 
@@ -127,16 +128,16 @@ const handleWebSocketEvents = (client: Client, wss: WebSocket.Server) => {
 
       game[data.action](...data.params);
 
-      updateClientGames(JSON.parse(JSON.stringify(game)), wss.clients);
+      updateClientGames(JSON.parse(JSON.stringify(game)), wss.clients, { alert: data.alert });
       return;
     }
 
     if (data.gameType === 'codenames') {
-      const game = ServerGames[data.gameId] as LigrettoGame;
+      const game = ServerGames[data.gameId] as CodenamesGame;
 
       game[data.action](...data.params);
 
-      updateClientGames(JSON.parse(JSON.stringify(game)), wss.clients);
+      updateClientGames(JSON.parse(JSON.stringify(game)), wss.clients, { alert: data.alert });
       return;
     }
 

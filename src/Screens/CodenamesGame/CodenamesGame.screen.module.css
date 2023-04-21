@@ -60,7 +60,11 @@
     }
 
     &[data-type='assassin'] {
-      --color: #282828;
+      background: #fff;
+      
+      & .cardText {
+        color: #000;
+      }
     }
 
     &[data-type='neutral'] {
@@ -77,13 +81,12 @@
   }
 }
 
-
 .guesses {
   display: flex;
   flex-direction: row;
   gap: 10px;
   justify-content: center;
-  width:100%;
+  width: 100%;
 }
 
 .guess {
@@ -96,15 +99,15 @@
   justify-content: center;
   align-items: center;
   height: 50px;
-  width:50px;
+  width: 50px;
   color: black;
-  
+
   border-radius: 100px;
   cursor: pointer;
   font-size: 5vw;
   text-transform: uppercase;
   transition: background-color 0.3s;
-  padding-top:2px;
+  padding-top: 2px;
 }
 
 .guess:active {

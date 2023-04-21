@@ -110,7 +110,7 @@ export function CodenamesGameScreen() {
                     data-type={card.type}
                     data-is-revealed={card.revealed}
                     data-is-spymaster={game.getPlayerRole(user.id) === 'spymaster'}
-                    onClick={() => revealCard(card.id)}
+                    onClick={() => game.isUserTurn(user.id) ? revealCard(card): null}
                   >
                     <div className={styles.cardText}>{card.word}</div>
                   </div>

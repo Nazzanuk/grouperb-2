@@ -16,7 +16,12 @@ const gameWs: GameWs = { instance: null as any };
 if (typeof window !== 'undefined') createWebSocket();
 
 const reconnect = (get: any, set: any, user: User) => {
-  set(initWebSocketAtom, user);
+  try {
+    set(initWebSocketAtom, user);
+  } catch (e) {
+    console.error('Failed to reconnect', e);
+    setTimeout(() => reconnect(get, set, user), 1000);
+  }
 };
 
 const gameTypeToRoute = (gameType: string, gameId: string): string | null => {
