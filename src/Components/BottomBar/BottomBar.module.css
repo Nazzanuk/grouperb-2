@@ -11,6 +11,7 @@
   padding: 20px;
   width: 100%;
   /* min-height: 100px; */
+  margin: 0 auto;
 }
 
 .overlay {
@@ -78,6 +79,9 @@
   position: relative;
   cursor: pointer;
   margin: -10px 0;
+
+
+  width: min(60vh, 100%);
 }
 
 .icon {

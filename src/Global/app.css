@@ -111,6 +111,10 @@ input {
   gap: 10px;
 
   flex: 1 1 auto;
+
+  width: 100%;
+  max-width: 60vh;
+  margin: 0 auto;
 }
 
 .buttons {
@@ -122,25 +126,25 @@ input {
 }
 
 .button {
+
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 3vh;
+  font-size: 2.5vh;
   text-align: center;
-
   border-radius: 100px;
-
-  height: 60px;
+  height: 40px;
   background: rgba(25, 31, 37, 1);
-  padding: 0 50px;
+  padding: 0 30px;
   color: white;
-  min-width: 200px;
+  min-width: 160px;
   align-self: center;
   text-transform: uppercase;
   text-decoration: none;
   transition: 0.1s;
   cursor: pointer;
   line-height: 0.8;
+  padding-top: 2px;
 
   &[data-size='s'] {
     height: 50px;

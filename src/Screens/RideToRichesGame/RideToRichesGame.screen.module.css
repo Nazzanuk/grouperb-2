@@ -1,0 +1,156 @@
+.gap {
+  margin: auto;
+}
+
+.track {
+  display: flex;
+  flex-direction: row;
+  max-height: 100%;
+  height: 100%;
+  gap: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.tarmac {
+  /* background-color: blue; */
+  position: absolute;
+  width: 100%;
+  height: 50%;
+  z-index: -1;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  transition: 1s;
+
+  animation: loopVertically 0s linear infinite;
+
+  &[data-is-racing='true'] {
+    /* animation: loopVertically 0.5s linear infinite; */
+    animation-duration: 0.5s;
+  }
+}
+
+.column {
+  display: flex;
+  flex: 1;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  z-index: 1;
+}
+
+.action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* position: absolute; */
+  width: 100%;
+  height: 3vh;
+  padding-top: 3px;
+  text-transform: uppercase;
+  background-color: green;
+  color: white;
+  font-size: 1.6vh;
+  /* border-radius: 50%; */
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.line {
+  display: flex;
+  position: absolute;
+  width: 4px;
+  height: 100%;
+  top: 0;
+  /* background-color: #ccc; */
+}
+
+.carContainer {
+  --i: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  bottom: 8vh;
+  height: 6vh;
+
+  &[data-is-racing='true'] {
+    animation: jitter 3s linear infinite;
+    animation-delay: calc((((var(--i)) * -0.04) - var(--i)/3) * 1s);
+  }
+}
+
+.car {
+  --offset: 0;
+  --color: 'red';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  width: 3vh;
+  height: 6vh;
+  background-color: var(--color);
+  /* bottom: 8vh; */
+
+  transform: translateY(calc(var(--offset) * -2vh));
+  transition: transform 1s linear;
+}
+
+@keyframes loopVertically {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes jitter {
+  0% {
+    transform: translateX(0);
+  }
+  10% {
+    transform: translateX(-0.1vh);
+  }
+  20% {
+    transform: translateY(0.1vh);
+  }
+  30% {
+  }
+  40% {
+    transform: translateY(-0.1vh);
+  }
+  50% {
+    transform: translateX(0.2);
+  }
+
+  60% {
+    transform: translateY(-0.1vh);
+    transform: translateX(0.1vh);
+  }
+
+  70% {
+    transform: translateY(0.1vh);
+  }
+
+  80% {
+  }
+
+  90% {
+    transform: translateY(-0.1vh);
+  }
+}
